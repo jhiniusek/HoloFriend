@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Frend:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Frend_jar</output-path>
+    <root id="archive" name="Frend.jar">
+      <element id="module-output" name="Frend" />
+    </root>
+  </artifact>
+</component>
