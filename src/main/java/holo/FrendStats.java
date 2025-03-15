@@ -1,13 +1,14 @@
 package holo;
 
+import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class FrendStats {
     private int hunger = 10;
     private int tiredness = 10;
     private boolean alive = true;
-    private int screenWidth;
-    private int screenHeight;
+    private ArrayList<Screen> screens = new ArrayList<>();
     private float positionX = 500;
     private float positionY = 500;
     private float destinationX = 500;
@@ -20,8 +21,8 @@ public class FrendStats {
     private int animationFrame = 1;
     private States state = States.IDLE;
 
-    public FrendStats() {
-        getMonitorSizes();
+    public FrendStats() throws InterruptedException {
+        getScreens();
     }
 
     public int getHunger() {
@@ -136,40 +137,40 @@ public class FrendStats {
         this.right = goRight;
     }
 
-    private void getMonitorSizes() {
-        int width = 0;
-        int height = 0;
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice[]    gs = ge.getScreenDevices();
+    private void getScreens() throws InterruptedException {
+        GraphicsDevice[] gs = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
+        JFrame screenDetector = new JFrame();
+        screenDetector.setUndecorated(true);
+        screenDetector.setVisible(false);
         for (int i = 0; i < gs.length; i++) {
-            DisplayMode dm = gs[i].getDisplayMode();
-            width += dm.getWidth();
-            height += dm.getHeight();
+            gs[i].setFullScreenWindow(screenDetector);
+            System.out.println(screenDetector.getLocation() + "" + screenDetector.getSize());
+            screens.addLast(new Screen(screenDetector));
+            System.out.println(screens.get(i));
         }
-        screenWidth = width;
-        screenHeight = (height/gs.length);
+        screenDetector.dispose();
     }
 
     public void chooseDestination(){
-        int max_x = screenWidth - 64;
-        int max_y = screenHeight - 128;
-        destinationX = (int)(Math.random() * max_x + 1);
-        destinationY = (int)(Math.random() * max_y + 1);
-        this.right = destinationX > positionX;
+        Screen randomScreen = screens.get((int)(Math.random() * screens.size()));
+        Point point = randomScreen.getRandomPoint();
 
-        float distance_x = Math.abs(destinationX - positionX);
-        float distance_y = Math.abs(destinationY - positionY);
+        destinationX = point.x;
+        destinationY = point.y;
 
-        if (distance_x > distance_y){
+        right = destinationX > positionX;
+
+        float distanceX = Math.abs(destinationX - positionX);
+        float distanceY = Math.abs(destinationY - positionY);
+
+        if (distanceX > distanceY){
             msX = 4;
-            float steps = distance_x / msX;
-            msY = distance_y / steps;
+            float steps = distanceX / msX;
+            msY = distanceY / steps;
         } else {
             msY = 4;
-            float steps = distance_y / msY;
-            msX = distance_x / steps;
+            float steps = distanceY / msY;
+            msX = distanceX / steps;
         }
-
-
     }
 }

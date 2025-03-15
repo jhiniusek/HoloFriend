@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         FrendStats stats = new FrendStats();
         ArrayList<Food> foodList= new ArrayList<>();
         for(int i = 0; i < 5; i++){
