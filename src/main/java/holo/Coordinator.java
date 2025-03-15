@@ -73,28 +73,26 @@ public class Coordinator implements Runnable{
             try {
                 x = foodList.get(i).getX();
                 y = foodList.get(i).getY();
-            } catch (Exception e){
-                break;
-            }
+                int min_x = (int)stats.getPositionX();
+                int max_x = min_x + 48;
 
-            int min_x = (int)stats.getPositionX();
-            int max_x = min_x + 48;
+                int min_y = (int)stats.getPositionY() - 16;
+                int max_y = min_y + 128;
 
-            int min_y = (int)stats.getPositionY() - 16;
-            int max_y = min_y + 128;
-
-            if (x > min_x && x < max_x){
-                if (y > min_y && y < max_y){
-                    foodList.get(i).dispose();
-                    foodList.set(i, null);
-                    if (stats.getHunger() < 7){
-                        stats.setHunger(stats.getHunger()+3);
-                    } else {
-                        stats.setHunger(10);
+                if (x > min_x && x < max_x){
+                    if (y > min_y && y < max_y){
+                        foodList.get(i).dispose();
+                        foodList.set(i, null);
+                        if (stats.getHunger() < 7){
+                            stats.setHunger(stats.getHunger()+3);
+                        } else {
+                            stats.setHunger(10);
+                        }
+                        System.out.println("HAMBURGER EATEN");  //debug
+                        break;
                     }
-                    System.out.println("HAMBURGER EATEN");  //debug
-                    break;
                 }
+            } catch (Exception e){
             }
         }
     }
