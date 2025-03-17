@@ -19,6 +19,12 @@ public class Screen {
     Point getRandomPoint(){
         Point point = new Point();
         point.setLocation((int)(Math.random() * (xMax - xMin + 1) + xMin), (int)(Math.random() * (yMax - yMin + 1) + yMin));
+        if(point.x > 64){
+            point.x = point.x - 64;
+        }
+        if(point.y > 128){
+            point.x = point.x - 128;
+        }
         System.out.println("NEW DESTINATION: " + point);
         return point;
     }
