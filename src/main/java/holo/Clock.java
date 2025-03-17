@@ -5,23 +5,31 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class BGClock implements Runnable{
+public class Clock implements Runnable{
     private FrendStats stats;
+    private int counter = 1;
+    private int frame = 1;
 
-    public BGClock(FrendStats stats) {
+    public Clock(FrendStats stats) {
         this.stats = stats;
     }
 
     @Override
     public void run() {
-        while (stats.isAlive()) {
-            try {
-                Thread.sleep(20000); //3 minutes = 180000
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        while(stats.isAlive()){
+            stats.setAnimationFrame(frame);
+            if(frame<8){
+                frame++;
+            }else{
+                frame=1;
             }
-            stats.setHunger(stats.getHunger()-1);
-            //stats.setTiredness(stats.getTiredness()-1);
+
+            counter++;
+            if (counter == 480) {       // 8 fps :   1 min = 480 frames
+                stats.setHunger(stats.getHunger()-1);
+                //stats.setTiredness(stats.getTiredness()-1);
+                counter = 1;
+            }
 
             if (stats.getHunger() == 0){
                 stats.setAlive(false);
@@ -44,9 +52,13 @@ public class BGClock implements Runnable{
                         System.exit(0);
                     }
                 });
-
                 frame.setVisible(true);
+            }
 
+            try {
+                Thread.sleep(125); //8 fps
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
     }
