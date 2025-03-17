@@ -16,9 +16,7 @@ public class Main {
         window.start();
         //Thread cursor = new Thread(new Cursor(stats));
         //cursor.start();
-        Thread animator = new Thread(new Animator(stats));
-        animator.start();
-        Thread clock = new Thread(new BGClock(stats));
+        Thread clock = new Thread(new Clock(stats));
         clock.start();
         Thread logic = new Thread(new Logic(stats));
         logic.start();
