@@ -10,9 +10,11 @@ public class Logic implements Runnable{
     @Override
     public void run() {
         while(stats.isAlive()){
-            if(stats.getState() != States.EAT){
-                if (stats.getPositionX() == stats.getDestinationX() && stats.getPositionY() == stats.getDestinationY()) {
-                    stats.setState(States.IDLE);
+
+            States state = stats.getState();
+
+            switch (state) {
+                case IDLE -> {
                     try {
                         Thread.sleep((int)(Math.random() * 5000 + 1000));
                         stats.chooseDestination();
@@ -21,14 +23,16 @@ public class Logic implements Runnable{
                         throw new RuntimeException(e);
                     }
                 }
-            } else {
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                case WALK -> {
+                    if (stats.getPositionX() == stats.getDestinationX() && stats.getPositionY() == stats.getDestinationY()) {
+                        stats.setState(States.IDLE);
+                    }
                 }
-                stats.setState(States.IDLE);
+                case HOLD -> {
+
+                }
             }
+
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

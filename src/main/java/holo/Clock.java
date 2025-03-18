@@ -4,28 +4,57 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 public class Clock implements Runnable{
     private FrendStats stats;
+    private NewFrend frend;
     private int counter = 1;
     private int frame = 1;
 
-    public Clock(FrendStats stats) {
+    public Clock(FrendStats stats, NewFrend frend) {
         this.stats = stats;
+        this.frend = frend;
     }
 
     @Override
     public void run() {
         while(stats.isAlive()){
             stats.setAnimationFrame(frame);
-            if(frame<8){
-                frame++;
-            }else{
-                frame=1;
+            if(counter%2 == 0){
+                if(frame<8){
+                    frame++;
+                }else{
+                    frame=1;
+                }
             }
 
+            if(stats.getState() == States.IDLE){
+                if(stats.isRight()){
+                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                    String path = "/sprites/IdleR" + stats.getAnimationFrame() + ".png";
+                    frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                } else {
+                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                    String path = "/sprites/IdleL" + stats.getAnimationFrame() + ".png";
+                    frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                }
+
+            } else if (stats.getState() == States.WALK) {
+                if(stats.isRight()){
+                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                    String path = "/sprites/WalkR" + stats.getAnimationFrame() + ".png";
+                    frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                } else {
+                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                    String path = "/sprites/WalkL" + stats.getAnimationFrame() + ".png";
+                    frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                }
+            }
+
+
             counter++;
-            if (counter == 480) {       // 8 fps :   1 min = 480 frames
+            if (counter == 960) {       // 16 ticks per second :   1 min = 960 tics
                 stats.setHunger(stats.getHunger()-1);
                 //stats.setTiredness(stats.getTiredness()-1);
                 counter = 1;
@@ -56,7 +85,7 @@ public class Clock implements Runnable{
             }
 
             try {
-                Thread.sleep(125); //8 fps
+                Thread.sleep(63); // movement 16 ticks per second
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

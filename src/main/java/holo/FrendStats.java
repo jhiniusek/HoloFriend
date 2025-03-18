@@ -154,10 +154,12 @@ public class FrendStats {
     public void chooseDestination(){
         Screen randomScreen = screens.get((int)(Math.random() * screens.size()));
         Point point = randomScreen.getRandomPoint();
-
         destinationX = point.x;
         destinationY = point.y;
+        evaluateMs();
+    }
 
+    public void evaluateMs(){
         right = destinationX > positionX;
 
         float distanceX = Math.abs(destinationX - positionX);
