@@ -5,10 +5,12 @@ import java.util.ArrayList;
 public class Coordinator implements Runnable{
     private FrendStats stats;
     private ArrayList<Food> foodList;
+    private GameWindow window;
 
-    public Coordinator(FrendStats stats, ArrayList<Food> foodList) {
+    public Coordinator(FrendStats stats, ArrayList<Food> foodList, GameWindow window) {
         this.stats = stats;
         this.foodList = foodList;
+        this.window = window;
     }
 
     @Override
@@ -85,8 +87,10 @@ public class Coordinator implements Runnable{
                         foodList.set(i, null);
                         if (stats.getHunger() < 7){
                             stats.setHunger(stats.getHunger()+3);
+                            window.hunger.setText("Hunger = " + String.valueOf(stats.getHunger()));
                         } else {
                             stats.setHunger(10);
+                            window.hunger.setText("Hunger = " + String.valueOf(stats.getHunger()));
                         }
                         System.out.println("HAMBURGER EATEN");  //debug
                         break;

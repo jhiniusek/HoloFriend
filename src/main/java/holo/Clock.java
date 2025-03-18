@@ -9,12 +9,14 @@ import java.util.Objects;
 public class Clock implements Runnable{
     private FrendStats stats;
     private NewFrend frend;
+    private GameWindow window;
     private int counter = 1;
     private int frame = 1;
 
-    public Clock(FrendStats stats, NewFrend frend) {
+    public Clock(FrendStats stats, NewFrend frend, GameWindow window) {
         this.stats = stats;
         this.frend = frend;
+        this.window = window;
     }
 
     @Override
@@ -56,6 +58,7 @@ public class Clock implements Runnable{
             counter++;
             if (counter == 960) {       // 16 ticks per second :   1 min = 960 tics
                 stats.setHunger(stats.getHunger()-1);
+                window.hunger.setText("Hunger = " + String.valueOf(stats.getHunger()));
                 //stats.setTiredness(stats.getTiredness()-1);
                 counter = 1;
             }

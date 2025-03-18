@@ -11,17 +11,19 @@ public class Main {
         for(int i = 0; i < 5; i++){
             foodList.addFirst(null);
         }
-        Thread window = new Thread(new GameWindow(stats, foodList));
-        window.start();
+
+
+
+        GameWindow window = new  GameWindow(stats, foodList);
         //Thread cursor = new Thread(new Cursor(stats));
         //cursor.start();
 
         NewFrend frend = new NewFrend(stats);
-        Thread clock = new Thread(new Clock(stats, frend));
+        Thread clock = new Thread(new Clock(stats, frend, window));
         clock.start();
         Thread logic = new Thread(new Logic(stats));
         logic.start();
-        Thread coordinator = new Thread(new Coordinator(stats, foodList));
+        Thread coordinator = new Thread(new Coordinator(stats, foodList, window));
         coordinator.start();
     }
 }
