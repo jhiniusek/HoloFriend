@@ -144,9 +144,8 @@ public class FrendStats {
         screenDetector.setVisible(false);
         for (int i = 0; i < gs.length; i++) {
             gs[i].setFullScreenWindow(screenDetector);
-            System.out.println(screenDetector.getLocation() + "" + screenDetector.getSize());
+            System.out.println(screenDetector.getLocation() + "  " + screenDetector.getSize());
             screens.addLast(new Screen(screenDetector));
-            System.out.println(screens.get(i));
         }
         screenDetector.dispose();
     }
