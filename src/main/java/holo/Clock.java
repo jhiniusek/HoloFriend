@@ -8,12 +8,12 @@ import java.util.Objects;
 
 public class Clock implements Runnable{
     private FrendStats stats;
-    private NewFrend frend;
+    private Frend frend;
     private GameWindow window;
     private int counter = 1;
     private int frame = 1;
 
-    public Clock(FrendStats stats, NewFrend frend, GameWindow window) {
+    public Clock(FrendStats stats, Frend frend, GameWindow window) {
         this.stats = stats;
         this.frend = frend;
         this.window = window;

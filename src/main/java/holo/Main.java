@@ -1,6 +1,5 @@
 package holo;
 
-import javax.management.remote.NotificationResult;
 import java.util.ArrayList;
 
 public class Main {
@@ -12,13 +11,12 @@ public class Main {
             foodList.addFirst(null);
         }
 
-
-
         GameWindow window = new  GameWindow(stats, foodList);
+
         //Thread cursor = new Thread(new Cursor(stats));
         //cursor.start();
 
-        NewFrend frend = new NewFrend(stats);
+        Frend frend = new Frend(stats);
         Thread clock = new Thread(new Clock(stats, frend, window));
         clock.start();
         Thread logic = new Thread(new Logic(stats));
