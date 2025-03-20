@@ -18,7 +18,6 @@ public class FrendStats {
     private boolean right = false;
     private int cursorX = 0;
     private int cursorY = 0;
-    private int animationFrame = 1;
     private States state = States.IDLE;
 
     public FrendStats() throws InterruptedException {
@@ -71,14 +70,6 @@ public class FrendStats {
 
     public void setCursorY(int cursorY) {
         this.cursorY = cursorY;
-    }
-
-    public int getAnimationFrame() {
-        return animationFrame;
-    }
-
-    public void setAnimationFrame(int animationFrame) {
-        this.animationFrame = animationFrame;
     }
 
     public States getState() {

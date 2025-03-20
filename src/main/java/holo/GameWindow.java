@@ -15,6 +15,7 @@ public class GameWindow extends JFrame{
         hunger.setText("Hunger = " + String.valueOf(stats.getHunger()));
         hunger.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));

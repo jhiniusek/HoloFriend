@@ -9,12 +9,13 @@ import java.awt.event.MouseMotionAdapter;
 public class Frend extends JFrame{
 
     private Point initialClick;
-    public JLabel icon = new JLabel(new ImageIcon(getClass().getResource("/sprites/IdleL1.png")));
+    public JLabel icon = new JLabel(new ImageIcon(getClass().getResource("/sprites/IdleL.gif")));
     private FrendStats stats;
 
     public Frend(FrendStats stats) throws HeadlessException {
         this.stats = stats;
         this.setSize(64,128);
+        this.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
         this.add(icon);
         this.setUndecorated(true);
         this.setAlwaysOnTop(true);

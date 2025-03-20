@@ -11,7 +11,6 @@ public class Clock implements Runnable{
     private Frend frend;
     private GameWindow window;
     private int counter = 1;
-    private int frame = 1;
 
     public Clock(FrendStats stats, Frend frend, GameWindow window) {
         this.stats = stats;
@@ -22,34 +21,25 @@ public class Clock implements Runnable{
     @Override
     public void run() {
         while(stats.isAlive()){
-            stats.setAnimationFrame(frame);
-            if(counter%2 == 0){
-                if(frame<8){
-                    frame++;
-                }else{
-                    frame=1;
-                }
-            }
-
             if(stats.getState() == States.IDLE){
                 if(stats.isRight()){
                     frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    String path = "/sprites/IdleR" + stats.getAnimationFrame() + ".png";
+                    String path = "/sprites/IdleR.gif";
                     frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
                 } else {
                     frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    String path = "/sprites/IdleL" + stats.getAnimationFrame() + ".png";
+                    String path = "/sprites/IdleL.gif";
                     frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
                 }
 
             } else if (stats.getState() == States.WALK) {
                 if(stats.isRight()){
                     frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    String path = "/sprites/WalkR" + stats.getAnimationFrame() + ".png";
+                    String path = "/sprites/WalkR.gif";
                     frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
                 } else {
                     frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    String path = "/sprites/WalkL" + stats.getAnimationFrame() + ".png";
+                    String path = "/sprites/WalkL.gif";
                     frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
                 }
             }
