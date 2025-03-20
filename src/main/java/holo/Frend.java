@@ -10,12 +10,17 @@ public class Frend extends JFrame{
 
     private Point initialClick;
     public JLabel icon = new JLabel(new ImageIcon(getClass().getResource("/sprites/IdleL.gif")));
+    public JLabel shadow = new JLabel(new ImageIcon(getClass().getResource("/sprites/Shadow.png")));
     private FrendStats stats;
 
     public Frend(FrendStats stats) throws HeadlessException {
         this.stats = stats;
         this.setSize(64,128);
+        this.setLayout(null);
         this.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
+        shadow.setBounds(0,116,60,11);
+        this.add(shadow);
+        icon.setBounds(0,0,64,126);
         this.add(icon);
         this.setUndecorated(true);
         this.setAlwaysOnTop(true);
