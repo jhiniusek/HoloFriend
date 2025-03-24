@@ -2,16 +2,16 @@ package holo;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.event.*;
 
 public class Frend extends JFrame{
 
-    private Point initialClick;
+
     public JLabel icon = new JLabel(new ImageIcon(getClass().getResource("/sprites/IdleL.gif")));
     public JLabel shadow = new JLabel(new ImageIcon(getClass().getResource("/sprites/Shadow.png")));
     private FrendStats stats;
+    private Point initialClick;
+    private Boolean holding;
 
     public Frend(FrendStats stats) throws HeadlessException {
         this.stats = stats;
@@ -30,17 +30,25 @@ public class Frend extends JFrame{
         getContentPane().addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 initialClick = e.getPoint();
-                stats.setState(States.HOLD);
+                holding = false;
+
             }
 
             public void mouseReleased(MouseEvent e) {
-                stats.setState(States.WALK);
-                stats.evaluateMs();
+                if (!holding) {
+                    System.out.println("Frend clicked");
+                } else {
+                    stats.setState(States.WALK);
+                    stats.evaluateMs();
+                }
             }
         });
 
         getContentPane().addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseDragged(MouseEvent e) {
+                holding = true;
+                stats.setState(States.HOLD);
+
                 int thisX = getLocation().x;
                 int thisY = getLocation().y;
 

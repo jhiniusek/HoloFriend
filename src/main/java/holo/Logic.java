@@ -16,7 +16,7 @@ public class Logic implements Runnable{
             switch (state) {
                 case IDLE -> {
                     try {
-                        Thread.sleep((int)(Math.random() * 5000 + 1000));
+                        Thread.sleep((int)(Math.random() * 5000 + 2000));
                         stats.chooseDestination();
                         if(stats.getState() != States.HOLD){
                             stats.setState(States.WALK);
@@ -26,9 +26,7 @@ public class Logic implements Runnable{
                     }
                 }
                 case WALK -> {
-                    if (stats.getPositionX() == stats.getDestinationX() && stats.getPositionY() == stats.getDestinationY()) {
-                        stats.setState(States.IDLE);
-                    }
+
                 }
                 case HOLD -> {
 

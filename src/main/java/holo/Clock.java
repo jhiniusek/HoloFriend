@@ -102,6 +102,10 @@ public class Clock implements Runnable{
                 }
             }
 
+            if(stats.getPositionX() == stats.getDestinationX() && stats.getPositionY() == stats.getDestinationY()){
+                stats.setState(States.IDLE);
+            }
+
             counter++;
             if (counter == 960) {       // 16 ticks per second :   1 min = 960 tics
                 stats.setHunger(stats.getHunger()-1);
