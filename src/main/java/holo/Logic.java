@@ -18,7 +18,9 @@ public class Logic implements Runnable{
                     try {
                         Thread.sleep((int)(Math.random() * 5000 + 1000));
                         stats.chooseDestination();
-                        stats.setState(States.WALK);
+                        if(stats.getState() != States.HOLD){
+                            stats.setState(States.WALK);
+                        }
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }

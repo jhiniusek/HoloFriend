@@ -17,11 +17,9 @@ public class Main {
         //cursor.start();
 
         Frend frend = new Frend(stats);
-        Thread clock = new Thread(new Clock(stats, frend, window));
+        Thread clock = new Thread(new Clock(stats, frend, window, foodList));
         clock.start();
         Thread logic = new Thread(new Logic(stats));
         logic.start();
-        Thread coordinator = new Thread(new Coordinator(stats, foodList, window));
-        coordinator.start();
     }
 }
