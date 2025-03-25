@@ -22,29 +22,31 @@ public class GameWindow extends JFrame{
         burgerMap.put(5, new Point(128,162));
 
 
-        this.setSize(500,350);
-        this.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
-        this.setLocationRelativeTo(null);
-        this.setLayout(null);
-        this.setUndecorated(true);
-        this.setBackground(new Color(1.0f,1.0f,1.0f,0f));
+        setSize(500,350);
+        setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(null);
+        setUndecorated(true);
+        setBackground(new Color(1.0f,1.0f,1.0f,0f));
         ImageIcon imageIcon = new ImageIcon(getClass().getResource("/sprites/Menu.png"));
         JLabel imageLabel = new JLabel(imageIcon);
         imageLabel.setBounds(0, 0, imageIcon.getIconWidth(), imageIcon.getIconHeight());
-        this.add(imageLabel);
+        add(imageLabel);
+
 
         hungerBar.setValue(stats.getHunger());
         hungerBar.setBounds(224,104,160,16);
         hungerBar.setForeground(new Color(39,199,225));
-        this.add(hungerBar);
-        this.getContentPane().setComponentZOrder(hungerBar, 0);
+        add(hungerBar);
+        getContentPane().setComponentZOrder(hungerBar, 0);
 
 
         tiredBar.setValue(stats.getTiredness());
         tiredBar.setBounds(224,152,160,16);
         tiredBar.setForeground(new Color(39,199,225));
-        this.add(tiredBar);
-        this.getContentPane().setComponentZOrder(tiredBar, 0);
+        add(tiredBar);
+        getContentPane().setComponentZOrder(tiredBar, 0);
 
 
         JButton quitButton = new JButton();
@@ -86,7 +88,13 @@ public class GameWindow extends JFrame{
             });
             byeFrend.setVisible(true);
         });
-        this.add(quitButton);
+        add(quitButton);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                quitButton.doClick();
+            }
+        });
 
 
         JButton foodSpawner = new JButton();
@@ -144,13 +152,13 @@ public class GameWindow extends JFrame{
                 setLocation(X, Y);
             }
         });
-        this.setVisible(true);
+        setVisible(true);
 
 
-        stats.setPositionX(this.getX()+226);
-        stats.setDestinationX(this.getX()+226);
-        stats.setPositionY(this.getY()+209);
-        stats.setDestinationY(this.getY()+209);
+        stats.setPositionX(getX()+226);
+        stats.setDestinationX(getX()+226);
+        stats.setPositionY(getY()+209);
+        stats.setDestinationY(getY()+209);
 
     }
 }

@@ -15,17 +15,18 @@ public class Frend extends JFrame{
 
     public Frend(FrendStats stats) throws HeadlessException {
         this.stats = stats;
-        this.setSize(64,128);
-        this.setLayout(null);
-        this.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setSize(64,128);
+        setLayout(null);
+        setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
         shadow.setBounds(0,116,60,11);
-        this.add(shadow);
+        add(shadow);
         icon.setBounds(0,0,64,126);
-        this.add(icon);
-        this.setUndecorated(true);
-        this.setAlwaysOnTop(true);
-        this.setBackground(new Color(1.0f,1.0f,1.0f,0f));
-        this.setVisible(true);
+        add(icon);
+        setUndecorated(true);
+        setAlwaysOnTop(true);
+        setBackground(new Color(1.0f,1.0f,1.0f,0f));
+        setVisible(true);
 
         getContentPane().addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {

@@ -11,11 +11,12 @@ public class Food extends JFrame{
     public boolean moved = false;
 
     public Food(int x, int y) {
-        setUndecorated(true); // Remove default title bar
+        setUndecorated(true);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(16, 16);
         setLocation(x, y);
         setAlwaysOnTop(true);
-        this.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
+        setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
         setBackground(new Color(1.0f,1.0f,1.0f,0f));
         JLabel sprite = new JLabel(new ImageIcon(getClass().getResource("/sprites/Burger.png")));
         add(sprite);
