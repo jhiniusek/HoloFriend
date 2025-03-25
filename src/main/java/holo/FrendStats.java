@@ -5,8 +5,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class FrendStats {
-    private int hunger = 10;
-    private int tiredness = 10;
+    private int hunger = 100;
+    private int tiredness = 100;
     private boolean alive = true;
     private ArrayList<Screen> screens = new ArrayList<>();
     private float positionX = 500;

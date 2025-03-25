@@ -107,9 +107,9 @@ public class Clock implements Runnable{
             }
 
             counter++;
-            if (counter == 960) {       // 16 ticks per second :   1 min = 960 tics
+            if (counter == 96) {       // 16 ticks per second :   1 min = 960 tics
                 stats.setHunger(stats.getHunger()-1);
-                window.hunger.setText("Hunger = " + String.valueOf(stats.getHunger()));
+                window.hungerBar.setValue(stats.getHunger());
                 //stats.setTiredness(stats.getTiredness()-1);
                 counter = 1;
             }
@@ -163,12 +163,12 @@ public class Clock implements Runnable{
                     if (y > min_y && y < max_y){
                         foodList.get(i).dispose();
                         foodList.set(i, null);
-                        if (stats.getHunger() < 7){
-                            stats.setHunger(stats.getHunger()+3);
-                            window.hunger.setText("Hunger = " + String.valueOf(stats.getHunger()));
+                        if (stats.getHunger() < 70){
+                            stats.setHunger(stats.getHunger()+30);
+                            window.hungerBar.setValue(stats.getHunger());
                         } else {
-                            stats.setHunger(10);
-                            window.hunger.setText("Hunger = " + String.valueOf(stats.getHunger()));
+                            stats.setHunger(100);
+                            window.hungerBar.setValue(stats.getHunger());
                         }
                         System.out.println("HAMBURGER EATEN");  //debug
                         break;

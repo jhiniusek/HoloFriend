@@ -8,13 +8,14 @@ import java.awt.event.MouseMotionAdapter;
 
 public class Food extends JFrame{
     private Point initialClick;
+    public boolean moved = false;
 
     public Food(int x, int y) {
         setUndecorated(true); // Remove default title bar
         setSize(16, 16);
         setLocation(x, y);
         setAlwaysOnTop(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
         setBackground(new Color(1.0f,1.0f,1.0f,0f));
         JLabel sprite = new JLabel(new ImageIcon(getClass().getResource("/sprites/Burger.png")));
         add(sprite);
@@ -36,6 +37,7 @@ public class Food extends JFrame{
                 int X = thisX + xMoved;
                 int Y = thisY + yMoved;
                 setLocation(X, Y);
+                moved = true;
             }
         });
 
