@@ -1,11 +1,21 @@
 package holo;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
+
         FrendStats stats = new FrendStats();
+
+        File saveFile = new File("save.txt");
+        if(saveFile.createNewFile()){
+        } else {
+            stats.load(saveFile);
+        }
+
         ArrayList<Food> foodList= new ArrayList<>();
         for(int i = 0; i < 6; i++){
             foodList.addFirst(null);

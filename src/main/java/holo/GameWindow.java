@@ -3,6 +3,9 @@ package holo;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,6 +75,16 @@ public class GameWindow extends JFrame{
             closeButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+
+                    File save = new File("save.txt");
+                    FileWriter myWriter = null;
+                    try {
+                        myWriter = new FileWriter("save.txt");
+                        myWriter.write(stats.toString());
+                        myWriter.close();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     System.exit(0);
                 }
             });

@@ -2,7 +2,10 @@ package holo;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class FrendStats {
     private int hunger = 100;
@@ -164,5 +167,26 @@ public class FrendStats {
             float steps = distanceY / msY;
             msX = distanceX / steps;
         }
+    }
+
+    public void load(File save) {
+        ArrayList<Integer> load = new ArrayList();
+        try {
+            Scanner scanner = new Scanner(save);
+            while (scanner.hasNextLine()) {
+                String data = scanner.nextLine();
+                load.add(Integer.parseInt(data));
+            }
+            scanner.close();
+            hunger = load.get(0);
+            tiredness = load.get(1);
+        } catch (Exception e) {
+            System.out.println("save corrupted"); // Display options here, if restart or try to fix a save and restart the software
+        }
+    }
+
+    @Override
+    public String toString() {
+        return hunger + "\n" + tiredness;
     }
 }
