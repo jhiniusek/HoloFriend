@@ -8,6 +8,7 @@ import java.awt.event.MouseMotionAdapter;
 
 public class Lake extends JFrame {
     private Point initialClick;
+    JLabel sprite = new JLabel(new ImageIcon(getClass().getResource("/sprites/lake.png")));
     public boolean moved = false;
 
     public Lake(int x, int y) {
@@ -17,7 +18,6 @@ public class Lake extends JFrame {
         setLocation(x, y);
         setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
         setBackground(new Color(1.0f,1.0f,1.0f,0f));
-        JLabel sprite = new JLabel(new ImageIcon(getClass().getResource("/sprites/Lake.png")));
         add(sprite);
 
         getContentPane().addMouseListener(new MouseAdapter() {

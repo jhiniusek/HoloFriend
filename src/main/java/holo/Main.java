@@ -30,9 +30,5 @@ public class Main {
         Lake lake = new Lake(0,0);
         Thread clock = new Thread(new Clock(stats, frend, window, foodList, lake));
         clock.start();
-        Thread logic = new Thread(new Logic(stats));
-        logic.start();
-
-
     }
 }

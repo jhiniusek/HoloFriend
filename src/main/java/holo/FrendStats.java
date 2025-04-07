@@ -22,7 +22,6 @@ public class FrendStats {
     private int cursorX = 0;
     private int cursorY = 0;
     private States state = States.IDLE;
-    private States forcedState = null;
 
     public FrendStats() throws InterruptedException {
         getScreens();
@@ -130,14 +129,6 @@ public class FrendStats {
 
     public void setRight(boolean goRight) {
         this.right = goRight;
-    }
-
-    public States getForcedState() {
-        return forcedState;
-    }
-
-    public void setForcedState(States forcedState) {
-        this.forcedState = forcedState;
     }
 
     private void getScreens() throws InterruptedException {

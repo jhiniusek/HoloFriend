@@ -13,6 +13,7 @@ public class Clock implements Runnable{
     private GameWindow window;
     private ArrayList<Food> foodList;
     private Lake lake;
+    private int idleTimer = 60;
     private int counter = 1;
     private boolean ableToWork = true;
     private int workCooldown = 0;
@@ -28,95 +29,105 @@ public class Clock implements Runnable{
     @Override
     public void run() {
         while(stats.isAlive()){
-            if(stats.getForcedState()==null){
-                if(stats.getState() == States.IDLE){
-                    if(stats.isRight()){
-                        frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                        String path = "/sprites/IdleR.gif";
-                        frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+
+            if(stats.getState() == States.IDLE){
+                if(stats.isRight()){
+                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                    String path = "/sprites/IdleR.gif";
+                    frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                } else {
+                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                    String path = "/sprites/IdleL.gif";
+                    frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                }
+
+            } else if (stats.getState() == States.WALK) {
+                if(stats.isRight()){
+                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                    String path = "/sprites/WalkR.gif";
+                    frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                } else {
+                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                    String path = "/sprites/WalkL.gif";
+                    frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                }
+            } else if (stats.getState() == States.HOLD) {
+                if(stats.isRight()){
+                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                    String path = "/sprites/Hold1R.png";
+                    frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                } else {
+                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                    String path = "/sprites/Hold1L.png";
+                    frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                }
+            }
+
+            for(int i = 0; i < foodList.size(); i++){
+                if(foodList.get(i) != null){
+                    CheckFoodCollision();
+                    break;
+                }
+            }
+
+            if((stats.getPositionX() != stats.getDestinationX() || stats.getPositionY() != stats.getDestinationY()) && stats.getState()!=States.HOLD) {
+
+                if (stats.getPositionX() > stats.getDestinationX()){
+
+                    if ((stats.getPositionX() - stats.getDestinationX()) < stats.getMsX()) {
+                        stats.setPositionX(stats.getDestinationX());
                     } else {
-                        frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                        String path = "/sprites/IdleL.gif";
-                        frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                        stats.setPositionX(stats.getPositionX() - stats.getMsX());
                     }
 
-                } else if (stats.getState() == States.WALK) {
-                    if(stats.isRight()){
-                        frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                        String path = "/sprites/WalkR.gif";
-                        frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                } else if (stats.getPositionX() < stats.getDestinationX()){
+
+                    if ((stats.getDestinationX() - stats.getPositionX()) < stats.getMsX()) {
+                        stats.setPositionX(stats.getDestinationX());
                     } else {
-                        frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                        String path = "/sprites/WalkL.gif";
-                        frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                        stats.setPositionX(stats.getPositionX() + stats.getMsX());
                     }
-                } else if (stats.getState() == States.HOLD) {
-                    if(stats.isRight()){
-                        frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                        String path = "/sprites/Hold1R.png";
-                        frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+
+                }
+
+                if (stats.getPositionY() > stats.getDestinationY()){
+
+                    if ((stats.getPositionY() - stats.getDestinationY()) < stats.getMsY()) {
+                        stats.setPositionY(stats.getDestinationY());
                     } else {
-                        frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                        String path = "/sprites/Hold1L.png";
-                        frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
-                    }
-                }
-
-                for(int i = 0; i < foodList.size(); i++){
-                    if(foodList.get(i) != null){
-                        CheckFoodCollision();
-                        break;
-                    }
-                }
-
-                if((stats.getPositionX() != stats.getDestinationX() || stats.getPositionY() != stats.getDestinationY()) && stats.getState()!=States.HOLD) {
-
-                    if (stats.getPositionX() > stats.getDestinationX()){
-
-                        if ((stats.getPositionX() - stats.getDestinationX()) < stats.getMsX()) {
-                            stats.setPositionX(stats.getDestinationX());
-                        } else {
-                            stats.setPositionX(stats.getPositionX() - stats.getMsX());
-                        }
-
-                    } else if (stats.getPositionX() < stats.getDestinationX()){
-
-                        if ((stats.getDestinationX() - stats.getPositionX()) < stats.getMsX()) {
-                            stats.setPositionX(stats.getDestinationX());
-                        } else {
-                            stats.setPositionX(stats.getPositionX() + stats.getMsX());
-                        }
-
+                        stats.setPositionY(stats.getPositionY() - stats.getMsY());
                     }
 
-                    if (stats.getPositionY() > stats.getDestinationY()){
+                } else if (stats.getPositionY() < stats.getDestinationY()){
 
-                        if ((stats.getPositionY() - stats.getDestinationY()) < stats.getMsY()) {
-                            stats.setPositionY(stats.getDestinationY());
-                        } else {
-                            stats.setPositionY(stats.getPositionY() - stats.getMsY());
-                        }
-
-                    } else if (stats.getPositionY() < stats.getDestinationY()){
-
-                        if ((stats.getDestinationY() - stats.getPositionY()) < stats.getMsY()) {
-                            stats.setPositionY(stats.getDestinationY());
-                        } else {
-                            stats.setPositionY(stats.getPositionY() + stats.getMsY());
-                        }
-
+                    if ((stats.getDestinationY() - stats.getPositionY()) < stats.getMsY()) {
+                        stats.setPositionY(stats.getDestinationY());
+                    } else {
+                        stats.setPositionY(stats.getPositionY() + stats.getMsY());
                     }
-                }
 
-                if(stats.getPositionX() == stats.getDestinationX() && stats.getPositionY() == stats.getDestinationY()){
-                    stats.setState(States.IDLE);
                 }
+            }
+
+            if(stats.getPositionX() == stats.getDestinationX() && stats.getPositionY() == stats.getDestinationY() ){
+                stats.setState(States.IDLE);
+            }
+
+            if(idleTimer != 0 && stats.getState() == States.IDLE){
+                idleTimer--;
+            }
+            if (stats.getPositionX() == stats.getDestinationX() && stats.getPositionY() == stats.getDestinationY() && idleTimer == 0) {
+                idleTimer = (int)(Math.random() * 80 + 64);
+                stats.chooseDestination();
+                stats.setState(States.WALK);
             }
 
             CheckLakeColision();
 
             if(stats.getForcedState() == States.WORK){
-
+                frend.setVisible(false);
+                String path = "/sprites/Cast.gif";
+                lake.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
             }
 
             counter++;
