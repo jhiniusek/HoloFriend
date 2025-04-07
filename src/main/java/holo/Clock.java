@@ -14,6 +14,8 @@ public class Clock implements Runnable{
     private ArrayList<Food> foodList;
     private Lake lake;
     private int counter = 1;
+    private boolean ableToWork = true;
+    private int workCooldown = 0;
 
     public Clock(FrendStats stats, Frend frend, GameWindow window, ArrayList<Food> foodList, Lake lake) {
         this.stats = stats;
@@ -26,99 +28,110 @@ public class Clock implements Runnable{
     @Override
     public void run() {
         while(stats.isAlive()){
-            if(stats.getState() == States.IDLE){
-                if(stats.isRight()){
-                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    String path = "/sprites/IdleR.gif";
-                    frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
-                } else {
-                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    String path = "/sprites/IdleL.gif";
-                    frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+            if(stats.getForcedState()==null){
+                if(stats.getState() == States.IDLE){
+                    if(stats.isRight()){
+                        frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                        String path = "/sprites/IdleR.gif";
+                        frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                    } else {
+                        frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                        String path = "/sprites/IdleL.gif";
+                        frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                    }
+
+                } else if (stats.getState() == States.WALK) {
+                    if(stats.isRight()){
+                        frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                        String path = "/sprites/WalkR.gif";
+                        frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                    } else {
+                        frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                        String path = "/sprites/WalkL.gif";
+                        frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                    }
+                } else if (stats.getState() == States.HOLD) {
+                    if(stats.isRight()){
+                        frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                        String path = "/sprites/Hold1R.png";
+                        frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                    } else {
+                        frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                        String path = "/sprites/Hold1L.png";
+                        frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                    }
                 }
 
-            } else if (stats.getState() == States.WALK) {
-                if(stats.isRight()){
-                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    String path = "/sprites/WalkR.gif";
-                    frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
-                } else {
-                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    String path = "/sprites/WalkL.gif";
-                    frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
+                for(int i = 0; i < foodList.size(); i++){
+                    if(foodList.get(i) != null){
+                        CheckFoodCollision();
+                        break;
+                    }
                 }
-            } else if (stats.getState() == States.HOLD) {
-                if(stats.isRight()){
-                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    String path = "/sprites/Hold1R.png";
-                    frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
-                } else {
-                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    String path = "/sprites/Hold1L.png";
-                    frend.icon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
-                }
-            }
 
-            for(int i = 0; i < foodList.size(); i++){
-                if(foodList.get(i) != null){
-                    CheckFoodCollision();
-                    break;
+                if((stats.getPositionX() != stats.getDestinationX() || stats.getPositionY() != stats.getDestinationY()) && stats.getState()!=States.HOLD) {
+
+                    if (stats.getPositionX() > stats.getDestinationX()){
+
+                        if ((stats.getPositionX() - stats.getDestinationX()) < stats.getMsX()) {
+                            stats.setPositionX(stats.getDestinationX());
+                        } else {
+                            stats.setPositionX(stats.getPositionX() - stats.getMsX());
+                        }
+
+                    } else if (stats.getPositionX() < stats.getDestinationX()){
+
+                        if ((stats.getDestinationX() - stats.getPositionX()) < stats.getMsX()) {
+                            stats.setPositionX(stats.getDestinationX());
+                        } else {
+                            stats.setPositionX(stats.getPositionX() + stats.getMsX());
+                        }
+
+                    }
+
+                    if (stats.getPositionY() > stats.getDestinationY()){
+
+                        if ((stats.getPositionY() - stats.getDestinationY()) < stats.getMsY()) {
+                            stats.setPositionY(stats.getDestinationY());
+                        } else {
+                            stats.setPositionY(stats.getPositionY() - stats.getMsY());
+                        }
+
+                    } else if (stats.getPositionY() < stats.getDestinationY()){
+
+                        if ((stats.getDestinationY() - stats.getPositionY()) < stats.getMsY()) {
+                            stats.setPositionY(stats.getDestinationY());
+                        } else {
+                            stats.setPositionY(stats.getPositionY() + stats.getMsY());
+                        }
+
+                    }
+                }
+
+                if(stats.getPositionX() == stats.getDestinationX() && stats.getPositionY() == stats.getDestinationY()){
+                    stats.setState(States.IDLE);
                 }
             }
 
             CheckLakeColision();
 
-            if((stats.getPositionX() != stats.getDestinationX() || stats.getPositionY() != stats.getDestinationY()) && stats.getState()!=States.HOLD) {
+            if(stats.getForcedState() == States.WORK){
 
-                if (stats.getPositionX() > stats.getDestinationX()){
-
-                    if ((stats.getPositionX() - stats.getDestinationX()) < stats.getMsX()) {
-                        stats.setPositionX(stats.getDestinationX());
-                    } else {
-                        stats.setPositionX(stats.getPositionX() - stats.getMsX());
-                    }
-
-                } else if (stats.getPositionX() < stats.getDestinationX()){
-
-                    if ((stats.getDestinationX() - stats.getPositionX()) < stats.getMsX()) {
-                        stats.setPositionX(stats.getDestinationX());
-                    } else {
-                        stats.setPositionX(stats.getPositionX() + stats.getMsX());
-                    }
-
-                }
-
-                if (stats.getPositionY() > stats.getDestinationY()){
-
-                    if ((stats.getPositionY() - stats.getDestinationY()) < stats.getMsY()) {
-                        stats.setPositionY(stats.getDestinationY());
-                    } else {
-                        stats.setPositionY(stats.getPositionY() - stats.getMsY());
-                    }
-
-                } else if (stats.getPositionY() < stats.getDestinationY()){
-
-                    if ((stats.getDestinationY() - stats.getPositionY()) < stats.getMsY()) {
-                        stats.setPositionY(stats.getDestinationY());
-                    } else {
-                        stats.setPositionY(stats.getPositionY() + stats.getMsY());
-                    }
-
-                }
-            }
-
-            if(stats.getPositionX() == stats.getDestinationX() && stats.getPositionY() == stats.getDestinationY()){
-                stats.setState(States.IDLE);
             }
 
             counter++;
             if (counter == 96) {       // 16 ticks per second :   1 min = 960 tics
                 stats.setHunger(stats.getHunger()-1);
                 window.hungerBar.setValue(stats.getHunger());
-                //stats.setTiredness(stats.getTiredness()-1);
+                if(stats.getTiredness() < 100){
+                    stats.setTiredness(stats.getTiredness()+1);
+                }
+                window.tiredBar.setValue(stats.getTiredness());
                 counter = 1;
             }
 
+
+            // Death out of Hunger
             if (stats.getHunger() == 0){
                 stats.setAlive(false);
 
@@ -195,7 +208,7 @@ public class Clock implements Runnable{
 
         if(x > min_x && x < max_x){
             if (y > min_y && y < max_y){
-                //lake colision
+                stats.setForcedState(States.WORK);
             }
         }
     }
