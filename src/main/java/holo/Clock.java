@@ -124,7 +124,7 @@ public class Clock implements Runnable{
 
             CheckLakeColision();
 
-            if(stats.getForcedState() == States.WORK){
+            if(stats.getState() == States.WORK){
                 frend.setVisible(false);
                 String path = "/sprites/Cast.gif";
                 lake.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(path))));
@@ -219,7 +219,7 @@ public class Clock implements Runnable{
 
         if(x > min_x && x < max_x){
             if (y > min_y && y < max_y){
-                stats.setForcedState(States.WORK);
+                stats.setState(States.WORK);
             }
         }
     }
