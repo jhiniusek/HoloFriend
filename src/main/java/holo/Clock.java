@@ -12,13 +12,15 @@ public class Clock implements Runnable{
     private Frend frend;
     private GameWindow window;
     private ArrayList<Food> foodList;
+    private Lake lake;
     private int counter = 1;
 
-    public Clock(FrendStats stats, Frend frend, GameWindow window, ArrayList<Food> foodList) {
+    public Clock(FrendStats stats, Frend frend, GameWindow window, ArrayList<Food> foodList, Lake lake) {
         this.stats = stats;
         this.frend = frend;
         this.window = window;
         this.foodList = foodList;
+        this.lake = lake;
     }
 
     @Override
@@ -63,6 +65,9 @@ public class Clock implements Runnable{
                     break;
                 }
             }
+
+            CheckLakeColision();
+
             if((stats.getPositionX() != stats.getDestinationX() || stats.getPositionY() != stats.getDestinationY()) && stats.getState()!=States.HOLD) {
 
                 if (stats.getPositionX() > stats.getDestinationX()){
@@ -175,6 +180,22 @@ public class Clock implements Runnable{
                     }
                 }
             } catch (Exception e){
+            }
+        }
+    }
+
+    private void CheckLakeColision(){
+        int x = (int)stats.getPositionX() + 32;
+        int y = (int)stats.getPositionY() + 100;
+        int min_x = lake.getX()+30;
+        int max_x = min_x + 220;
+
+        int min_y = lake.getY()+100;
+        int max_y = min_y + 128;
+
+        if(x > min_x && x < max_x){
+            if (y > min_y && y < max_y){
+                //lake colision
             }
         }
     }

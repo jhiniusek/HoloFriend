@@ -167,7 +167,6 @@ public class GameWindow extends JFrame{
         });
         setVisible(true);
 
-
         stats.setPositionX(getX()+226);
         stats.setDestinationX(getX()+226);
         stats.setPositionY(getY()+209);
