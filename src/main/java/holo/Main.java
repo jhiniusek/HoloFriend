@@ -27,7 +27,7 @@ public class Main {
         //cursor.start();
 
         Frend frend = new Frend(stats);
-        Lake lake = new Lake(0,0);
+        Lake lake = new Lake(500,500);
         Thread clock = new Thread(new Clock(stats, frend, window, foodList, lake));
         clock.start();
     }
