@@ -17,7 +17,6 @@ public class Clock implements Runnable{
     private String newSprite = null;
     private int idleTimer = 60;
     private int counter = 1;
-    private boolean ableToWork = true;
     private int workCooldown = 0;
     private int castAnimation = 22;
     private int catchTimer = 64;
@@ -146,6 +145,21 @@ public class Clock implements Runnable{
                 stats.setState(States.WALK);
             }
 
+            if (stats.getState() == States.IDLE && idleTimer == 0 && (stats.getPositionX() != stats.getDestinationX() || stats.getPositionY() != stats.getDestinationY())){
+                stats.evaluateMs();
+                stats.setState(States.WALK);
+            }
+
+
+
+            if(workCooldown>0){
+                workCooldown--;
+            }
+
+            if(stats.getTiredness()<6){
+                stats.setAbleToWork(false);
+            }
+
             if(stats.getState() == States.WORK){
                 stats.setPositionX(lake.getLocation().x+30);
                 stats.setPositionY(lake.getLocation().y+50);
@@ -174,6 +188,7 @@ public class Clock implements Runnable{
                             spritePath = newSprite;
                         }
                         catchTimer = ((int) (Math.random() * 80) + 80);
+                        stats.setTiredness(stats.getTiredness()-5);
                         //CURRENCY + 100 or smth
                     } else {
                         castAnimation = 32;
@@ -183,13 +198,26 @@ public class Clock implements Runnable{
                             spritePath = newSprite;
                         }
                         catchTimer = ((int) (Math.random() * 80) + 80);
+                        stats.setTiredness(stats.getTiredness()-5);
                         //CURRENCY + 10 or smth
                     }
                 }
+                if(!stats.isAbleToWork() && castAnimation==10){
+                    workCooldown = 320;
+                    stats.setPositionX(lake.getLocation().x-40);
+                    stats.setPositionY(lake.getLocation().y+50);
+                    newSprite = "/sprites/Lake.png";
+                    if(!newSprite.equals(spritePath)){
+                        lake.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        spritePath = newSprite;
+                    }
+                    frend.setLocation((int)stats.getPositionX(),(int)stats.getPositionY());
+                    frend.setVisible(true);
+                    stats.setState(States.IDLE);
+                    castAnimation = 22;
+                }
 
-
-
-            } else if (ableToWork){
+            } else if (stats.isAbleToWork() && workCooldown == 0){
                 CheckLakeCollision();
             }
 
@@ -199,6 +227,9 @@ public class Clock implements Runnable{
                 window.hungerBar.setValue(stats.getHunger());
                 if(stats.getTiredness() < 100){
                     stats.setTiredness(stats.getTiredness()+1);
+                    if(stats.getTiredness()>20){
+                        stats.setAbleToWork(true);
+                    }
                 }
                 window.tiredBar.setValue(stats.getTiredness());
                 counter = 1;

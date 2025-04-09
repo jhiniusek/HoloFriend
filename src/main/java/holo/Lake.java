@@ -38,6 +38,8 @@ public class Lake extends JFrame {
                 int Y = thisY + yMoved;
                 setLocation(X, Y);
                 moved = true;
+
+
             }
         });
 

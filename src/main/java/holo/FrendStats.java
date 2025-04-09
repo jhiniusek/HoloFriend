@@ -22,6 +22,7 @@ public class FrendStats {
     private int cursorX = 0;
     private int cursorY = 0;
     private States state = States.IDLE;
+    private boolean ableToWork = true;
 
     public FrendStats() throws InterruptedException {
         getScreens();
@@ -129,6 +130,14 @@ public class FrendStats {
 
     public void setRight(boolean goRight) {
         this.right = goRight;
+    }
+
+    public boolean isAbleToWork() {
+        return ableToWork;
+    }
+
+    public void setAbleToWork(boolean ableToWork) {
+        this.ableToWork = ableToWork;
     }
 
     private void getScreens() throws InterruptedException {
