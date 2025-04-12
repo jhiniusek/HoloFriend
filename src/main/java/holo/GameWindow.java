@@ -17,15 +17,15 @@ public class GameWindow extends JFrame{
 
     public GameWindow(FrendStats stats, ArrayList<Food> foodList) {
         Map<Integer, Point> burgerMap = new HashMap<Integer, Point>();
-        burgerMap.put(0, new Point(80,210));
-        burgerMap.put(1, new Point(128,210));
-        burgerMap.put(2, new Point(176,210));
-        burgerMap.put(3, new Point(104,186));
-        burgerMap.put(4, new Point(152,186));
-        burgerMap.put(5, new Point(128,162));
+        burgerMap.put(0, new Point(178,230));
+        burgerMap.put(1, new Point(219,230));
+        burgerMap.put(2, new Point(260,230));
+        burgerMap.put(3, new Point(178,207));
+        burgerMap.put(4, new Point(219,207));
+        burgerMap.put(5, new Point(260,207));
 
 
-        setSize(500,350);
+        setSize(306,346);
         setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -39,21 +39,21 @@ public class GameWindow extends JFrame{
 
 
         hungerBar.setValue(stats.getHunger());
-        hungerBar.setBounds(224,104,160,16);
+        hungerBar.setBounds(88,113,160,16);
         hungerBar.setForeground(new Color(39,199,225));
         add(hungerBar);
         getContentPane().setComponentZOrder(hungerBar, 0);
 
 
         tiredBar.setValue(stats.getTiredness());
-        tiredBar.setBounds(224,152,160,16);
+        tiredBar.setBounds(88,161,160,16);
         tiredBar.setForeground(new Color(39,199,225));
         add(tiredBar);
         getContentPane().setComponentZOrder(tiredBar, 0);
 
 
         JButton quitButton = new JButton();
-        quitButton.setBounds(235, 35, 40, 40);
+        quitButton.setBounds(133, 20, 40, 40);
         quitButton.setContentAreaFilled(false);
         quitButton.setBorderPainted(false);
         quitButton.setFocusPainted(false);
@@ -111,7 +111,7 @@ public class GameWindow extends JFrame{
 
 
         JButton foodSpawner = new JButton();
-        foodSpawner.setBounds(64, 241, 144, 48);
+        foodSpawner.setBounds(20, 209, 143, 35);
         foodSpawner.setContentAreaFilled(false);
         foodSpawner.setBorderPainted(false);
         foodSpawner.setFocusPainted(false);
@@ -129,6 +129,24 @@ public class GameWindow extends JFrame{
             }
         });
         this.add(foodSpawner);
+
+
+
+        JButton shop = new JButton();
+        shop.setBounds(20, 270, 143, 35);
+        shop.setContentAreaFilled(false);
+        shop.setBorderPainted(false);
+        shop.setFocusPainted(false);
+        shop.setOpaque(false);
+        shop.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("shop opened");
+            }
+        });
+        this.add(shop);
+
+
 
 
         getContentPane().addMouseListener(new MouseAdapter() {
@@ -167,10 +185,10 @@ public class GameWindow extends JFrame{
         });
         setVisible(true);
 
-        stats.setPositionX(getX()+226);
-        stats.setDestinationX(getX()+226);
-        stats.setPositionY(getY()+209);
-        stats.setDestinationY(getY()+209);
+        stats.setPositionX(getX()+325);
+        stats.setDestinationX(getX()+325);
+        stats.setPositionY(getY()+210);
+        stats.setDestinationY(getY()+210);
 
     }
 }
