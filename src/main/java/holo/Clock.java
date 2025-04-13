@@ -20,6 +20,9 @@ public class Clock implements Runnable{
     private int workCooldown = 0;
     private int castAnimation = 22;
     private int catchTimer = 64;
+    private int fishValue = 0;
+    private int tired = 0;
+    private int rodSpeed = 160;
 
     public Clock(FrendStats stats, Frend frend, GameWindow window, ArrayList<Food> foodList, Lake lake) {
         this.stats = stats;
@@ -151,6 +154,9 @@ public class Clock implements Runnable{
             }
 
 
+            if(lake.forceStop){
+                stats.setAbleToWork(false);
+            }
 
             if(workCooldown>0){
                 workCooldown--;
@@ -179,30 +185,31 @@ public class Clock implements Runnable{
                 if(catchTimer > 0){
                     catchTimer--;
                 }
-                if(catchTimer == 0){
-                    if(Math.random() < 0.5){
-                        castAnimation = 32;
-                        newSprite = "/sprites/CatchShiny.gif";
-                        if(!newSprite.equals(spritePath)){
-                            lake.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
-                            spritePath = newSprite;
-                        }
-                        catchTimer = ((int) (Math.random() * 80) + 80);
-                        stats.setTiredness(stats.getTiredness()-5);
-                        //CURRENCY + 100 or smth
-                    } else {
-                        castAnimation = 32;
-                        newSprite = "/sprites/CatchNormal.gif";
-                        if(!newSprite.equals(spritePath)){
-                            lake.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
-                            spritePath = newSprite;
-                        }
-                        catchTimer = ((int) (Math.random() * 80) + 80);
-                        stats.setTiredness(stats.getTiredness()-5);
-                        //CURRENCY + 10 or smth
-                    }
+                if(castAnimation == 15){
+                    stats.setCurrency(stats.getCurrency()+ fishValue);
+                    window.currency.setText(String.valueOf(stats.getCurrency()));
+                    stats.setTiredness(stats.getTiredness()-tired);
+                    window.tiredBar.setValue(stats.getTiredness());
+                    fishValue = 0;
+                    tired = 0;
                 }
-                if(!stats.isAbleToWork() && castAnimation==10){
+                if(catchTimer == 0){
+                    if(Math.random() < 0.05){
+                        newSprite = "/sprites/CatchShiny.gif";
+                        fishValue = 50;
+                    } else {
+                        newSprite = "/sprites/CatchNormal.gif";
+                        fishValue = 5;
+                    }
+                    castAnimation = 32;
+                    tired = 5;
+                    if(!newSprite.equals(spritePath)){
+                        lake.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        spritePath = newSprite;
+                    }
+                    catchTimer = ((int) (Math.random() * rodSpeed) + rodSpeed);
+                }
+                if(!stats.isAbleToWork() && castAnimation<10){
                     workCooldown = 320;
                     stats.setPositionX(lake.getLocation().x-40);
                     stats.setPositionY(lake.getLocation().y+50);
@@ -215,6 +222,8 @@ public class Clock implements Runnable{
                     frend.setVisible(true);
                     stats.setState(States.IDLE);
                     castAnimation = 22;
+                    lake.forceStop = false;
+                    lake.removeForcableStop();
                 }
 
             } else if (stats.isAbleToWork() && workCooldown == 0){
@@ -314,6 +323,7 @@ public class Clock implements Runnable{
         if(x > min_x && x < max_x){
             if (y > min_y && y < max_y){
                 stats.setState(States.WORK);
+                lake.makeForceableStop();
                 frend.setVisible(false);
                 newSprite = "/sprites/Cast.gif";
                 if(!newSprite.equals(spritePath)){

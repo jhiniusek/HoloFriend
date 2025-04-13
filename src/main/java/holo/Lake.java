@@ -2,23 +2,38 @@ package holo;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.event.*;
 
 public class Lake extends JFrame {
     private Point initialClick;
+    public boolean forceStop = false;
     JLabel sprite = new JLabel(new ImageIcon(getClass().getResource("/sprites/Lake.png")));
-    public boolean moved = false;
+    JButton cancel = new JButton();
 
     public Lake(int x, int y) {
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(261,217);
+        setLayout(null);
         setLocation(x, y);
         setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
         setBackground(new Color(1.0f,1.0f,1.0f,0f));
+        sprite.setBounds(0, 0, 261, 217);
         add(sprite);
+
+        cancel.setBounds(30, 50, 50, 128);
+        cancel.setContentAreaFilled(false);
+        cancel.setBorderPainted(false);
+        cancel.setFocusPainted(false);
+        cancel.setOpaque(false);
+        cancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("FORCED STOPPED");
+                forceStop = true;
+                remove(cancel);
+            }
+        });
 
         getContentPane().addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -37,12 +52,17 @@ public class Lake extends JFrame {
                 int X = thisX + xMoved;
                 int Y = thisY + yMoved;
                 setLocation(X, Y);
-                moved = true;
-
-
             }
         });
 
         setVisible(true);
+    }
+
+    public void makeForceableStop(){
+        add(cancel);
+    }
+
+    public void removeForcableStop(){
+        remove(cancel);
     }
 }

@@ -13,9 +13,10 @@ import java.util.Map;
 public class GameWindow extends JFrame{
     public JProgressBar hungerBar = new JProgressBar(0,100);
     public JProgressBar tiredBar = new JProgressBar(0,100);
+    public JLabel currency = new JLabel();
     private Point initialClick;
 
-    public GameWindow(FrendStats stats, ArrayList<Food> foodList) {
+    public GameWindow(FrendStats stats, ArrayList<Food> foodList) throws IOException, FontFormatException {
         Map<Integer, Point> burgerMap = new HashMap<Integer, Point>();
         burgerMap.put(0, new Point(178,230));
         burgerMap.put(1, new Point(219,230));
@@ -119,16 +120,21 @@ public class GameWindow extends JFrame{
         foodSpawner.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                for(int i = 0; i < foodList.size(); i++){
-                    if(foodList.get(i) == null){
-                        Food food = new Food((int) (getLocation().x + burgerMap.get(i).getX()), (int) (getLocation().y + burgerMap.get(i).getY()));
-                        foodList.set(i, food);
-                        break;
+
+                if(stats.getCurrency()>2){
+                    for(int i = 0; i < foodList.size(); i++){
+                        if(foodList.get(i) == null){
+                            Food food = new Food((int) (getLocation().x + burgerMap.get(i).getX()), (int) (getLocation().y + burgerMap.get(i).getY()));
+                            foodList.set(i, food);
+                            stats.setCurrency(stats.getCurrency()-2);
+                            currency.setText(String.valueOf(stats.getCurrency()));
+                            break;
+                        }
                     }
                 }
             }
         });
-        this.add(foodSpawner);
+        add(foodSpawner);
 
 
 
@@ -144,7 +150,15 @@ public class GameWindow extends JFrame{
                 System.out.println("shop opened");
             }
         });
-        this.add(shop);
+        add(shop);
+
+        Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/Micro5-Regular.ttf"));
+        currency.setText(String.valueOf(stats.getCurrency()));
+        currency.setFont(font.deriveFont(35f));
+        currency.setForeground(new Color(39,199,255,255));
+        currency.setBounds(205, 270, 143, 35);
+        add(currency);
+        getContentPane().setComponentZOrder(currency, 0);
 
 
 

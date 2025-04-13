@@ -3,13 +3,13 @@ package holo;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FrendStats {
     private int hunger = 100;
     private int tiredness = 100;
+    private int currency = 10;
     private boolean alive = true;
     private ArrayList<Screen> screens = new ArrayList<>();
     private float positionX = 500;
@@ -140,6 +140,14 @@ public class FrendStats {
         this.ableToWork = ableToWork;
     }
 
+    public int getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(int currency) {
+        this.currency = currency;
+    }
+
     private void getScreens() throws InterruptedException {
         GraphicsDevice[] gs = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
         JFrame screenDetector = new JFrame();
@@ -189,6 +197,7 @@ public class FrendStats {
             scanner.close();
             hunger = load.get(0);
             tiredness = load.get(1);
+            currency = load.get(2);
         } catch (Exception e) {
             System.out.println("save corrupted"); // Display options here, if restart or try to fix a save and restart the software
         }
@@ -196,6 +205,7 @@ public class FrendStats {
 
     @Override
     public String toString() {
-        return hunger + "\n" + tiredness;
+        return hunger + "\n" + tiredness + "\n" + currency;
     }
+
 }
