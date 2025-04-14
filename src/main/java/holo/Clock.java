@@ -13,10 +13,15 @@ public class Clock implements Runnable{
     private GameWindow window;
     private ArrayList<Food> foodList;
     private Lake lake;
+    private Bed bed;
     private String spritePath = "/sprites/IdleL.gif";
     private String newSprite = null;
+
+    //IDLE VARIABLES
     private int idleTimer = 60;
     private int counter = 1;
+
+    //FISHING VARIABLES
     private int workCooldown = 0;
     private int castAnimation = 22;
     private int catchTimer = 64;
@@ -24,22 +29,29 @@ public class Clock implements Runnable{
     private int tired = 0;
     private int rodSpeed = 160;
 
-    public Clock(FrendStats stats, Frend frend, GameWindow window, ArrayList<Food> foodList, Lake lake) {
+    //SLEEP VARIABLES
+    private int sleepCooldown = 0;
+    private int sleepTimer = 20;
+
+    public Clock(FrendStats stats, Frend frend, GameWindow window, ArrayList<Food> foodList, Lake lake, Bed bed) {
         this.stats = stats;
         this.frend = frend;
         this.window = window;
         this.foodList = foodList;
         this.lake = lake;
+        this.bed = bed;
     }
 
     @Override
     public void run() {
         while(stats.isAlive()){
 
-            for(int i = 0; i < foodList.size(); i++){
-                if(foodList.get(i) != null){
-                    CheckFoodCollision();
-                    break;
+            if (stats.getState() != States.SLEEP) {
+                for(int i = 0; i < foodList.size(); i++){
+                    if(foodList.get(i) != null){
+                        CheckFoodCollision();
+                        break;
+                    }
                 }
             }
 
@@ -162,7 +174,7 @@ public class Clock implements Runnable{
                 workCooldown--;
             }
 
-            if(stats.getTiredness()<6){
+            if(stats.getTiredness()<11){
                 stats.setAbleToWork(false);
             }
 
@@ -202,7 +214,7 @@ public class Clock implements Runnable{
                         fishValue = 5;
                     }
                     castAnimation = 32;
-                    tired = 5;
+                    tired = 10;
                     if(!newSprite.equals(spritePath)){
                         lake.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
@@ -226,8 +238,57 @@ public class Clock implements Runnable{
                     lake.removeForcableStop();
                 }
 
-            } else if (stats.isAbleToWork() && workCooldown == 0){
+            } else if (stats.isAbleToWork() && workCooldown == 0 && stats.getState() != States.SLEEP){
                 CheckLakeCollision();
+            }
+
+
+
+            if(sleepCooldown>0){
+                sleepCooldown--;
+            }
+
+            stats.setAbleToSleep(true);
+
+            if(stats.getTiredness() > 70 && stats.getState() != States.SLEEP){
+                stats.setAbleToSleep(false);
+            }
+
+            if(stats.getTiredness() == 100){
+                stats.setAbleToSleep(false);
+            }
+
+            if(bed.wakeup || stats.getHunger() < 5){
+                stats.setAbleToSleep(false);
+            }
+
+            if(stats.getState()==States.SLEEP){
+                if(sleepTimer > 0){
+                    sleepTimer--;
+                }
+                if(sleepTimer == 0){
+                    stats.setTiredness(stats.getTiredness()+1);
+                    window.tiredBar.setValue(stats.getTiredness());
+                    sleepTimer = 25;
+                }
+                if(!stats.isAbleToSleep()){
+                    sleepCooldown = 320;
+                    stats.setPositionX(bed.getLocation().x+95);
+                    stats.setPositionY(bed.getLocation().y-50);
+                    newSprite = "/sprites/Bed.png";
+                    if(!newSprite.equals(spritePath)){
+                        bed.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        spritePath = newSprite;
+                    }
+                    frend.setLocation((int)stats.getPositionX(),(int)stats.getPositionY());
+                    frend.setVisible(true);
+                    stats.setState(States.IDLE);
+                    bed.wakeup = false;
+                    bed.removeForcableStop();
+                }
+
+            } else if(stats.isAbleToSleep() && sleepCooldown == 0 && stats.getState() != States.WORK){
+                CheckBedCollision();
             }
 
             counter++;
@@ -296,7 +357,7 @@ public class Clock implements Runnable{
                         foodList.get(i).dispose();
                         foodList.set(i, null);
                         if (stats.getHunger() < 70){
-                            stats.setHunger(stats.getHunger()+30);
+                            stats.setHunger(stats.getHunger()+10);
                             window.hungerBar.setValue(stats.getHunger());
                         } else {
                             stats.setHunger(100);
@@ -328,6 +389,29 @@ public class Clock implements Runnable{
                 newSprite = "/sprites/Cast.gif";
                 if(!newSprite.equals(spritePath)){
                     lake.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                    spritePath = newSprite;
+                }
+            }
+        }
+    }
+
+    private void CheckBedCollision(){
+        int x = (int)stats.getPositionX() + 16;
+        int y = (int)stats.getPositionY() + 64;
+        int min_x = bed.getX()+50;
+        int max_x = min_x + 120;
+
+        int min_y = bed.getY()+15;
+        int max_y = min_y + 70;
+
+        if(x > min_x && x < max_x){
+            if (y > min_y && y < max_y){
+                stats.setState(States.SLEEP);
+                bed.makeForceableStop();
+                frend.setVisible(false);
+                newSprite = "/sprites/Sleep.gif";
+                if(!newSprite.equals(spritePath)){
+                    bed.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                     spritePath = newSprite;
                 }
             }

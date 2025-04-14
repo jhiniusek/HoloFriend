@@ -156,7 +156,7 @@ public class GameWindow extends JFrame{
         currency.setText(String.valueOf(stats.getCurrency()));
         currency.setFont(font.deriveFont(35f));
         currency.setForeground(new Color(39,199,255,255));
-        currency.setBounds(205, 270, 143, 35);
+        currency.setBounds(205, 270, 90, 35);
         add(currency);
         getContentPane().setComponentZOrder(currency, 0);
 

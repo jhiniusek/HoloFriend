@@ -29,7 +29,11 @@ public class Main {
 
         Frend frend = new Frend(stats);
         Lake lake = new Lake(500,500);
-        Thread clock = new Thread(new Clock(stats, frend, window, foodList, lake));
+        Bed bed = new Bed(0,0);
+        Thread clock = new Thread(new Clock(stats, frend, window, foodList, lake, bed));
         clock.start();
+
+
+
     }
 }

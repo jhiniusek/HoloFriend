@@ -23,6 +23,7 @@ public class FrendStats {
     private int cursorY = 0;
     private States state = States.IDLE;
     private boolean ableToWork = true;
+    private boolean ableToSleep = true;
 
     public FrendStats() throws InterruptedException {
         getScreens();
@@ -146,6 +147,14 @@ public class FrendStats {
 
     public void setCurrency(int currency) {
         this.currency = currency;
+    }
+
+    public boolean isAbleToSleep() {
+        return ableToSleep;
+    }
+
+    public void setAbleToSleep(boolean ableToSleep) {
+        this.ableToSleep = ableToSleep;
     }
 
     private void getScreens() throws InterruptedException {
