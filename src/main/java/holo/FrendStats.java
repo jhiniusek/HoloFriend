@@ -25,6 +25,24 @@ public class FrendStats {
     private boolean ableToWork = true;
     private boolean ableToSleep = true;
 
+    //EQUIPMENT
+    private int goodRod = 0;
+    private int superRod = 0;
+
+    private int bed = 0;
+    public int bedPositionX = 0;
+    public int bedPositionY = 0;
+
+    private int wardrobe = 0;
+    public int wardrobePositionX = 0;
+    public int wardrobePositionY = 0;
+    private int kurokami = 0;
+
+    private int radio = 0;
+    public int radioPositionX = 0;
+    public int radioPositionY = 0;
+    private int chessSlowed = 0;
+
     public FrendStats() throws InterruptedException {
         getScreens();
     }
@@ -157,6 +175,62 @@ public class FrendStats {
         this.ableToSleep = ableToSleep;
     }
 
+    public int getGoodRod() {
+        return goodRod;
+    }
+
+    public void setGoodRod(int goodRod) {
+        this.goodRod = goodRod;
+    }
+
+    public int getSuperRod() {
+        return superRod;
+    }
+
+    public void setSuperRod(int superRod) {
+        this.superRod = superRod;
+    }
+
+    public int getBed() {
+        return bed;
+    }
+
+    public void setBed(int bed) {
+        this.bed = bed;
+    }
+
+    public int getWardrobe() {
+        return wardrobe;
+    }
+
+    public void setWardrobe(int wardrobe) {
+        this.wardrobe = wardrobe;
+    }
+
+    public int getKurokami() {
+        return kurokami;
+    }
+
+    public void setKurokami(int kurokami) {
+        this.kurokami = kurokami;
+    }
+
+    public int getRadio() {
+        return radio;
+    }
+
+    public void setRadio(int radio) {
+        this.radio = radio;
+    }
+
+    public int getChessSlowed() {
+        return chessSlowed;
+    }
+
+    public void setChessSlowed(int chessSlowed) {
+        this.chessSlowed = chessSlowed;
+    }
+
     private void getScreens() throws InterruptedException {
         GraphicsDevice[] gs = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
         JFrame screenDetector = new JFrame();
@@ -207,6 +281,12 @@ public class FrendStats {
             hunger = load.get(0);
             tiredness = load.get(1);
             currency = load.get(2);
+            bed = load.get(3);
+            if(bed == 1){
+
+            }
+            bedPositionX = load.get(4);
+            bedPositionY = load.get(5);
         } catch (Exception e) {
             System.out.println("save corrupted"); // Display options here, if restart or try to fix a save and restart the software
         }
@@ -214,7 +294,7 @@ public class FrendStats {
 
     @Override
     public String toString() {
-        return hunger + "\n" + tiredness + "\n" + currency;
+        return hunger + "\n" + tiredness + "\n" + currency + "\n" + bed + "\n" + bedPositionX + "\n" + bedPositionY;
     }
 
 }

@@ -16,7 +16,7 @@ public class GameWindow extends JFrame{
     public JLabel currency = new JLabel();
     private Point initialClick;
 
-    public GameWindow(FrendStats stats, ArrayList<Food> foodList) throws IOException, FontFormatException {
+    public GameWindow(FrendStats stats, ArrayList<Food> foodList, Shop shop) throws IOException, FontFormatException {
         Map<Integer, Point> burgerMap = new HashMap<Integer, Point>();
         burgerMap.put(0, new Point(178,230));
         burgerMap.put(1, new Point(219,230));
@@ -138,19 +138,20 @@ public class GameWindow extends JFrame{
 
 
 
-        JButton shop = new JButton();
-        shop.setBounds(20, 270, 143, 35);
-        shop.setContentAreaFilled(false);
-        shop.setBorderPainted(false);
-        shop.setFocusPainted(false);
-        shop.setOpaque(false);
-        shop.addActionListener(new ActionListener() {
+        JButton openShop = new JButton();
+        openShop.setBounds(20, 270, 143, 35);
+        openShop.setContentAreaFilled(false);
+        openShop.setBorderPainted(false);
+        openShop.setFocusPainted(false);
+        openShop.setOpaque(false);
+        openShop.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("shop opened");
+                shop.setLocation(getLocation().x-170,getLocation().y+250);
+                shop.setVisible(true);
             }
         });
-        add(shop);
+        add(openShop);
 
         Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/Micro5-Regular.ttf"));
         currency.setText(String.valueOf(stats.getCurrency()));

@@ -10,12 +10,11 @@ public class Bed extends JFrame {
     JLabel sprite = new JLabel(new ImageIcon(getClass().getResource("/sprites/Bed.png")));
     JButton cancel = new JButton();
 
-    public Bed(int x, int y) {
+    public Bed(FrendStats stats) {
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(214,83);
         setLayout(null);
-        setLocation(x, y);
         setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
         setBackground(new Color(1.0f,1.0f,1.0f,0f));
         JLabel shadow = new JLabel(new ImageIcon(getClass().getResource("/sprites/BedShadow.png")));
@@ -55,10 +54,12 @@ public class Bed extends JFrame {
                 int X = thisX + xMoved;
                 int Y = thisY + yMoved;
                 setLocation(X, Y);
+                stats.bedPositionX = X;
+                stats.bedPositionY = Y;
             }
         });
-
-        setVisible(true);
+        setVisible(stats.getBed() == 1);
+        setLocation(stats.bedPositionX, stats.bedPositionY);
     }
 
     public void makeForceableStop(){

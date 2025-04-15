@@ -22,14 +22,18 @@ public class Main {
             foodList.addFirst(null);
         }
 
-        GameWindow window = new  GameWindow(stats, foodList);
+        Bed bed = new Bed(stats);
+
+        Shop shop = new Shop(stats, bed);
+        GameWindow window = new  GameWindow(stats, foodList, shop);
+        shop.setMainWindow(window);
 
         //Thread cursor = new Thread(new Cursor(stats));
         //cursor.start();
 
         Frend frend = new Frend(stats);
-        Lake lake = new Lake(500,500);
-        Bed bed = new Bed(0,0);
+        Lake lake = new Lake(window.getLocation().x - 270,window.getLocation().y + 100);
+
         Thread clock = new Thread(new Clock(stats, frend, window, foodList, lake, bed));
         clock.start();
 
