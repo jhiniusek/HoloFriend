@@ -55,6 +55,13 @@ public class Clock implements Runnable{
                 }
             }
 
+            if(stats.getGoodRod() == 1){
+                rodSpeed = 120;
+            }
+            if(stats.getSuperRod() == 1){
+                rodSpeed = 80;
+            }
+
             if(stats.getState() == States.IDLE){
                 if(stats.isRight()){
                     frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
