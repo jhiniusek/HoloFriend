@@ -23,8 +23,10 @@ public class Main {
         }
 
         Bed bed = new Bed(stats);
+        Radio radio = new Radio(stats);
+        Wardrobe wardrobe = new Wardrobe(stats);
 
-        Shop shop = new Shop(stats, bed);
+        Shop shop = new Shop(stats, bed, radio, wardrobe);
         GameWindow window = new  GameWindow(stats, foodList, shop);
         shop.setMainWindow(window);
 
@@ -36,6 +38,8 @@ public class Main {
 
         Thread clock = new Thread(new Clock(stats, frend, window, foodList, lake, bed));
         clock.start();
+
+
 
 
 

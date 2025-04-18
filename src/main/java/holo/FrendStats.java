@@ -281,12 +281,19 @@ public class FrendStats {
             hunger = load.get(0);
             tiredness = load.get(1);
             currency = load.get(2);
-            bed = load.get(3);
-            if(bed == 1){
-
-            }
-            bedPositionX = load.get(4);
-            bedPositionY = load.get(5);
+            goodRod = load.get(3);
+            superRod = load.get(4);
+            bed = load.get(5);
+            bedPositionX = load.get(6);
+            bedPositionY = load.get(7);
+            wardrobe = load.get(8);
+            wardrobePositionX = load.get(9);
+            wardrobePositionY = load.get(10);
+            kurokami = load.get(11);
+            radio = load.get(12);
+            radioPositionX = load.get(13);
+            radioPositionY = load.get(14);
+            chessSlowed = load.get(15);
         } catch (Exception e) {
             System.out.println("save corrupted"); // Display options here, if restart or try to fix a save and restart the software
         }
@@ -294,7 +301,10 @@ public class FrendStats {
 
     @Override
     public String toString() {
-        return hunger + "\n" + tiredness + "\n" + currency + "\n" + bed + "\n" + bedPositionX + "\n" + bedPositionY;
+        return hunger + "\n" + tiredness + "\n" + currency + "\n" + goodRod + "\n" + superRod + "\n" + bed + "\n" +
+                bedPositionX + "\n" + bedPositionY + "\n" + wardrobe + "\n" + wardrobePositionX + "\n" +
+                wardrobePositionY + "\n" + kurokami + "\n" + radio + "\n" + radioPositionX + "\n" +
+                radioPositionY + "\n" + chessSlowed;
     }
 
 }

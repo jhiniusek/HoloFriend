@@ -13,14 +13,14 @@ public class Bed extends JFrame {
     public Bed(FrendStats stats) {
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setSize(214,83);
+        setSize(182,83);
         setLayout(null);
         setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
         setBackground(new Color(1.0f,1.0f,1.0f,0f));
         JLabel shadow = new JLabel(new ImageIcon(getClass().getResource("/sprites/BedShadow.png")));
-        shadow.setBounds(0, 0, 214, 83);
+        shadow.setBounds(0, 0, 182, 83);
         add(shadow);
-        sprite.setBounds(0, 0, 214, 83);
+        sprite.setBounds(0, 0, 182, 83);
         add(sprite);
 
         cancel.setBounds(135, 10, 35, 35);
