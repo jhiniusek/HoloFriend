@@ -416,8 +416,7 @@ public class Clock implements Runnable{
                 stats.setState(States.SLEEP);
                 bed.makeForceableStop();
                 frend.setVisible(false);
-                //newSprite = "/sprites/"+stats.getSkin()+"Sleep.gif";
-                newSprite = "/sprites/basic/Sleep.gif"; //REMOVE WHEN SLEEP KUROKAMI ADDED
+                newSprite = "/sprites/"+stats.getSkin()+"Sleep.gif";
                 if(!newSprite.equals(spritePath)){
                     bed.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                     spritePath = newSprite;
