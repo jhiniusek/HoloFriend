@@ -24,6 +24,7 @@ public class FrendStats {
     private States state = States.IDLE;
     private boolean ableToWork = true;
     private boolean ableToSleep = true;
+    String[] skins = new String[] {"basic/", "kurokami/"};
 
     //EQUIPMENT
     private int goodRod = 0;
@@ -37,6 +38,7 @@ public class FrendStats {
     public int wardrobePositionX = 0;
     public int wardrobePositionY = 0;
     private int kurokami = 0;
+    private int skin = 0;
 
     private int radio = 0;
     public int radioPositionX = 0;
@@ -175,6 +177,14 @@ public class FrendStats {
         this.ableToSleep = ableToSleep;
     }
 
+    public void setSkin(int skin){
+        this.skin = skin;
+    }
+
+    public String getSkin(){
+        return skins[skin];
+    }
+
     public int getGoodRod() {
         return goodRod;
     }
@@ -269,6 +279,20 @@ public class FrendStats {
         }
     }
 
+    public void changeSkin(){
+        ArrayList<Integer> skinList =  new ArrayList<>();
+        skinList.add(0);
+        if(kurokami==1){
+            skinList.add(1);
+        }
+        int index = skinList.indexOf(skin);
+        try {
+            skin = skinList.get(index+1);
+        } catch (Exception e) {
+            skin = 0;
+        }
+    }
+
     public void load(File save) {
         ArrayList<Integer> load = new ArrayList();
         try {
@@ -290,10 +314,11 @@ public class FrendStats {
             wardrobePositionX = load.get(9);
             wardrobePositionY = load.get(10);
             kurokami = load.get(11);
-            radio = load.get(12);
-            radioPositionX = load.get(13);
-            radioPositionY = load.get(14);
-            chessSlowed = load.get(15);
+            skin = load.get(12);
+            radio = load.get(13);
+            radioPositionX = load.get(14);
+            radioPositionY = load.get(15);
+            chessSlowed = load.get(16);
         } catch (Exception e) {
             System.out.println("save corrupted"); // Display options here, if restart or try to fix a save and restart the software
         }
@@ -303,7 +328,7 @@ public class FrendStats {
     public String toString() {
         return hunger + "\n" + tiredness + "\n" + currency + "\n" + goodRod + "\n" + superRod + "\n" + bed + "\n" +
                 bedPositionX + "\n" + bedPositionY + "\n" + wardrobe + "\n" + wardrobePositionX + "\n" +
-                wardrobePositionY + "\n" + kurokami + "\n" + radio + "\n" + radioPositionX + "\n" +
+                wardrobePositionY + "\n" + kurokami + "\n" + skin + "\n" + radio + "\n" + radioPositionX + "\n" +
                 radioPositionY + "\n" + chessSlowed;
     }
 

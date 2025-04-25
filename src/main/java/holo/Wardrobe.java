@@ -39,6 +39,13 @@ public class Wardrobe extends JFrame {
                 stats.wardrobePositionY = Y;
             }
         });
+
+        getContentPane().addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                stats.changeSkin();
+            }
+        });
+
         setVisible(stats.getWardrobe() == 1);
         setLocation(stats.wardrobePositionX, stats.wardrobePositionY);
     }

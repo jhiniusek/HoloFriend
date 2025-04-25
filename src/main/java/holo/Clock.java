@@ -65,7 +65,7 @@ public class Clock implements Runnable{
             if(stats.getState() == States.IDLE){
                 if(stats.isRight()){
                     frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    newSprite = "/sprites/IdleR.gif";
+                    newSprite = "/sprites/"+stats.getSkin()+"IdleR.gif";
                     if(!newSprite.equals(spritePath)){
                         frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
@@ -73,7 +73,7 @@ public class Clock implements Runnable{
 
                 } else {
                     frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    newSprite = "/sprites/IdleL.gif";
+                    newSprite = "/sprites/"+stats.getSkin()+"IdleL.gif";
                     if(!newSprite.equals(spritePath)){
                         frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
@@ -83,14 +83,14 @@ public class Clock implements Runnable{
             } else if (stats.getState() == States.WALK) {
                 if(stats.isRight()){
                     frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    newSprite = "/sprites/WalkR.gif";
+                    newSprite = "/sprites/"+stats.getSkin()+"WalkR.gif";
                     if(!newSprite.equals(spritePath)){
                         frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
                 } else {
                     frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    newSprite = "/sprites/WalkL.gif";
+                    newSprite = "/sprites/"+stats.getSkin()+"WalkL.gif";
                     if(!newSprite.equals(spritePath)){
                         frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
@@ -99,14 +99,14 @@ public class Clock implements Runnable{
             } else if (stats.getState() == States.HOLD) {
                 if(stats.isRight()){
                     frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    newSprite = "/sprites/Hold1R.png";
+                    newSprite = "/sprites/"+stats.getSkin()+"Hold1R.png";
                     if(!newSprite.equals(spritePath)){
                         frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
                 } else {
                     frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    newSprite = "/sprites/Hold1L.png";
+                    newSprite = "/sprites/"+stats.getSkin()+"Hold1L.png";
                     if(!newSprite.equals(spritePath)){
                         frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
@@ -193,7 +193,7 @@ public class Clock implements Runnable{
                     castAnimation--;
                 }
                 if(castAnimation == 0){
-                    newSprite = "/sprites/LakeIdle.gif";
+                    newSprite = "/sprites/"+stats.getSkin()+"LakeIdle.gif";
                     if(!newSprite.equals(spritePath)){
                         lake.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
@@ -214,10 +214,10 @@ public class Clock implements Runnable{
                 }
                 if(catchTimer == 0){
                     if(Math.random() < 0.05){
-                        newSprite = "/sprites/CatchShiny.gif";
+                        newSprite = "/sprites/"+stats.getSkin()+"CatchShiny.gif";
                         fishValue = 50;
                     } else {
-                        newSprite = "/sprites/CatchNormal.gif";
+                        newSprite = "/sprites/"+stats.getSkin()+"CatchNormal.gif";
                         fishValue = 5;
                     }
                     castAnimation = 32;
@@ -393,7 +393,7 @@ public class Clock implements Runnable{
                 stats.setState(States.WORK);
                 lake.makeForceableStop();
                 frend.setVisible(false);
-                newSprite = "/sprites/Cast.gif";
+                newSprite = "/sprites/"+stats.getSkin()+"Cast.gif";
                 if(!newSprite.equals(spritePath)){
                     lake.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                     spritePath = newSprite;
@@ -416,7 +416,8 @@ public class Clock implements Runnable{
                 stats.setState(States.SLEEP);
                 bed.makeForceableStop();
                 frend.setVisible(false);
-                newSprite = "/sprites/Sleep.gif";
+                //newSprite = "/sprites/"+stats.getSkin()+"Sleep.gif";
+                newSprite = "/sprites/basic/Sleep.gif"; //REMOVE WHEN SLEEP KUROKAMI ADDED
                 if(!newSprite.equals(spritePath)){
                     bed.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                     spritePath = newSprite;

@@ -7,7 +7,7 @@ import java.awt.event.*;
 public class Frend extends JFrame{
 
 
-    public JLabel sprite = new JLabel(new ImageIcon(getClass().getResource("/sprites/IdleL.gif")));
+    public JLabel sprite = new JLabel(new ImageIcon(getClass().getResource("/sprites/basic/IdleL.gif")));
     public JLabel shadow = new JLabel(new ImageIcon(getClass().getResource("/sprites/Shadow.png")));
     private FrendStats stats;
     private Point initialClick;
