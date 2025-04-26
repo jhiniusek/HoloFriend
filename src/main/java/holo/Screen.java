@@ -31,4 +31,8 @@ public class Screen {
         System.out.println("NEW DESTINATION: " + point);
         return point;
     }
+
+    public boolean checkIfVisible(Point point){
+        return(xMin <= point.x && point.x <= xMax -1 && yMin <= point.y && point.y <= yMax);
+    }
 }
