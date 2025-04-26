@@ -33,6 +33,10 @@ public class Clock implements Runnable{
     private int sleepCooldown = 0;
     private int sleepTimer = 20;
 
+    //DANCE VARIABLES
+    private int danceLenght = 0;
+    private int danceTimer = 0;
+
     public Clock(FrendStats stats, Frend frend, GameWindow window, ArrayList<Food> foodList, Lake lake, Bed bed) {
         this.stats = stats;
         this.frend = frend;
@@ -114,6 +118,10 @@ public class Clock implements Runnable{
                 }
             }
 
+            //
+            //       MOVEMENT LOGIC
+            //
+
             if((stats.getPositionX() != stats.getDestinationX() || stats.getPositionY() != stats.getDestinationY()) && stats.getState()==States.WALK) {
 
                 if (stats.getPositionX() > stats.getDestinationX()){
@@ -172,6 +180,10 @@ public class Clock implements Runnable{
                 stats.setState(States.WALK);
             }
 
+
+            //
+            //                        WORK
+            //
 
             if(lake.forceStop){
                 stats.setAbleToWork(false);
@@ -245,11 +257,14 @@ public class Clock implements Runnable{
                     lake.removeForcableStop();
                 }
 
-            } else if (stats.isAbleToWork() && workCooldown == 0 && stats.getState() != States.SLEEP){
+            } else if (stats.isAbleToWork() && workCooldown == 0 && stats.getState() != States.SLEEP && stats.getState() != States.DANCE){
                 CheckLakeCollision();
             }
 
 
+            //
+            //            SLEEP
+            //
 
             if(sleepCooldown>0){
                 sleepCooldown--;
@@ -294,9 +309,52 @@ public class Clock implements Runnable{
                     bed.removeForcableStop();
                 }
 
-            } else if(stats.isAbleToSleep() && sleepCooldown == 0 && stats.getState() != States.WORK){
+            } else if(stats.isAbleToSleep() && sleepCooldown == 0 && stats.getState() != States.WORK && stats.getState() != States.DANCE){
                 CheckBedCollision();
             }
+
+
+            //
+            //           DANCING
+            //
+
+            if(stats.getState() == States.DANCE){
+                String currentDance = stats.getCurrentTrack();
+                if(currentDance == "NoDisk"){
+                    danceLenght = 140;
+
+                    newSprite = "/sprites/"+stats.getSkin()+"IdleL.gif";
+                    if(!newSprite.equals(spritePath)){
+                        frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        spritePath = newSprite;
+                    }
+
+                    if(danceTimer == danceLenght){
+                        stats.setState(States.IDLE);
+                    }
+                    danceTimer++;
+                }
+                if(currentDance == "RatDance"){
+                    danceLenght = 2176;
+
+                    newSprite = "/sprites/"+stats.getSkin()+"RatDance.gif";
+                    if(!newSprite.equals(spritePath)){
+                        frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        spritePath = newSprite;
+                    }
+
+                    if(danceTimer == danceLenght){
+                        stats.setState(States.IDLE);
+                    }
+                    danceTimer++;
+                }
+
+            } else {
+                danceTimer = 0;
+            }
+
+
+            // CLOCK
 
             counter++;
             if (counter == 96) {       // 16 ticks per second :   1 min = 960 tics

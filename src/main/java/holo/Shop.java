@@ -249,6 +249,7 @@ public class Shop extends JFrame {
                     stats.setCurrency(stats.getCurrency() - 200);
                     mainWindow.currency.setText(String.valueOf(stats.getCurrency()));
                     SoldOut(172, 151);
+                    radio.updateTrackList();
                 }
 
             }

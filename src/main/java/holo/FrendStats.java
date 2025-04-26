@@ -25,6 +25,7 @@ public class FrendStats {
     private boolean ableToWork = true;
     private boolean ableToSleep = true;
     String[] skins = new String[] {"basic/", "kurokami/"};
+    private String currentTrack = "NoDisk";
 
     //EQUIPMENT
     private int goodRod = 0;
@@ -183,6 +184,14 @@ public class FrendStats {
 
     public String getSkin(){
         return skins[skin];
+    }
+
+    public void setCurrentTrack(String track){
+        this.currentTrack = track;
+    }
+
+    public String getCurrentTrack(){
+        return currentTrack;
     }
 
     public int getGoodRod() {

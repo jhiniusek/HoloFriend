@@ -6,6 +6,6 @@ public enum States {
     HOLD,
     RUN,
     SLEEP,
-    EAT,
+    DANCE,
     WORK
 }
