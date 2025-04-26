@@ -146,6 +146,8 @@ public class Shop extends JFrame {
                     stats.setCurrency(stats.getCurrency() - 350);
                     mainWindow.currency.setText(String.valueOf(stats.getCurrency()));
                     bed.setLocation(getLocation().x + 306, getLocation().y + 162);
+                    stats.checkOutOfBounds();
+                    bed.setLocation(stats.bedPositionX, stats.bedPositionY);
                     SoldOut(172, 51);
                 }
 
@@ -211,6 +213,8 @@ public class Shop extends JFrame {
                     stats.setCurrency(stats.getCurrency() - 100);
                     mainWindow.currency.setText(String.valueOf(stats.getCurrency()));
                     wardrobe.setLocation(getLocation().x + 310, getLocation().y + 95);
+                    stats.checkOutOfBounds();
+                    wardrobe.setLocation(stats.wardrobePositionX, stats.wardrobePositionY);
                     SoldOut(241, 51);
                     unlock(kurokamiLocked);
                     add(buyKurokami);
@@ -282,6 +286,8 @@ public class Shop extends JFrame {
                     stats.setCurrency(stats.getCurrency() - 200);
                     mainWindow.currency.setText(String.valueOf(stats.getCurrency()));
                     radio.setLocation(getLocation().x + 310, getLocation().y + 195);
+                    stats.checkOutOfBounds();
+                    radio.setLocation(stats.radioPositionX, stats.radioPositionY);
                     SoldOut(103, 151);
                     unlock(chessTypeBeatLocked);
                     add(buyChessTypeBeat);

@@ -302,6 +302,45 @@ public class FrendStats {
         }
     }
 
+    public void checkOutOfBounds(){
+        Point object = new Point();
+        object.setLocation(bedPositionX, bedPositionY);
+        boolean bedVisible = false;
+        for (int i = 0; i < screens.size() - 1; i++) {
+            if(screens.get(i).checkIfVisible(object)){
+               bedVisible = true;
+            }
+        }
+        if(!bedVisible){
+            bedPositionX = 0;
+            bedPositionY = 0;
+        }
+
+        object.setLocation(wardrobePositionX, wardrobePositionY);
+        boolean wardrobeVisible = false;
+        for (int i = 0; i < screens.size() - 1; i++) {
+            if(screens.get(i).checkIfVisible(object)){
+                wardrobeVisible = true;
+            }
+        }
+        if(!wardrobeVisible){
+            wardrobePositionX = 0;
+            wardrobePositionY = 0;
+        }
+
+        object.setLocation(radioPositionX, radioPositionY);
+        boolean radioVisible = false;
+        for (int i = 0; i < screens.size() - 1; i++) {
+            if(screens.get(i).checkIfVisible(object)){
+                radioVisible = true;
+            }
+        }
+        if(!radioVisible){
+            radioPositionX = 0;
+            radioPositionY = 0;
+        }
+    }
+
     public void load(File save) {
         ArrayList<Integer> load = new ArrayList();
         try {
@@ -331,6 +370,7 @@ public class FrendStats {
         } catch (Exception e) {
             System.out.println("save corrupted"); // Display options here, if restart or try to fix a save and restart the software
         }
+        checkOutOfBounds();
     }
 
     @Override
