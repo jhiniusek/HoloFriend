@@ -29,7 +29,6 @@ public class Lake extends JFrame {
         cancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("FORCED STOPPED");
                 forceStop = true;
                 remove(cancel);
             }

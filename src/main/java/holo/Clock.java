@@ -261,7 +261,6 @@ public class Clock implements Runnable{
                 CheckLakeCollision();
             }
 
-
             //
             //            SLEEP
             //
@@ -313,7 +312,6 @@ public class Clock implements Runnable{
                 CheckBedCollision();
             }
 
-
             //
             //           DANCING
             //
@@ -355,7 +353,6 @@ public class Clock implements Runnable{
 
 
             // CLOCK
-
             counter++;
             if (counter == 96) {       // 16 ticks per second :   1 min = 960 tics
                 stats.setHunger(stats.getHunger()-1);
