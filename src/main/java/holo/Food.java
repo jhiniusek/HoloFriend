@@ -13,6 +13,7 @@ public class Food extends JFrame{
     public Food(int x, int y) {
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setType(Window.Type.UTILITY);
         setSize(16, 16);
         setLocation(x, y);
         setAlwaysOnTop(true);

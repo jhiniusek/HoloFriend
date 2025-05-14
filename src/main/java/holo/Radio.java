@@ -21,6 +21,7 @@ public class Radio extends JFrame {
         updateTrackList();
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setType(Window.Type.UTILITY);
         setSize(76,40);
         setLayout(null);
         setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());

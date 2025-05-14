@@ -13,6 +13,7 @@ public class Bed extends JFrame {
     public Bed(FrendStats stats) {
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setType(Window.Type.UTILITY);
         setSize(182,83);
         setLayout(null);
         setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
@@ -64,9 +65,11 @@ public class Bed extends JFrame {
 
     public void makeForceableStop(){
         add(cancel);
+        setAlwaysOnTop(true);
     }
 
     public void removeForcableStop(){
         remove(cancel);
+        setAlwaysOnTop(false);
     }
 }

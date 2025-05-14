@@ -13,6 +13,7 @@ public class Lake extends JFrame {
     public Lake(int x, int y) {
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setType(Window.Type.UTILITY);
         setSize(261,217);
         setLayout(null);
         setLocation(x, y);
@@ -59,9 +60,11 @@ public class Lake extends JFrame {
 
     public void makeForceableStop(){
         add(cancel);
+        setAlwaysOnTop(true);
     }
 
     public void removeForcableStop(){
         remove(cancel);
+        setAlwaysOnTop(false);
     }
 }

@@ -13,6 +13,7 @@ public class Shop extends JFrame {
     public Shop(FrendStats stats, Bed bed, Radio radio, Wardrobe wardrobe) {
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setType(Window.Type.UTILITY);
         setSize(306,262);
         setLayout(null);
         setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());

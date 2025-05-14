@@ -11,6 +11,7 @@ public class Wardrobe extends JFrame {
     public Wardrobe(FrendStats stats) {
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setType(Window.Type.UTILITY);
         setSize(91,153);
         setLayout(null);
         setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
