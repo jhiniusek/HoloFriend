@@ -4,7 +4,7 @@ public enum States {
     IDLE,
     WALK,
     HOLD,
-    RUN,
+    CHASE,
     SLEEP,
     DANCE,
     WORK

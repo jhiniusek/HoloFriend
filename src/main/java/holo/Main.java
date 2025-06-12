@@ -21,6 +21,7 @@ public class Main {
         for(int i = 0; i < 6; i++){
             foodList.addFirst(null);
         }
+        stats.setFoodList(foodList);
 
         Bed bed = new Bed(stats);
         Radio radio = new Radio(stats);
@@ -29,9 +30,6 @@ public class Main {
         Shop shop = new Shop(stats, bed, radio, wardrobe);
         GameWindow window = new  GameWindow(stats, foodList, shop);
         shop.setMainWindow(window);
-
-        //Thread cursor = new Thread(new Cursor(stats));
-        //cursor.start();
 
         Frend frend = new Frend(stats);
         Lake lake = new Lake(window.getLocation().x - 270,window.getLocation().y + 100);

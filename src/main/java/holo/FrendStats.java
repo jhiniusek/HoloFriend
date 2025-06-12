@@ -12,6 +12,7 @@ public class FrendStats {
     private int currency = 10;
     private boolean alive = true;
     private ArrayList<Screen> screens = new ArrayList<>();
+    private ArrayList<Food> foodList;
     private float positionX = 500;
     private float positionY = 500;
     private float destinationX = 500;
@@ -22,6 +23,7 @@ public class FrendStats {
     private int cursorX = 0;
     private int cursorY = 0;
     private States state = States.IDLE;
+    private String chaseObject = null;
     private boolean ableToWork = true;
     private boolean ableToSleep = true;
     String[] skins = new String[] {"basic/", "kurokami/"};
@@ -66,6 +68,10 @@ public class FrendStats {
         this.tiredness = tiredness;
     }
 
+    public void setFoodList(ArrayList<Food> foodList) {
+        this.foodList = foodList;
+    }
+
     public float getPositionX() {
         return positionX;
     }
@@ -104,6 +110,10 @@ public class FrendStats {
 
     public void setState(States state) {
         this.state = state;
+    }
+
+    public String getChaseObject() {
+        return chaseObject;
     }
 
     public float getDestinationX() {
@@ -264,6 +274,18 @@ public class FrendStats {
     }
 
     public void chooseDestination(){
+        // Chase or Walk
+        int foodProbabilty = 100 - hunger;
+        int sleepProbability = 50 - tiredness;
+        if (sleepProbability < 0) {sleepProbability = 0;}
+        sleepProbability += foodProbabilty;
+        int cursorProbability = 10 + sleepProbability;
+        int walkProbability = 50 + cursorProbability;
+
+        int target = (int)(Math.random() * walkProbability);
+        System.out.println("TEST RANDOM DESTINY: " + target + "\n Food: " + foodProbabilty + "  Bed: " + sleepProbability + "  Cursor: " + cursorProbability + "  Walk: " + walkProbability);
+
+
         Screen randomScreen = screens.get((int)(Math.random() * screens.size()));
         Point point = randomScreen.getRandomPoint();
         destinationX = point.x;

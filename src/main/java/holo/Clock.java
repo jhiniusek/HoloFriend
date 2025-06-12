@@ -182,6 +182,15 @@ public class Clock implements Runnable{
 
 
             //
+            //                        CHASE
+            //
+
+            if(stats.getState() == States.CHASE){
+
+            }
+
+
+            //
             //                        WORK
             //
 
@@ -367,6 +376,9 @@ public class Clock implements Runnable{
                 counter = 1;
             }
 
+            stats.setCursorX((int) MouseInfo.getPointerInfo().getLocation().getX());
+            stats.setCursorY((int) MouseInfo.getPointerInfo().getLocation().getY());
+
 
             // Death out of Hunger
             if (stats.getHunger() == 0){
@@ -418,14 +430,13 @@ public class Clock implements Runnable{
                     if (y > min_y && y < max_y){
                         foodList.get(i).dispose();
                         foodList.set(i, null);
-                        if (stats.getHunger() < 70){
-                            stats.setHunger(stats.getHunger()+10);
+                        if (stats.getHunger() < 79){
+                            stats.setHunger(stats.getHunger()+20);
                             window.hungerBar.setValue(stats.getHunger());
                         } else {
                             stats.setHunger(100);
                             window.hungerBar.setValue(stats.getHunger());
                         }
-                        System.out.println("HAMBURGER EATEN");  //debug
                         break;
                     }
                 }
