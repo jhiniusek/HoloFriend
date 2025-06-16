@@ -42,11 +42,15 @@ public class Frend extends JFrame{
                 if (releaseTime - clickTime < 100) {
                     System.out.println("Frend clicked");
                 }
+                try {
+                    Thread.sleep(75);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
                 if(stats.getState() == States.HOLD){
                     stats.setState(States.WALK);
                 }
                 stats.evaluateMs();
-
             }
         });
 
