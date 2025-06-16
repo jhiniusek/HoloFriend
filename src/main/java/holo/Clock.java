@@ -266,7 +266,7 @@ public class Clock implements Runnable{
                     lake.removeForcableStop();
                 }
 
-            } else if (stats.isAbleToWork() && workCooldown == 0 && stats.getState() != States.SLEEP && stats.getState() != States.DANCE){
+            } else if (stats.isAbleToWork() && workCooldown == 0 && (stats.getChaseObject() == "Lake" ||  stats.getState() == States.HOLD)){
                 CheckLakeCollision();
             }
 
@@ -293,6 +293,8 @@ public class Clock implements Runnable{
             }
 
             if(stats.getState()==States.SLEEP){
+                stats.setPositionX(bed.getLocation().x+95);
+                stats.setPositionY(bed.getLocation().y-50);
                 if(sleepTimer > 0){
                     sleepTimer--;
                 }
@@ -317,7 +319,7 @@ public class Clock implements Runnable{
                     bed.removeForcableStop();
                 }
 
-            } else if(stats.isAbleToSleep() && sleepCooldown == 0 && stats.getState() != States.WORK && stats.getState() != States.DANCE){
+            } else if(stats.isAbleToSleep() && sleepCooldown == 0 && (stats.getChaseObject() == "Bed" ||  stats.getState() == States.HOLD)){
                 CheckBedCollision();
             }
 
@@ -378,6 +380,9 @@ public class Clock implements Runnable{
 
             stats.setCursorX((int) MouseInfo.getPointerInfo().getLocation().getX());
             stats.setCursorY((int) MouseInfo.getPointerInfo().getLocation().getY());
+            stats.setLakeX(lake.getX());
+            stats.setLakeY(lake.getY());
+            stats.updateDestination();
 
 
             // Death out of Hunger

@@ -42,7 +42,9 @@ public class Frend extends JFrame{
                 if (releaseTime - clickTime < 100) {
                     System.out.println("Frend clicked");
                 }
-                stats.setState(States.WALK);
+                if(stats.getState() == States.HOLD){
+                    stats.setState(States.WALK);
+                }
                 stats.evaluateMs();
 
             }

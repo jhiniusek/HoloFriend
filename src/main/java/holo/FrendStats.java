@@ -23,8 +23,10 @@ public class FrendStats {
     private int cursorX = 0;
     private int cursorY = 0;
     private States state = States.IDLE;
-    private String chaseObject = null;
+    private String chaseObject = "";
     private boolean ableToWork = true;
+    private int lakeX;
+    private int lakeY;
     private boolean ableToSleep = true;
     String[] skins = new String[] {"basic/", "kurokami/"};
     private String currentTrack = "NoDisk";
@@ -172,6 +174,22 @@ public class FrendStats {
         this.ableToWork = ableToWork;
     }
 
+    public int getLakeX() {
+        return lakeX;
+    }
+
+    public void setLakeX(int lakeX) {
+        this.lakeX = lakeX;
+    }
+
+    public int getLakeY() {
+        return lakeY;
+    }
+
+    public void setLakeY(int lakeY) {
+        this.lakeY = lakeY;
+    }
+
     public int getCurrency() {
         return currency;
     }
@@ -279,18 +297,60 @@ public class FrendStats {
         int sleepProbability = 50 - tiredness;
         if (sleepProbability < 0) {sleepProbability = 0;}
         sleepProbability += foodProbabilty;
-        int cursorProbability = 10 + sleepProbability;
+        int workProbability = 50 + tiredness + sleepProbability;
+        int cursorProbability = 10 + workProbability;
         int walkProbability = 50 + cursorProbability;
 
         int target = (int)(Math.random() * walkProbability);
-        System.out.println("TEST RANDOM DESTINY: " + target + "\n Food: " + foodProbabilty + "  Bed: " + sleepProbability + "  Cursor: " + cursorProbability + "  Walk: " + walkProbability);
-
+        System.out.println("TEST RANDOM DESTINY: " + target + "\n Food: " + foodProbabilty + "  Bed: " + sleepProbability + "  Lake: " + workProbability + "  Cursor: " + cursorProbability + "  Walk: " + walkProbability);
+        if(target > cursorProbability){
+            System.out.println("WALK RANDOMLY");
+            chaseObject = "Random";
+        } else if (target > workProbability) {
+            System.out.println("CHASE CURSOR");
+            chaseObject = "Cursor";
+        } else if (target > sleepProbability) {
+            System.out.println("GO TO WORK");
+            chaseObject = "Lake";
+        } else if (target > foodProbabilty) {
+            System.out.println("GO TO SLEEP");
+            chaseObject = "Bed";
+        } else {
+            System.out.println("GO EAT");
+            chaseObject = "Food";
+        }
 
         Screen randomScreen = screens.get((int)(Math.random() * screens.size()));
         Point point = randomScreen.getRandomPoint();
         destinationX = point.x;
         destinationY = point.y;
         evaluateMs();
+    }
+
+    public void updateDestination(){
+        switch(chaseObject) {
+            case "Random":
+                break;
+            case "Cursor":
+                destinationX = cursorX;
+                destinationY = cursorY;
+                evaluateMs();
+                break;
+            case "Lake":
+                destinationX = lakeX + 10;
+                destinationY = lakeY + 50;
+                evaluateMs();
+                break;
+            case "Bed":
+                destinationX = bedPositionX + 40;
+                destinationY = bedPositionY - 15;
+                evaluateMs();
+                break;
+            case "Food":
+                break;
+            default:
+                break;
+        }
     }
 
     public void evaluateMs(){
