@@ -297,7 +297,7 @@ public class FrendStats {
         int sleepProbability = 50 - tiredness;
         if (sleepProbability < 0) {sleepProbability = 0;}
         sleepProbability += foodProbabilty;
-        int workProbability = 50 + tiredness + sleepProbability;
+        int workProbability = 20 + tiredness + sleepProbability;
         int cursorProbability = 10 + workProbability;
         int walkProbability = 50 + cursorProbability;
 
@@ -320,6 +320,10 @@ public class FrendStats {
             chaseObject = "Food";
         }
 
+        if (hunger < 10){
+            chaseObject = "Food";
+        }
+
         Screen randomScreen = screens.get((int)(Math.random() * screens.size()));
         Point point = randomScreen.getRandomPoint();
         destinationX = point.x;
@@ -330,6 +334,7 @@ public class FrendStats {
     public void updateDestination(){
         switch(chaseObject) {
             case "Random":
+                evaluateMs();
                 break;
             case "Cursor":
                 destinationX = cursorX;
@@ -347,24 +352,43 @@ public class FrendStats {
                 evaluateMs();
                 break;
             case "Food":
+                for (int i = 0; i < foodList.size(); i++) {
+                    if (foodList.get(i) != null) {
+                        destinationX = foodList.get(i).getX() - 10;
+                        destinationY = foodList.get(i).getY() - 10;
+                        break;
+                    }
+                }
+                evaluateMs();
                 break;
             default:
+                evaluateMs();
                 break;
         }
     }
 
     public void evaluateMs(){
-        right = destinationX > positionX;
+        if (state == States.WALK || state == States.CHASE) {
+            right = destinationX > positionX;
+        }
 
         float distanceX = Math.abs(destinationX - positionX);
         float distanceY = Math.abs(destinationY - positionY);
 
         if (distanceX > distanceY){
-            msX = 4;
+            if (chaseObject == "Cursor") {
+                msX = 6;
+            } else {
+                msX = 4;
+            }
             float steps = distanceX / msX;
             msY = distanceY / steps;
         } else {
-            msY = 4;
+            if (chaseObject == "Cursor") {
+                msY = 6;
+            } else {
+                msY = 4;
+            }
             float steps = distanceY / msY;
             msX = distanceX / steps;
         }
