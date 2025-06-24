@@ -294,7 +294,7 @@ public class FrendStats {
     public void chooseDestination(){
         // Chase or Walk
         int foodProbabilty = 100 - hunger;
-        int sleepProbability = 5000 - tiredness;
+        int sleepProbability = 50 - tiredness;
         if (sleepProbability < 0) {sleepProbability = 0;}
         sleepProbability += foodProbabilty;
         int workProbability = 20 + tiredness + sleepProbability;
