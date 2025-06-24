@@ -294,7 +294,7 @@ public class FrendStats {
     public void chooseDestination(){
         // Chase or Walk
         int foodProbabilty = 100 - hunger;
-        int sleepProbability = 50 - tiredness;
+        int sleepProbability = 5000 - tiredness;
         if (sleepProbability < 0) {sleepProbability = 0;}
         sleepProbability += foodProbabilty;
         int workProbability = 20 + tiredness + sleepProbability;
@@ -312,7 +312,7 @@ public class FrendStats {
         } else if (target > sleepProbability) {
             System.out.println("GO TO WORK");
             chaseObject = "Lake";
-        } else if (target > foodProbabilty) {
+        } else if (target > foodProbabilty && getBed() == 1) {
             System.out.println("GO TO SLEEP");
             chaseObject = "Bed";
         } else {
