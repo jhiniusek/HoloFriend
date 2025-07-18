@@ -47,7 +47,7 @@ public class Wardrobe extends JFrame {
             }
         });
 
-        setVisible(stats.getWardrobe() == 1);
+        setVisible(stats.getWardrobeOwned() == 1);
         setLocation(stats.wardrobePositionX, stats.wardrobePositionY);
     }
 }

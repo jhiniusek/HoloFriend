@@ -48,7 +48,14 @@ public class Frend extends JFrame{
                     throw new RuntimeException(ex);
                 }
                 if(stats.getState() == States.HOLD){
-                    stats.setState(States.WALK);
+                    try {
+                        Thread.sleep(0);        ///??? it bugs without this for some reason
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    if(stats.getState() != States.SLEEP || stats.getState() != States.WORK){
+                        stats.setState(States.WALK);
+                    }
                 }
                 stats.evaluateMs();
             }

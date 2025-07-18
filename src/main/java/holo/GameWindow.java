@@ -14,6 +14,8 @@ public class GameWindow extends JFrame{
     public JProgressBar hungerBar = new JProgressBar(0,100);
     public JProgressBar tiredBar = new JProgressBar(0,100);
     public JLabel currency = new JLabel();
+    private JFrame options = new JFrame("Options");
+    private JFrame byeFrend = new JFrame("Bye Frend");
     private Point initialClick;
 
     public GameWindow(FrendStats stats, ArrayList<Food> foodList, Shop shop) throws IOException, FontFormatException {
@@ -53,6 +55,46 @@ public class GameWindow extends JFrame{
         getContentPane().setComponentZOrder(tiredBar, 0);
 
 
+        byeFrend.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
+        byeFrend.setSize(240, 180);
+        byeFrend.setLayout(null);
+        byeFrend.setLocationRelativeTo(null);
+
+        JLabel quitMessage = new JLabel("<html>Are you sure you want to quit?<br/>Progress will be saved.", SwingConstants.CENTER);
+        quitMessage.setBounds(20, 10, 190, 70);
+        byeFrend.add(quitMessage);
+
+        JButton closeButton = new JButton("YES");
+        closeButton.setBounds(40, 90, 60, 30);
+        byeFrend.add(closeButton);
+
+        closeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                File save = new File("save.txt");
+                FileWriter myWriter = null;
+                try {
+                    myWriter = new FileWriter("save.txt");
+                    myWriter.write(stats.toString());
+                    myWriter.close();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                System.exit(0);
+            }
+        });
+        JButton stayButton = new JButton("NO");
+        stayButton.setBounds(125, 90, 60, 30);
+        byeFrend.add(stayButton);
+
+        stayButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                byeFrend.dispose();
+            }
+        });
+
         JButton quitButton = new JButton();
         quitButton.setBounds(133, 20, 40, 40);
         quitButton.setContentAreaFilled(false);
@@ -60,46 +102,6 @@ public class GameWindow extends JFrame{
         quitButton.setFocusPainted(false);
         quitButton.setOpaque(false);
         quitButton.addActionListener(e -> {
-            JFrame byeFrend = new JFrame("Bye Frend");
-            byeFrend.setSize(240, 150);
-            byeFrend.setLayout(null);
-            byeFrend.setLocationRelativeTo(null);
-
-            JLabel label = new JLabel("Are you sure you want to quit?", SwingConstants.CENTER);
-            label.setBounds(20, 10, 190, 40);
-            byeFrend.add(label);
-
-            JButton closeButton = new JButton("YES");
-            closeButton.setBounds(40, 60, 60, 30);
-            byeFrend.add(closeButton);
-
-            closeButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-
-                    File save = new File("save.txt");
-                    FileWriter myWriter = null;
-                    try {
-                        myWriter = new FileWriter("save.txt");
-                        myWriter.write(stats.toString());
-                        myWriter.close();
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    System.exit(0);
-                }
-            });
-            byeFrend.setVisible(true);
-            JButton stayButton = new JButton("NO");
-            stayButton.setBounds(125, 60, 60, 30);
-            byeFrend.add(stayButton);
-
-            stayButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    byeFrend.dispose();
-                }
-            });
             byeFrend.setVisible(true);
         });
         add(quitButton);
@@ -109,6 +111,87 @@ public class GameWindow extends JFrame{
                 quitButton.doClick();
             }
         });
+
+
+
+
+        options.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
+        options.setSize(240, 300);
+        options.setLayout(null);
+        options.setLocationRelativeTo(null);
+
+        JLabel optionsMessage = new JLabel("This will be options", SwingConstants.CENTER);
+        optionsMessage.setBounds(20, 10, 190, 40);
+        options.add(optionsMessage);
+
+        JButton respawnLake = new JButton("Respawn Lake");
+        respawnLake.setBounds(40, 60, 144, 30);
+        options.add(respawnLake);
+
+        respawnLake.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stats.getLake().setLocation(0,0);
+            }
+        });
+
+        JButton respawnBed = new JButton("Respawn Bed");
+        respawnBed.setBounds(40, 100, 144, 30);
+        options.add(respawnBed);
+
+        respawnBed.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(stats.getBedOwned() == 1){
+                    stats.getBed().setLocation(0,0);
+                }
+            }
+        });
+
+        JButton respawnRadio = new JButton("Respawn Radio");
+        respawnRadio.setBounds(40, 140, 144, 30);
+        options.add(respawnRadio);
+
+        respawnRadio.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(stats.getRadioOwned() == 1){
+                    stats.getRadio().setLocation(0,0);
+                }
+            }
+        });
+
+        JButton respawnWardrobe = new JButton("Respawn Wardrobe");
+        respawnWardrobe.setBounds(40, 180, 144, 30);
+        options.add(respawnWardrobe);
+
+        respawnWardrobe.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(stats.getWardrobeOwned() == 1){
+                    stats.getWardrobe().setLocation(0,0);
+                }
+            }
+        });
+
+        JButton optionsButton = new JButton();
+        optionsButton.setBounds(250, 45, 35, 35);
+        optionsButton.setContentAreaFilled(false);
+        optionsButton.setBorderPainted(false);
+        optionsButton.setFocusPainted(false);
+        optionsButton.setOpaque(false);
+        optionsButton.addActionListener(e -> {
+            options.setVisible(true);
+        });
+        add(optionsButton);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                quitButton.doClick();
+            }
+        });
+
+
 
 
         JButton foodSpawner = new JButton();

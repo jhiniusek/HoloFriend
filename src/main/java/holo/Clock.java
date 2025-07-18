@@ -319,7 +319,7 @@ public class Clock implements Runnable{
                     bed.removeForcableStop();
                 }
 
-            } else if(stats.getBed() == 1 && stats.isAbleToSleep() && sleepCooldown == 0 && (stats.getChaseObject() == "Bed" ||  stats.getState() == States.HOLD)){
+            } else if(stats.getBedOwned() == 1 && stats.isAbleToSleep() && sleepCooldown == 0 && (stats.getChaseObject() == "Bed" ||  stats.getState() == States.HOLD)){
                 CheckBedCollision();
             }
 
@@ -380,8 +380,6 @@ public class Clock implements Runnable{
 
             stats.setCursorX((int) MouseInfo.getPointerInfo().getLocation().getX());
             stats.setCursorY((int) MouseInfo.getPointerInfo().getLocation().getY());
-            stats.setLakeX(lake.getX());
-            stats.setLakeY(lake.getY());
             stats.updateDestination();
 
 

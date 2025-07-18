@@ -25,8 +25,10 @@ public class FrendStats {
     private States state = States.IDLE;
     private String chaseObject = "";
     private boolean ableToWork = true;
-    private int lakeX;
-    private int lakeY;
+    private Lake lake;
+    private Bed bed;
+    private Wardrobe wardrobe;
+    private Radio radio;
     private boolean ableToSleep = true;
     String[] skins = new String[] {"basic/", "kurokami/"};
     private String currentTrack = "NoDisk";
@@ -35,17 +37,17 @@ public class FrendStats {
     private int goodRod = 0;
     private int superRod = 0;
 
-    private int bed = 0;
+    private int bedOwned = 0;
     public int bedPositionX = 0;
     public int bedPositionY = 0;
 
-    private int wardrobe = 0;
+    private int wardrobeOwned = 0;
     public int wardrobePositionX = 0;
     public int wardrobePositionY = 0;
     private int kurokami = 0;
     private int skin = 0;
 
-    private int radio = 0;
+    private int radioOwned = 0;
     public int radioPositionX = 0;
     public int radioPositionY = 0;
     private int chessSlowed = 0;
@@ -174,20 +176,36 @@ public class FrendStats {
         this.ableToWork = ableToWork;
     }
 
-    public int getLakeX() {
-        return lakeX;
+    public void setLake(Lake lake) {
+        this.lake = lake;
     }
 
-    public void setLakeX(int lakeX) {
-        this.lakeX = lakeX;
+    public Lake getLake() {
+        return lake;
     }
 
-    public int getLakeY() {
-        return lakeY;
+    public Bed getBed() {
+        return bed;
     }
 
-    public void setLakeY(int lakeY) {
-        this.lakeY = lakeY;
+    public void setBed(Bed bed) {
+        this.bed = bed;
+    }
+
+    public Wardrobe getWardrobe() {
+        return wardrobe;
+    }
+
+    public void setWardrobe(Wardrobe wardrobe) {
+        this.wardrobe = wardrobe;
+    }
+
+    public Radio getRadio() {
+        return radio;
+    }
+
+    public void setRadio(Radio radio) {
+        this.radio = radio;
     }
 
     public int getCurrency() {
@@ -238,20 +256,20 @@ public class FrendStats {
         this.superRod = superRod;
     }
 
-    public int getBed() {
-        return bed;
+    public int getBedOwned() {
+        return bedOwned;
     }
 
-    public void setBed(int bed) {
-        this.bed = bed;
+    public void setBedOwned(int bedOwned) {
+        this.bedOwned = bedOwned;
     }
 
-    public int getWardrobe() {
-        return wardrobe;
+    public int getWardrobeOwned() {
+        return wardrobeOwned;
     }
 
-    public void setWardrobe(int wardrobe) {
-        this.wardrobe = wardrobe;
+    public void setWardrobeOwned(int wardrobeOwned) {
+        this.wardrobeOwned = wardrobeOwned;
     }
 
     public int getKurokami() {
@@ -262,12 +280,12 @@ public class FrendStats {
         this.kurokami = kurokami;
     }
 
-    public int getRadio() {
-        return radio;
+    public int getRadioOwned() {
+        return radioOwned;
     }
 
-    public void setRadio(int radio) {
-        this.radio = radio;
+    public void setRadioOwned(int radioOwned) {
+        this.radioOwned = radioOwned;
     }
 
     public int getChessSlowed() {
@@ -312,7 +330,7 @@ public class FrendStats {
         } else if (target > sleepProbability) {
             System.out.println("GO TO WORK");
             chaseObject = "Lake";
-        } else if (target > foodProbabilty && getBed() == 1) {
+        } else if (target > foodProbabilty && getBedOwned() == 1) {
             System.out.println("GO TO SLEEP");
             chaseObject = "Bed";
         } else {
@@ -342,8 +360,8 @@ public class FrendStats {
                 evaluateMs();
                 break;
             case "Lake":
-                destinationX = lakeX + 10;
-                destinationY = lakeY + 50;
+                destinationX = lake.getX() + 10;
+                destinationY = lake.getY() + 50;
                 evaluateMs();
                 break;
             case "Bed":
@@ -461,15 +479,15 @@ public class FrendStats {
             currency = load.get(2);
             goodRod = load.get(3);
             superRod = load.get(4);
-            bed = load.get(5);
+            bedOwned = load.get(5);
             bedPositionX = load.get(6);
             bedPositionY = load.get(7);
-            wardrobe = load.get(8);
+            wardrobeOwned = load.get(8);
             wardrobePositionX = load.get(9);
             wardrobePositionY = load.get(10);
             kurokami = load.get(11);
             skin = load.get(12);
-            radio = load.get(13);
+            radioOwned = load.get(13);
             radioPositionX = load.get(14);
             radioPositionY = load.get(15);
             chessSlowed = load.get(16);
@@ -481,9 +499,9 @@ public class FrendStats {
 
     @Override
     public String toString() {
-        return hunger + "\n" + tiredness + "\n" + currency + "\n" + goodRod + "\n" + superRod + "\n" + bed + "\n" +
-                bedPositionX + "\n" + bedPositionY + "\n" + wardrobe + "\n" + wardrobePositionX + "\n" +
-                wardrobePositionY + "\n" + kurokami + "\n" + skin + "\n" + radio + "\n" + radioPositionX + "\n" +
+        return hunger + "\n" + tiredness + "\n" + currency + "\n" + goodRod + "\n" + superRod + "\n" + bedOwned + "\n" +
+                bedPositionX + "\n" + bedPositionY + "\n" + wardrobeOwned + "\n" + wardrobePositionX + "\n" +
+                wardrobePositionY + "\n" + kurokami + "\n" + skin + "\n" + radioOwned + "\n" + radioPositionX + "\n" +
                 radioPositionY + "\n" + chessSlowed;
     }
 

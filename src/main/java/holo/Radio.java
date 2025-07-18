@@ -166,7 +166,7 @@ public class Radio extends JFrame {
             }
         });
         setVisible(true);
-        setVisible(stats.getRadio() == 1);
+        setVisible(stats.getRadioOwned() == 1);
         setLocation(stats.radioPositionX, stats.radioPositionY);
     }
 
