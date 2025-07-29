@@ -14,9 +14,24 @@ public class GameWindow extends JFrame{
     public JProgressBar hungerBar = new JProgressBar(0,100);
     public JProgressBar tiredBar = new JProgressBar(0,100);
     public JLabel currency = new JLabel();
+    public JLabel hint = new JLabel();
     private JFrame options = new JFrame("Options");
     private JFrame byeFrend = new JFrame("Bye Frend");
+    private JFrame help = new JFrame("Help");
     private Point initialClick;
+    public String[] tips = {"Hi Frends!",
+            "Click on a cog(earring) to open options",
+            "Fubuki gets hungry over time",
+            "Fubuki dies and loses gold when starved",
+            "Make burgers to feed Fubuki",
+            "Each burger costs 2 gold",
+            "Hold LMB on an object to grab it and move",
+            "Fubuki regenerates stamina over time",
+            "Earn gold by fishing",
+            "Fishing uses stamina",
+            "Sleeping regenerates stamina",
+            "You can spend gold in the shop",
+            "Click on wardrobe to change clothes"};
 
     public GameWindow(FrendStats stats, ArrayList<Food> foodList, Shop shop) throws IOException, FontFormatException {
         Map<Integer, Point> burgerMap = new HashMap<Integer, Point>();
@@ -59,6 +74,7 @@ public class GameWindow extends JFrame{
         byeFrend.setSize(240, 180);
         byeFrend.setLayout(null);
         byeFrend.setLocationRelativeTo(null);
+        byeFrend.setResizable(false);
 
         JLabel quitMessage = new JLabel("<html>Are you sure you want to quit?<br/>Progress will be saved.", SwingConstants.CENTER);
         quitMessage.setBounds(20, 10, 190, 70);
@@ -116,63 +132,88 @@ public class GameWindow extends JFrame{
 
 
         options.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
-        options.setSize(240, 300);
+        options.setSize(240, 310);
         options.setLayout(null);
         options.setLocationRelativeTo(null);
+        options.setResizable(false);
 
-        JLabel optionsMessage = new JLabel("This will be options", SwingConstants.CENTER);
+        JLabel optionsMessage = new JLabel("Object lost? Respawn it:", SwingConstants.CENTER);
         optionsMessage.setBounds(20, 10, 190, 40);
         options.add(optionsMessage);
 
-        JButton respawnLake = new JButton("Respawn Lake");
-        respawnLake.setBounds(40, 60, 144, 30);
+        JButton respawnLake = new JButton("Lake");
+        respawnLake.setBounds(40, 50, 144, 30);
         options.add(respawnLake);
 
         respawnLake.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                stats.getLake().setLocation(0,0);
+                stats.getLake().setLocation(stats.getCursorX(), stats.getCursorY());
+                stats.getLake().toFront();
             }
         });
 
-        JButton respawnBed = new JButton("Respawn Bed");
-        respawnBed.setBounds(40, 100, 144, 30);
+        JButton respawnBed = new JButton("Bed");
+        respawnBed.setBounds(40, 90, 144, 30);
         options.add(respawnBed);
 
         respawnBed.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(stats.getBedOwned() == 1){
-                    stats.getBed().setLocation(0,0);
+                    stats.getBed().setLocation(stats.getCursorX(), stats.getCursorY());
+                    stats.getBed().toFront();
                 }
             }
         });
 
-        JButton respawnRadio = new JButton("Respawn Radio");
-        respawnRadio.setBounds(40, 140, 144, 30);
+        JButton respawnRadio = new JButton("Radio");
+        respawnRadio.setBounds(40, 130, 144, 30);
         options.add(respawnRadio);
 
         respawnRadio.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(stats.getRadioOwned() == 1){
-                    stats.getRadio().setLocation(0,0);
+                    stats.getRadio().setLocation(stats.getCursorX(), stats.getCursorY());
+                    stats.getRadio().toFront();
                 }
             }
         });
 
-        JButton respawnWardrobe = new JButton("Respawn Wardrobe");
-        respawnWardrobe.setBounds(40, 180, 144, 30);
+        JButton respawnWardrobe = new JButton("Wardrobe");
+        respawnWardrobe.setBounds(40, 170, 144, 30);
         options.add(respawnWardrobe);
 
         respawnWardrobe.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(stats.getWardrobeOwned() == 1){
-                    stats.getWardrobe().setLocation(0,0);
+                    stats.getWardrobe().setLocation(stats.getCursorX(), stats.getCursorY());
+                    stats.getWardrobe().toFront();
                 }
             }
         });
+
+        JButton helpButton = new JButton("Help");
+        helpButton.setBounds(40, 230, 144, 30);
+        options.add(helpButton);
+
+        helpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                help.setVisible(true);
+            }
+        });
+
+        help.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
+        help.setSize(280, 293);
+        help.setLayout(null);
+        help.setLocationRelativeTo(null);
+        help.setResizable(false);
+        JList<String> listOfTips = new JList<String>(tips);
+        listOfTips.setBounds(10,10,245,234);
+        help.add(listOfTips);
 
         JButton optionsButton = new JButton();
         optionsButton.setBounds(250, 45, 35, 35);
@@ -244,6 +285,13 @@ public class GameWindow extends JFrame{
         add(currency);
         getContentPane().setComponentZOrder(currency, 0);
 
+        hint.setText(tips[0]);
+        hint.setFont(font.deriveFont(16f));
+        hint.setForeground(new Color(39,199,255,255));
+        hint.setBounds(48, 295, 250, 50);
+        hint.setHorizontalAlignment(SwingConstants.CENTER);
+        add(hint);
+        getContentPane().setComponentZOrder(hint, 0);
 
 
 

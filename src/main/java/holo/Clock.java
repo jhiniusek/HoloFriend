@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -20,6 +23,7 @@ public class Clock implements Runnable{
     //IDLE VARIABLES
     private int idleTimer = 60;
     private int counter = 1;
+    private int hintRefresh = 1;
 
     //FISHING VARIABLES
     private int workCooldown = 0;
@@ -376,6 +380,12 @@ public class Clock implements Runnable{
                 }
                 window.tiredBar.setValue(stats.getTiredness());
                 counter = 1;
+                if(hintRefresh == 5){
+                    UpdateHint();
+                    hintRefresh = 1;
+                } else {
+                    hintRefresh++;
+                }
             }
 
             stats.setCursorX((int) MouseInfo.getPointerInfo().getLocation().getX());
@@ -402,6 +412,18 @@ public class Clock implements Runnable{
                 closeButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        stats.setCurrency(0);
+                        stats.setHunger(100);
+                        stats.setTiredness(100);
+                        File save = new File("save.txt");
+                        FileWriter myWriter = null;
+                        try {
+                            myWriter = new FileWriter("save.txt");
+                            myWriter.write(stats.toString());
+                            myWriter.close();
+                        } catch (IOException ex) {
+                            throw new RuntimeException(ex);
+                        }
                         System.exit(0);
                     }
                 });
@@ -492,5 +514,9 @@ public class Clock implements Runnable{
                 }
             }
         }
+    }
+
+    private void UpdateHint(){
+        window.hint.setText(window.tips[(int)(Math.random() * (window.tips.length - 1) + 1)]);
     }
 }
