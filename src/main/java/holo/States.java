@@ -3,9 +3,10 @@ package holo;
 public enum States {
     IDLE,
     WALK,
-    HOLD,
     CHASE,
+    HOLD,
     SLEEP,
     DANCE,
-    WORK
+    WORK,
+    PULL
 }

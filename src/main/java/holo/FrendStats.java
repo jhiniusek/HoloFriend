@@ -120,6 +120,10 @@ public class FrendStats {
         return chaseObject;
     }
 
+    public void setChaseObject(String chaseObject) {
+        this.chaseObject = chaseObject;
+    }
+
     public float getDestinationX() {
         return destinationX;
     }
@@ -355,8 +359,13 @@ public class FrendStats {
                 evaluateMs();
                 break;
             case "Cursor":
-                destinationX = cursorX;
-                destinationY = cursorY;
+                if(isRight()){
+                    destinationX = cursorX - 84;
+                    destinationY = cursorY - 36;
+                } else {
+                    destinationX = cursorX - 5;
+                    destinationY = cursorY - 36;
+                }
                 evaluateMs();
                 break;
             case "Lake":
@@ -386,7 +395,7 @@ public class FrendStats {
     }
 
     public void evaluateMs(){
-        if (state == States.WALK || state == States.CHASE) {
+        if (state == States.WALK) {
             right = destinationX > positionX;
         }
 
@@ -396,6 +405,9 @@ public class FrendStats {
         if (distanceX > distanceY){
             if (chaseObject == "Cursor") {
                 msX = 6;
+                state = States.CHASE;
+            } else if (state == States.PULL){
+                msX = 2;
             } else {
                 msX = 4;
             }
@@ -404,6 +416,9 @@ public class FrendStats {
         } else {
             if (chaseObject == "Cursor") {
                 msY = 6;
+                state = States.CHASE;
+            } else  if (state == States.PULL){
+                msY = 2;
             } else {
                 msY = 4;
             }

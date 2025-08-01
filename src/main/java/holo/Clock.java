@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,6 +20,7 @@ public class Clock implements Runnable{
     private Bed bed;
     private String spritePath = "/sprites/IdleL.gif";
     private String newSprite = null;
+    private Point mousePoint = new Point (0,0);
 
     //IDLE VARIABLES
     private int idleTimer = 60;
@@ -104,7 +106,25 @@ public class Clock implements Runnable{
                         spritePath = newSprite;
                     }
                 }
-            } else if (stats.getState() == States.HOLD) {
+
+            } else if (stats.getState() == States.CHASE) {
+                if(stats.isRight()){
+                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                    newSprite = "/sprites/"+stats.getSkin()+"WalkL.gif";
+                    if(!newSprite.equals(spritePath)){
+                        frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        spritePath = newSprite;
+                    }
+                } else {
+                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                    newSprite = "/sprites/"+stats.getSkin()+"WalkR.gif";
+                    if(!newSprite.equals(spritePath)){
+                        frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        spritePath = newSprite;
+                    }
+                }
+
+            }else if (stats.getState() == States.HOLD) {
                 if(stats.isRight()){
                     frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
                     newSprite = "/sprites/"+stats.getSkin()+"Hold1R.png";
@@ -120,13 +140,29 @@ public class Clock implements Runnable{
                         spritePath = newSprite;
                     }
                 }
+            } else if (stats.getState() == States.PULL) {
+                if(stats.isRight()){
+                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+                    newSprite = "/sprites/"+stats.getSkin()+"WalkL.gif";
+                    if(!newSprite.equals(spritePath)){
+                        frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        spritePath = newSprite;
+                    }
+                } else {
+                    frend.setLocation((int) stats.getPositionX(), (int) stats.getPositionY());
+                    newSprite = "/sprites/" + stats.getSkin() + "WalkR.gif";
+                    if (!newSprite.equals(spritePath)) {
+                        frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        spritePath = newSprite;
+                    }
+                }
             }
 
             //
             //       MOVEMENT LOGIC
             //
 
-            if((stats.getPositionX() != stats.getDestinationX() || stats.getPositionY() != stats.getDestinationY()) && stats.getState()==States.WALK) {
+            if((stats.getPositionX() != stats.getDestinationX() || stats.getPositionY() != stats.getDestinationY()) && (stats.getState()==States.WALK || stats.getState()==States.CHASE || stats.getState()==States.PULL)) {
 
                 if (stats.getPositionX() > stats.getDestinationX()){
 
@@ -165,8 +201,25 @@ public class Clock implements Runnable{
                 }
             }
 
-            if(stats.getPositionX() == stats.getDestinationX() && stats.getPositionY() == stats.getDestinationY() && stats.getState() == States.WALK){
-                stats.setState(States.IDLE);
+            if(stats.getPositionX() == stats.getDestinationX() && stats.getPositionY() == stats.getDestinationY() && (stats.getState()==States.WALK || stats.getState()==States.CHASE || stats.getState()==States.PULL)){
+                if (stats.getChaseObject() == "Cursor") {
+                    stats.setState(States.PULL);
+                    stats.setChaseObject("Random");
+                    int pullDistanceX = (int)(Math.random() * 200 + 200);
+                    int pullDistanceY = (int)(Math.random() * 50 + 50);
+                    if(stats.isRight()){
+                        stats.setDestinationX(stats.getDestinationX() - pullDistanceX);
+                    } else {
+                        stats.setDestinationX(stats.getDestinationX() + pullDistanceX);
+                    }
+                    if(pullDistanceY % 2 == 0){
+                        stats.setDestinationY(stats.getDestinationY() + pullDistanceY);
+                    } else {
+                        stats.setDestinationY(stats.getDestinationY() - pullDistanceY);
+                    }
+                } else {
+                    stats.setState(States.IDLE);
+                }
             }
 
             if(idleTimer != 0 && stats.getState() == States.IDLE){
@@ -186,10 +239,18 @@ public class Clock implements Runnable{
 
 
             //
-            //                        CHASE
+            //                        PULL CURSOR
             //
 
-            if(stats.getState() == States.CHASE){
+            if(stats.getState() == States.PULL){
+                if(stats.isRight()){
+                    mousePoint.x = (int) (stats.getPositionX() + 84);
+                    mousePoint.y = (int) (stats.getPositionY() + 36);
+                } else {
+                    mousePoint.x = (int) (stats.getPositionX() + 5);
+                    mousePoint.y = (int) (stats.getPositionY() + 36);
+                }
+                moveMouse(mousePoint);
 
             }
 
@@ -518,5 +579,33 @@ public class Clock implements Runnable{
 
     private void UpdateHint(){
         window.hint.setText(window.tips[(int)(Math.random() * (window.tips.length - 1) + 1)]);
+    }
+
+    public void moveMouse(Point p) {
+        GraphicsEnvironment ge =
+                GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice[] gs = ge.getScreenDevices();
+
+        for (GraphicsDevice device: gs) {
+            GraphicsConfiguration[] configurations =
+                    device.getConfigurations();
+            for (GraphicsConfiguration config: configurations) {
+                Rectangle bounds = config.getBounds();
+                if(bounds.contains(p)) {
+                    Point b = bounds.getLocation();
+                    Point s = new Point(p.x - b.x, p.y - b.y);
+
+                    try {
+                        Robot r = new Robot(device);
+                        r.mouseMove(s.x, s.y);
+                    } catch (AWTException e) {
+                        e.printStackTrace();
+                    }
+
+                    return;
+                }
+            }
+        }
+        return;
     }
 }
