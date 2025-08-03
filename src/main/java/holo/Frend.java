@@ -63,20 +63,21 @@ public class Frend extends JFrame{
 
         getContentPane().addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseDragged(MouseEvent e) {
-                stats.setState(States.HOLD);
+                if (stats.getState() != States.PULL) {
+                    stats.setState(States.HOLD);
 
-                int thisX = getLocation().x;
-                int thisY = getLocation().y;
+                    int thisX = getLocation().x;
+                    int thisY = getLocation().y;
 
-                int xMoved = e.getX() - initialClick.x;
-                int yMoved = e.getY() - initialClick.y;
+                    int xMoved = e.getX() - initialClick.x;
+                    int yMoved = e.getY() - initialClick.y;
 
-                int X = thisX + xMoved;
-                int Y = thisY + yMoved;
-                setLocation(X, Y);
-                stats.setPositionX(X);
-                stats.setPositionY(Y);
-
+                    int X = thisX + xMoved;
+                    int Y = thisY + yMoved;
+                    setLocation(X, Y);
+                    stats.setPositionX(X);
+                    stats.setPositionY(Y);
+                }
             }
         });
     }

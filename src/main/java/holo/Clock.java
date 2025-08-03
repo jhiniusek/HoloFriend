@@ -73,6 +73,9 @@ public class Clock implements Runnable{
             }
 
             if(stats.getState() == States.IDLE){
+                frend.setSize(64,128);
+                frend.sprite.setBounds(0,0,64,128);
+                frend.shadow.setBounds(0,116,60,11);
                 if(stats.isRight()){
                     frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
                     newSprite = "/sprites/"+stats.getSkin()+"IdleR.gif";
@@ -91,6 +94,9 @@ public class Clock implements Runnable{
                 }
 
             } else if (stats.getState() == States.WALK) {
+                frend.setSize(64,128);
+                frend.sprite.setBounds(0,0,64,128);
+                frend.shadow.setBounds(0,116,60,11);
                 if(stats.isRight()){
                     frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
                     newSprite = "/sprites/"+stats.getSkin()+"WalkR.gif";
@@ -108,16 +114,20 @@ public class Clock implements Runnable{
                 }
 
             } else if (stats.getState() == States.CHASE) {
+                frend.setSize(175,128);
+                frend.sprite.setBounds(0,0,175,128);
                 if(stats.isRight()){
+                    frend.shadow.setBounds(0,116,60,11);
                     frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    newSprite = "/sprites/"+stats.getSkin()+"WalkL.gif";
+                    newSprite = "/sprites/"+stats.getSkin()+"ChaseR.gif";
                     if(!newSprite.equals(spritePath)){
                         frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
                 } else {
+                    frend.shadow.setBounds(80,116,60,11);
                     frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    newSprite = "/sprites/"+stats.getSkin()+"WalkR.gif";
+                    newSprite = "/sprites/"+stats.getSkin()+"ChaseL.gif";
                     if(!newSprite.equals(spritePath)){
                         frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
@@ -125,6 +135,9 @@ public class Clock implements Runnable{
                 }
 
             }else if (stats.getState() == States.HOLD) {
+                frend.setSize(64,128);
+                frend.sprite.setBounds(0,0,64,128);
+                frend.shadow.setBounds(0,116,60,11);
                 if(stats.isRight()){
                     frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
                     newSprite = "/sprites/"+stats.getSkin()+"Hold1R.png";
@@ -141,6 +154,9 @@ public class Clock implements Runnable{
                     }
                 }
             } else if (stats.getState() == States.PULL) {
+                frend.setSize(64,128);
+                frend.sprite.setBounds(0,0,64,128);
+                frend.shadow.setBounds(0,116,60,11);
                 if(stats.isRight()){
                     frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
                     newSprite = "/sprites/"+stats.getSkin()+"WalkL.gif";
@@ -582,28 +598,18 @@ public class Clock implements Runnable{
     }
 
     public void moveMouse(Point p) {
-        GraphicsEnvironment ge =
-                GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice[] gs = ge.getScreenDevices();
-
         for (GraphicsDevice device: gs) {
-            GraphicsConfiguration[] configurations =
-                    device.getConfigurations();
+            GraphicsConfiguration[] configurations = device.getConfigurations();
             for (GraphicsConfiguration config: configurations) {
-                Rectangle bounds = config.getBounds();
-                if(bounds.contains(p)) {
-                    Point b = bounds.getLocation();
-                    Point s = new Point(p.x - b.x, p.y - b.y);
-
-                    try {
-                        Robot r = new Robot(device);
-                        r.mouseMove(s.x, s.y);
-                    } catch (AWTException e) {
-                        e.printStackTrace();
-                    }
-
-                    return;
+                try {
+                    Robot r = new Robot(device);
+                    r.mouseMove(p.x, p.y);
+                } catch (AWTException e) {
+                    e.printStackTrace();
                 }
+                return;
             }
         }
         return;

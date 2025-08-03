@@ -359,13 +359,8 @@ public class FrendStats {
                 evaluateMs();
                 break;
             case "Cursor":
-                if(isRight()){
-                    destinationX = cursorX - 84;
-                    destinationY = cursorY - 36;
-                } else {
-                    destinationX = cursorX - 5;
-                    destinationY = cursorY - 36;
-                }
+                destinationX = cursorX - 84;
+                destinationY = cursorY - 38;
                 evaluateMs();
                 break;
             case "Lake":
@@ -395,7 +390,7 @@ public class FrendStats {
     }
 
     public void evaluateMs(){
-        if (state == States.WALK) {
+        if (state == States.WALK || state == States.CHASE) {
             right = destinationX > positionX;
         }
 
