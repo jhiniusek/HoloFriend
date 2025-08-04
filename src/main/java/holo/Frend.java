@@ -41,6 +41,7 @@ public class Frend extends JFrame{
                 releaseTime = System.currentTimeMillis();
                 if (releaseTime - clickTime < 100) {
                     System.out.println("Frend clicked");
+                    stats.setClickCounter(stats.getClickCounter() + 1);
                 }
                 try {
                     Thread.sleep(75);

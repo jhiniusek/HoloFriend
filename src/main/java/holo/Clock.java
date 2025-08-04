@@ -114,6 +114,7 @@ public class Clock implements Runnable{
             } else if (stats.getState() == States.CHASE) {
                 frend.setSize(175,128);
                 frend.sprite.setBounds(0,0,175,128);
+                stats.evaluateMs();
                 if(stats.isRight()){
                     frend.shadow.setBounds(0,116,60,11);
                     newSprite = "/sprites/"+stats.getSkin()+"ChaseR.gif";
@@ -252,6 +253,11 @@ public class Clock implements Runnable{
             //                        PULL CURSOR
             //
 
+            if(stats.getClickCounter() >= 3){
+                stats.setClickCounter(0);
+                stats.setChaseObject("Cursor");
+            }
+
             if(stats.getState() == States.PULL){
                 if(stats.isRight()){
                     mousePoint.x = (int) (stats.getPositionX() + 53);
@@ -261,7 +267,6 @@ public class Clock implements Runnable{
                     mousePoint.y = (int) (stats.getPositionY() + 43);
                 }
                 moveMouse(mousePoint);
-
             }
 
 

@@ -24,6 +24,7 @@ public class FrendStats {
     private int cursorY = 0;
     private States state = States.IDLE;
     private String chaseObject = "";
+    private int clickCounter = 0;
     private boolean ableToWork = true;
     private Lake lake;
     private Bed bed;
@@ -122,6 +123,14 @@ public class FrendStats {
 
     public void setChaseObject(String chaseObject) {
         this.chaseObject = chaseObject;
+    }
+
+    public int getClickCounter() {
+        return clickCounter;
+    }
+
+    public void setClickCounter(int clickCounter) {
+        this.clickCounter = clickCounter;
     }
 
     public float getDestinationX() {
@@ -390,8 +399,18 @@ public class FrendStats {
     }
 
     public void evaluateMs(){
-        if (state == States.WALK || state == States.CHASE) {
+        if (state == States.WALK) {
             right = destinationX > positionX;
+        }
+
+        if(state == States.CHASE && right && destinationX < positionX){
+            right = false;
+            positionX = positionX - 60;
+        }
+
+        if(state == States.CHASE && !right && destinationX > positionX){
+            right = true;
+            positionX = positionX + 60;
         }
 
         float distanceX = Math.abs(destinationX - positionX);
@@ -399,7 +418,7 @@ public class FrendStats {
 
         if (distanceX > distanceY){
             if (chaseObject == "Cursor") {
-                msX = 6;
+                msX = 8;
                 state = States.CHASE;
             } else if (state == States.PULL){
                 msX = 2;
@@ -410,7 +429,7 @@ public class FrendStats {
             msY = distanceY / steps;
         } else {
             if (chaseObject == "Cursor") {
-                msY = 6;
+                msY = 8;
                 state = States.CHASE;
             } else  if (state == States.PULL){
                 msY = 2;
@@ -502,7 +521,7 @@ public class FrendStats {
             radioPositionY = load.get(15);
             chessSlowed = load.get(16);
         } catch (Exception e) {
-            System.out.println("save corrupted"); // Display options here, if restart or try to fix a save and restart the software
+            System.out.println("save corrupted"); // Soon Display options here, if restart or try to fix a save and restart the software
         }
         checkOutOfBounds();
     }
