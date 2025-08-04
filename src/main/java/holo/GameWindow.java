@@ -32,7 +32,7 @@ public class GameWindow extends JFrame{
             "Sleeping regenerates stamina",
             "You can spend gold in the shop",
             "Click on wardrobe to change clothes",
-            "If you per Fubuki too much, she gets angry"};
+            "If you pet Fubuki too much, she gets angry"};
 
     public GameWindow(FrendStats stats, ArrayList<Food> foodList, Shop shop) throws IOException, FontFormatException {
         Map<Integer, Point> burgerMap = new HashMap<Integer, Point>();
