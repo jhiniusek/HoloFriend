@@ -72,12 +72,13 @@ public class Clock implements Runnable{
                 rodSpeed = 80;
             }
 
+            frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+
             if(stats.getState() == States.IDLE){
                 frend.setSize(64,128);
                 frend.sprite.setBounds(0,0,64,128);
                 frend.shadow.setBounds(0,116,60,11);
                 if(stats.isRight()){
-                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
                     newSprite = "/sprites/"+stats.getSkin()+"IdleR.gif";
                     if(!newSprite.equals(spritePath)){
                         frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
@@ -85,7 +86,6 @@ public class Clock implements Runnable{
                     }
 
                 } else {
-                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
                     newSprite = "/sprites/"+stats.getSkin()+"IdleL.gif";
                     if(!newSprite.equals(spritePath)){
                         frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
@@ -98,14 +98,12 @@ public class Clock implements Runnable{
                 frend.sprite.setBounds(0,0,64,128);
                 frend.shadow.setBounds(0,116,60,11);
                 if(stats.isRight()){
-                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
                     newSprite = "/sprites/"+stats.getSkin()+"WalkR.gif";
                     if(!newSprite.equals(spritePath)){
                         frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
                 } else {
-                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
                     newSprite = "/sprites/"+stats.getSkin()+"WalkL.gif";
                     if(!newSprite.equals(spritePath)){
                         frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
@@ -118,7 +116,6 @@ public class Clock implements Runnable{
                 frend.sprite.setBounds(0,0,175,128);
                 if(stats.isRight()){
                     frend.shadow.setBounds(0,116,60,11);
-                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
                     newSprite = "/sprites/"+stats.getSkin()+"ChaseR.gif";
                     if(!newSprite.equals(spritePath)){
                         frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
@@ -126,7 +123,6 @@ public class Clock implements Runnable{
                     }
                 } else {
                     frend.shadow.setBounds(80,116,60,11);
-                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
                     newSprite = "/sprites/"+stats.getSkin()+"ChaseL.gif";
                     if(!newSprite.equals(spritePath)){
                         frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
@@ -139,14 +135,12 @@ public class Clock implements Runnable{
                 frend.sprite.setBounds(0,0,64,128);
                 frend.shadow.setBounds(0,116,60,11);
                 if(stats.isRight()){
-                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
                     newSprite = "/sprites/"+stats.getSkin()+"Hold1R.png";
                     if(!newSprite.equals(spritePath)){
                         frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
                 } else {
-                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
                     newSprite = "/sprites/"+stats.getSkin()+"Hold1L.png";
                     if(!newSprite.equals(spritePath)){
                         frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
@@ -158,15 +152,13 @@ public class Clock implements Runnable{
                 frend.sprite.setBounds(0,0,64,128);
                 frend.shadow.setBounds(0,116,60,11);
                 if(stats.isRight()){
-                    frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
-                    newSprite = "/sprites/"+stats.getSkin()+"WalkL.gif";
+                    newSprite = "/sprites/"+stats.getSkin()+"PullR.gif";
                     if(!newSprite.equals(spritePath)){
                         frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
                 } else {
-                    frend.setLocation((int) stats.getPositionX(), (int) stats.getPositionY());
-                    newSprite = "/sprites/" + stats.getSkin() + "WalkR.gif";
+                    newSprite = "/sprites/" + stats.getSkin() + "PullL.gif";
                     if (!newSprite.equals(spritePath)) {
                         frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
@@ -224,8 +216,10 @@ public class Clock implements Runnable{
                     int pullDistanceX = (int)(Math.random() * 200 + 200);
                     int pullDistanceY = (int)(Math.random() * 50 + 50);
                     if(stats.isRight()){
+                        stats.setPositionX(stats.getPositionX() + 20);
                         stats.setDestinationX(stats.getDestinationX() - pullDistanceX);
                     } else {
+                        stats.setPositionX(stats.getPositionX() + 80);
                         stats.setDestinationX(stats.getDestinationX() + pullDistanceX);
                     }
                     if(pullDistanceY % 2 == 0){
@@ -260,11 +254,11 @@ public class Clock implements Runnable{
 
             if(stats.getState() == States.PULL){
                 if(stats.isRight()){
-                    mousePoint.x = (int) (stats.getPositionX() + 84);
-                    mousePoint.y = (int) (stats.getPositionY() + 36);
+                    mousePoint.x = (int) (stats.getPositionX() + 53);
+                    mousePoint.y = (int) (stats.getPositionY() + 43);
                 } else {
-                    mousePoint.x = (int) (stats.getPositionX() + 5);
-                    mousePoint.y = (int) (stats.getPositionY() + 36);
+                    mousePoint.x = (int) (stats.getPositionX() + 6);
+                    mousePoint.y = (int) (stats.getPositionY() + 43);
                 }
                 moveMouse(mousePoint);
 
@@ -465,8 +459,12 @@ public class Clock implements Runnable{
                 }
             }
 
-            stats.setCursorX((int) MouseInfo.getPointerInfo().getLocation().getX());
-            stats.setCursorY((int) MouseInfo.getPointerInfo().getLocation().getY());
+            try {
+                stats.setCursorX((int) MouseInfo.getPointerInfo().getLocation().getX());
+                stats.setCursorY((int) MouseInfo.getPointerInfo().getLocation().getY());
+            } catch (Exception e) {
+
+            }
             stats.updateDestination();
 
 
