@@ -16,10 +16,10 @@ public class GameWindow extends JFrame{
     public JLabel currency = new JLabel();
     public JLabel hint = new JLabel();
     private JFrame options = new JFrame("Options");
-    private JFrame byeFrend = new JFrame("Bye Frend");
+    private JFrame byeFriend = new JFrame("Bye Friend");
     private JFrame help = new JFrame("Help");
     private Point initialClick;
-    public String[] tips = {"Hi Frends!",
+    public String[] tips = {"Hi Friends!",
             "Click on a cog(earring) to open options",
             "Fubuki gets hungry over time",
             "Fubuki dies and loses gold when starved",
@@ -34,7 +34,7 @@ public class GameWindow extends JFrame{
             "Click on wardrobe to change clothes",
             "If you pet Fubuki too much, she gets angry"};
 
-    public GameWindow(FrendStats stats, ArrayList<Food> foodList, Shop shop) throws IOException, FontFormatException {
+    public GameWindow(FriendStats stats, ArrayList<Food> foodList, Shop shop) throws IOException, FontFormatException {
         Map<Integer, Point> burgerMap = new HashMap<Integer, Point>();
         burgerMap.put(0, new Point(178,230));
         burgerMap.put(1, new Point(219,230));
@@ -71,19 +71,19 @@ public class GameWindow extends JFrame{
         getContentPane().setComponentZOrder(tiredBar, 0);
 
 
-        byeFrend.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
-        byeFrend.setSize(240, 180);
-        byeFrend.setLayout(null);
-        byeFrend.setLocationRelativeTo(null);
-        byeFrend.setResizable(false);
+        byeFriend.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
+        byeFriend.setSize(240, 180);
+        byeFriend.setLayout(null);
+        byeFriend.setLocationRelativeTo(null);
+        byeFriend.setResizable(false);
 
         JLabel quitMessage = new JLabel("<html>Are you sure you want to quit?<br/>Progress will be saved.", SwingConstants.CENTER);
         quitMessage.setBounds(20, 10, 190, 70);
-        byeFrend.add(quitMessage);
+        byeFriend.add(quitMessage);
 
         JButton closeButton = new JButton("YES");
         closeButton.setBounds(40, 90, 60, 30);
-        byeFrend.add(closeButton);
+        byeFriend.add(closeButton);
 
         closeButton.addActionListener(new ActionListener() {
             @Override
@@ -103,12 +103,12 @@ public class GameWindow extends JFrame{
         });
         JButton stayButton = new JButton("NO");
         stayButton.setBounds(125, 90, 60, 30);
-        byeFrend.add(stayButton);
+        byeFriend.add(stayButton);
 
         stayButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                byeFrend.dispose();
+                byeFriend.dispose();
             }
         });
 
@@ -119,7 +119,7 @@ public class GameWindow extends JFrame{
         quitButton.setFocusPainted(false);
         quitButton.setOpaque(false);
         quitButton.addActionListener(e -> {
-            byeFrend.setVisible(true);
+            byeFriend.setVisible(true);
         });
         add(quitButton);
         addWindowListener(new WindowAdapter() {

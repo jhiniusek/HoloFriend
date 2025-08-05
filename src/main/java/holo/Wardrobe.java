@@ -8,7 +8,7 @@ public class Wardrobe extends JFrame {
     private Point initialClick;
     JLabel sprite = new JLabel(new ImageIcon(getClass().getResource("/sprites/Wardrobe.png")));
 
-    public Wardrobe(FrendStats stats) {
+    public Wardrobe(FriendStats stats) {
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setType(Window.Type.UTILITY);

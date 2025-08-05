@@ -10,13 +10,13 @@ import java.util.ArrayList;
 
 public class Radio extends JFrame {
     private Point initialClick;
-    private FrendStats stats;
+    private FriendStats stats;
     JLabel lcd = new JLabel(new ImageIcon(getClass().getResource("/sprites/RadioLCD_NoDisk.gif")));
     private Clip clip;
     private ArrayList<String> trackList;
     private int currentTrack = 0;
 
-    public Radio(FrendStats stats) {
+    public Radio(FriendStats stats) {
         this.stats = stats;
         updateTrackList();
         setUndecorated(true);

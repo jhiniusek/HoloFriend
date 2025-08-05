@@ -4,17 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Frend extends JFrame{
+public class Friend extends JFrame{
 
 
     public JLabel sprite = new JLabel(new ImageIcon(getClass().getResource("/sprites/basic/IdleL.gif")));
     public JLabel shadow = new JLabel(new ImageIcon(getClass().getResource("/sprites/Shadow.png")));
     private Point initialClick;
-    private FrendStats stats;
+    private FriendStats stats;
     long clickTime;
     long releaseTime;
 
-    public Frend(FrendStats stats) throws HeadlessException {
+    public Friend(FriendStats stats) throws HeadlessException {
         this.stats = stats;
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setType(Window.Type.UTILITY);
@@ -40,7 +40,7 @@ public class Frend extends JFrame{
             public void mouseReleased(MouseEvent e) {
                 releaseTime = System.currentTimeMillis();
                 if (releaseTime - clickTime < 100) {
-                    System.out.println("Frend clicked");
+                    System.out.println("Friend clicked");
                     stats.setClickCounter(stats.getClickCounter() + 1);
                 }
                 try {

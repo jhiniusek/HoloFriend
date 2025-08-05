@@ -10,7 +10,7 @@ public class Bed extends JFrame {
     JLabel sprite = new JLabel(new ImageIcon(getClass().getResource("/sprites/Bed.png")));
     JButton cancel = new JButton();
 
-    public Bed(FrendStats stats) {
+    public Bed(FriendStats stats) {
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setType(Window.Type.UTILITY);

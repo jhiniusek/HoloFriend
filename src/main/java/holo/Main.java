@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException, IOException, FontFormatException {
 
-        FrendStats stats = new FrendStats();
+        FriendStats stats = new FriendStats();
 
         File saveFile = new File("save.txt");
         if(saveFile.createNewFile()){
@@ -34,11 +34,11 @@ public class Main {
         GameWindow window = new  GameWindow(stats, foodList, shop);
         shop.setMainWindow(window);
 
-        Frend frend = new Frend(stats);
+        Friend friend = new Friend(stats);
         Lake lake = new Lake(window.getLocation().x - 270,window.getLocation().y + 100);
         stats.setLake(lake);
 
-        Thread clock = new Thread(new Clock(stats, frend, window, foodList, lake, bed));
+        Thread clock = new Thread(new Clock(stats, friend, window, foodList, lake, bed));
         clock.start();
 
 

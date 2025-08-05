@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Clock implements Runnable{
-    private FrendStats stats;
-    private Frend frend;
+    private FriendStats stats;
+    private Friend friend;
     private GameWindow window;
     private ArrayList<Food> foodList;
     private Lake lake;
@@ -43,9 +42,9 @@ public class Clock implements Runnable{
     private int danceLenght = 0;
     private int danceTimer = 0;
 
-    public Clock(FrendStats stats, Frend frend, GameWindow window, ArrayList<Food> foodList, Lake lake, Bed bed) {
+    public Clock(FriendStats stats, Friend friend, GameWindow window, ArrayList<Food> foodList, Lake lake, Bed bed) {
         this.stats = stats;
-        this.frend = frend;
+        this.friend = friend;
         this.window = window;
         this.foodList = foodList;
         this.lake = lake;
@@ -72,96 +71,96 @@ public class Clock implements Runnable{
                 rodSpeed = 80;
             }
 
-            frend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
+            friend.setLocation((int)stats.getPositionX(), (int)stats.getPositionY());
 
             if(stats.getState() == States.IDLE){
-                frend.setSize(64,128);
-                frend.sprite.setBounds(0,0,64,128);
-                frend.shadow.setBounds(0,116,60,11);
+                friend.setSize(64,128);
+                friend.sprite.setBounds(0,0,64,128);
+                friend.shadow.setBounds(0,116,60,11);
                 if(stats.isRight()){
                     newSprite = "/sprites/"+stats.getSkin()+"IdleR.gif";
                     if(!newSprite.equals(spritePath)){
-                        frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
 
                 } else {
                     newSprite = "/sprites/"+stats.getSkin()+"IdleL.gif";
                     if(!newSprite.equals(spritePath)){
-                        frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
                 }
 
             } else if (stats.getState() == States.WALK) {
-                frend.setSize(64,128);
-                frend.sprite.setBounds(0,0,64,128);
-                frend.shadow.setBounds(0,116,60,11);
+                friend.setSize(64,128);
+                friend.sprite.setBounds(0,0,64,128);
+                friend.shadow.setBounds(0,116,60,11);
                 if(stats.isRight()){
                     newSprite = "/sprites/"+stats.getSkin()+"WalkR.gif";
                     if(!newSprite.equals(spritePath)){
-                        frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
                 } else {
                     newSprite = "/sprites/"+stats.getSkin()+"WalkL.gif";
                     if(!newSprite.equals(spritePath)){
-                        frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
                 }
 
             } else if (stats.getState() == States.CHASE) {
-                frend.setSize(175,128);
-                frend.sprite.setBounds(0,0,175,128);
+                friend.setSize(175,128);
+                friend.sprite.setBounds(0,0,175,128);
                 stats.evaluateMs();
                 if(stats.isRight()){
-                    frend.shadow.setBounds(0,116,60,11);
+                    friend.shadow.setBounds(0,116,60,11);
                     newSprite = "/sprites/"+stats.getSkin()+"ChaseR.gif";
                     if(!newSprite.equals(spritePath)){
-                        frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
                 } else {
-                    frend.shadow.setBounds(80,116,60,11);
+                    friend.shadow.setBounds(80,116,60,11);
                     newSprite = "/sprites/"+stats.getSkin()+"ChaseL.gif";
                     if(!newSprite.equals(spritePath)){
-                        frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
                 }
 
             }else if (stats.getState() == States.HOLD) {
-                frend.setSize(64,128);
-                frend.sprite.setBounds(0,0,64,128);
-                frend.shadow.setBounds(0,116,60,11);
+                friend.setSize(64,128);
+                friend.sprite.setBounds(0,0,64,128);
+                friend.shadow.setBounds(0,116,60,11);
                 if(stats.isRight()){
                     newSprite = "/sprites/"+stats.getSkin()+"Hold1R.png";
                     if(!newSprite.equals(spritePath)){
-                        frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
                 } else {
                     newSprite = "/sprites/"+stats.getSkin()+"Hold1L.png";
                     if(!newSprite.equals(spritePath)){
-                        frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
                 }
             } else if (stats.getState() == States.PULL) {
-                frend.setSize(64,128);
-                frend.sprite.setBounds(0,0,64,128);
-                frend.shadow.setBounds(0,116,60,11);
+                friend.setSize(64,128);
+                friend.sprite.setBounds(0,0,64,128);
+                friend.shadow.setBounds(0,116,60,11);
                 if(stats.isRight()){
                     newSprite = "/sprites/"+stats.getSkin()+"PullR.gif";
                     if(!newSprite.equals(spritePath)){
-                        frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
                 } else {
                     newSprite = "/sprites/" + stats.getSkin() + "PullL.gif";
                     if (!newSprite.equals(spritePath)) {
-                        frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
                 }
@@ -338,8 +337,8 @@ public class Clock implements Runnable{
                         lake.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
-                    frend.setLocation((int)stats.getPositionX(),(int)stats.getPositionY());
-                    frend.setVisible(true);
+                    friend.setLocation((int)stats.getPositionX(),(int)stats.getPositionY());
+                    friend.setVisible(true);
                     stats.setState(States.IDLE);
                     castAnimation = 22;
                     lake.forceStop = false;
@@ -392,8 +391,8 @@ public class Clock implements Runnable{
                         bed.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
-                    frend.setLocation((int)stats.getPositionX(),(int)stats.getPositionY());
-                    frend.setVisible(true);
+                    friend.setLocation((int)stats.getPositionX(),(int)stats.getPositionY());
+                    friend.setVisible(true);
                     stats.setState(States.IDLE);
                     bed.wakeup = false;
                     bed.removeForcableStop();
@@ -414,7 +413,7 @@ public class Clock implements Runnable{
 
                     newSprite = "/sprites/"+stats.getSkin()+"IdleL.gif";
                     if(!newSprite.equals(spritePath)){
-                        frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
 
@@ -428,7 +427,7 @@ public class Clock implements Runnable{
 
                     newSprite = "/sprites/"+stats.getSkin()+"RatDance.gif";
                     if(!newSprite.equals(spritePath)){
-                        frend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
                         spritePath = newSprite;
                     }
 
@@ -563,7 +562,7 @@ public class Clock implements Runnable{
             if (y > min_y && y < max_y){
                 stats.setState(States.WORK);
                 lake.makeForceableStop();
-                frend.setVisible(false);
+                friend.setVisible(false);
                 newSprite = "/sprites/"+stats.getSkin()+"Cast.gif";
                 if(!newSprite.equals(spritePath)){
                     lake.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
@@ -586,7 +585,7 @@ public class Clock implements Runnable{
             if (y > min_y && y < max_y){
                 stats.setState(States.SLEEP);
                 bed.makeForceableStop();
-                frend.setVisible(false);
+                friend.setVisible(false);
                 newSprite = "/sprites/"+stats.getSkin()+"Sleep.gif";
                 if(!newSprite.equals(spritePath)){
                     bed.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));

@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class FrendStats {
+public class FriendStats {
     private int hunger = 100;
     private int tiredness = 100;
     private int currency = 10;
@@ -53,7 +53,7 @@ public class FrendStats {
     public int radioPositionY = 0;
     private int chessSlowed = 0;
 
-    public FrendStats() throws InterruptedException {
+    public FriendStats() throws InterruptedException {
         getScreens();
     }
 
