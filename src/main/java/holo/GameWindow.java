@@ -46,6 +46,7 @@ public class GameWindow extends JFrame{
 
         setSize(306,346);
         setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
+        setTitle("HoloFriend");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);

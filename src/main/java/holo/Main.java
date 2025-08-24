@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) throws InterruptedException, IOException, FontFormatException {
-
         FriendStats stats = new FriendStats();
 
         File saveFile = new File("save.txt");
@@ -40,10 +39,5 @@ public class Main {
 
         Thread clock = new Thread(new Clock(stats, friend, window, foodList, lake, bed));
         clock.start();
-
-
-
-
-
     }
 }

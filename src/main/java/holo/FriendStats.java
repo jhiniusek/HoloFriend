@@ -1,9 +1,17 @@
 package holo;
 
+import com.sun.jna.Native;
+import com.sun.jna.Pointer;
+import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinDef;
+import com.sun.jna.platform.win32.WinUser;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class FriendStats {
@@ -24,6 +32,7 @@ public class FriendStats {
     private int cursorY = 0;
     private States state = States.IDLE;
     private String chaseObject = "";
+    private String windowName = "";
     private int clickCounter = 0;
     private boolean ableToWork = true;
     private Lake lake;
@@ -323,27 +332,31 @@ public class FriendStats {
     }
 
     public void chooseDestination(){
-        // Chase or Walk
-        int foodProbabilty = 100 - hunger;
+        int foodProbability = 100 - hunger;
         int sleepProbability = 50 - tiredness;
         if (sleepProbability < 0) {sleepProbability = 0;}
-        sleepProbability += foodProbabilty;
+        sleepProbability += foodProbability;
         int workProbability = 20 + tiredness + sleepProbability;
         int cursorProbability = 10 + workProbability;
-        int walkProbability = 50 + cursorProbability;
+        int windowProbability = 10 + cursorProbability;
+        int walkProbability = 50 + windowProbability;
 
         int target = (int)(Math.random() * walkProbability);
-        System.out.println("TEST RANDOM DESTINY: " + target + "\n Food: " + foodProbabilty + "  Bed: " + sleepProbability + "  Lake: " + workProbability + "  Cursor: " + cursorProbability + "  Walk: " + walkProbability);
-        if(target > cursorProbability){
+        System.out.println("TEST RANDOM DESTINY: " + target + "\n Food: " + foodProbability + "  Bed: " + sleepProbability + "  Lake: " + workProbability + "  Cursor: " + cursorProbability + "  Window: " + windowProbability + "  Walk: " + walkProbability);
+        if(target > windowProbability){
             System.out.println("WALK RANDOMLY");
             chaseObject = "Random";
+        } else if (target > cursorProbability) {
+            System.out.println("MOVE WINDOW");
+            chaseObject = "Window";
+            windowName = chooseRandomWindow();
         } else if (target > workProbability) {
             System.out.println("CHASE CURSOR");
             chaseObject = "Cursor";
         } else if (target > sleepProbability) {
             System.out.println("GO TO WORK");
             chaseObject = "Lake";
-        } else if (target > foodProbabilty && getBedOwned() == 1) {
+        } else if (target > foodProbability && getBedOwned() == 1) {
             System.out.println("GO TO SLEEP");
             chaseObject = "Bed";
         } else {
@@ -383,10 +396,10 @@ public class FriendStats {
                 evaluateMs();
                 break;
             case "Food":
-                for (int i = 0; i < foodList.size(); i++) {
-                    if (foodList.get(i) != null) {
-                        destinationX = foodList.get(i).getX() - 10;
-                        destinationY = foodList.get(i).getY() - 10;
+                for (Food food : foodList) {
+                    if (food != null) {
+                        destinationX = food.getX() - 10;
+                        destinationY = food.getY() - 10;
                         break;
                     }
                 }
@@ -492,6 +505,72 @@ public class FriendStats {
             radioPositionX = 0;
             radioPositionY = 0;
         }
+    }
+
+    private String chooseRandomWindow(){
+        List<WinDef.HWND> windows = new ArrayList<>();
+        int WS_EX_TOOLWINDOW = 0x00000080;
+
+        User32.INSTANCE.EnumWindows(new WinUser.WNDENUMPROC() {
+            @Override
+            public boolean callback(WinDef.HWND hWnd, Pointer data) {
+                if (User32.INSTANCE.IsWindowVisible(hWnd) && User32.INSTANCE.IsWindowEnabled(hWnd)) {
+                    char[] buffer = new char[512];
+                    User32.INSTANCE.GetWindowText(hWnd, buffer, 512);
+                    String windowTitle = Native.toString(buffer);
+
+                    if (!windowTitle.isBlank() && User32.INSTANCE.IsWindowVisible(hWnd)) {
+                        WinDef.HWND root = User32.INSTANCE.GetAncestor(hWnd, WinUser.GA_ROOT);
+                        if (!hWnd.equals(root)) {
+                            return true;
+                        }
+
+                        char[] className = new char[512];
+                        User32.INSTANCE.GetClassName(hWnd, className, 512);
+                        String wndClass = Native.toString(className);
+
+                        if (wndClass.equals("ApplicationFrameWindow")) {
+                            WinDef.HWND child = User32.INSTANCE.FindWindowEx(hWnd, null, "Windows.UI.Core.CoreWindow", null);
+                            if (child == null || !User32.INSTANCE.IsWindowVisible(child)) {
+                                return true;
+                            }
+                        }
+
+                        int style = User32.INSTANCE.GetWindowLong(hWnd, WinUser.GWL_STYLE);
+                        int exStyle = User32.INSTANCE.GetWindowLong(hWnd, WinUser.GWL_EXSTYLE);
+
+                        boolean hasTitleBar = (style & WinUser.WS_CAPTION) != 0;
+                        boolean hasSysMenu  = (style & WinUser.WS_SYSMENU) != 0;
+                        boolean maximized = (style & WinUser.WS_MAXIMIZE) != 0;
+                        boolean isToolWindow = (exStyle & WS_EX_TOOLWINDOW) != 0;
+
+                        if (hasTitleBar && hasSysMenu && !isToolWindow && !maximized) {
+                            System.out.println("Found: " + windowTitle);
+                            windows.add(hWnd);
+                        }
+                    }
+                }
+                return true;
+            }
+        }, null);
+
+        WinDef.HWND randomWindow;
+        String randomWindowTitle = "";
+
+        if (!windows.isEmpty()) {
+            Random rand = new Random();
+            randomWindow = windows.get(rand.nextInt(windows.size()));
+
+            char[] buffer = new char[512];
+            User32.INSTANCE.GetWindowText(randomWindow, buffer, 512);
+            randomWindowTitle = Native.toString(buffer);
+
+            System.out.println("\nRandom window: " + randomWindowTitle);
+        } else {
+            System.out.println("No windows found!");
+        }
+
+        return randomWindowTitle;
     }
 
     public void load(File save) {
