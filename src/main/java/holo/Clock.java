@@ -4,11 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 
 public class Clock implements Runnable{
     private FriendStats stats;
@@ -209,7 +211,7 @@ public class Clock implements Runnable{
                 }
             }
 
-            if(stats.getPositionX() == stats.getDestinationX() && stats.getPositionY() == stats.getDestinationY() && (stats.getState()==States.WALK || stats.getState()==States.CHASE || stats.getState()==States.PULL)){
+            if(stats.getPositionX() == stats.getDestinationX() && stats.getPositionY() == stats.getDestinationY() && (stats.getState()==States.WALK || stats.getState()==States.CHASE || stats.getState()==States.PULL || stats.getState()==States.PUSH)){
                 if (stats.getChaseObject() == "Cursor") {
                     stats.setState(States.PULL);
                     stats.setChaseObject("Random");
@@ -226,6 +228,42 @@ public class Clock implements Runnable{
                         stats.setDestinationY(stats.getDestinationY() + pullDistanceY);
                     } else {
                         stats.setDestinationY(stats.getDestinationY() - pullDistanceY);
+                    }
+                } else if (stats.getChaseObject() == "Window") {
+                    stats.setChaseObject("Random");
+                    Random rand = new Random();
+                    //int PushOrPull = rand.nextInt(2);
+                    int PushOrPull = 0;
+                    int distanceX = (int)(Math.random() * 200 + 200);
+                    int distanceY = (int)(Math.random() * 50 + 50);
+
+                    if(stats.getWindowSide() == 0){
+                        switch (PushOrPull){
+                            case 0:
+                                stats.setState(States.PULL);
+                                stats.setDestinationX(stats.getDestinationX() - distanceX);
+                                break;
+                            case 1:
+                                stats.setState(States.PUSH);
+                                stats.setDestinationX(stats.getDestinationX() + distanceX);
+                                break;
+                        }
+                    } else {
+                        switch (PushOrPull){
+                            case 0:
+                                stats.setState(States.PULL);
+                                stats.setDestinationX(stats.getDestinationX() + distanceX);
+                                break;
+                            case 1:
+                                stats.setState(States.PUSH);
+                                stats.setDestinationX(stats.getDestinationX() - distanceX);
+                                break;
+                        }
+                    }
+                    if(distanceY % 2 == 0){
+                        stats.setDestinationY(stats.getDestinationY() + distanceY);
+                    } else {
+                        stats.setDestinationY(stats.getDestinationY() - distanceY);
                     }
                 } else {
                     stats.setState(States.IDLE);
@@ -257,7 +295,7 @@ public class Clock implements Runnable{
                 stats.setChaseObject("Cursor");
             }
 
-            if(stats.getState() == States.PULL){
+            if(stats.getState() == States.PULL && stats.getChaseObject() == "Cursor"){
                 if(stats.isRight()){
                     mousePoint.x = (int) (stats.getPositionX() + 53);
                     mousePoint.y = (int) (stats.getPositionY() + 43);
@@ -266,6 +304,23 @@ public class Clock implements Runnable{
                     mousePoint.y = (int) (stats.getPositionY() + 43);
                 }
                 moveMouse(mousePoint);
+            }
+
+
+            //
+            //                PULL WINDOW
+            //
+
+            if(stats.getState() == States.PULL && stats.getChaseObject() == "Window") {
+
+            }
+
+            //
+            //                PUSH WINDOW
+            //
+
+            if(stats.getState() == States.PUSH && stats.getChaseObject() == "Window") {
+
             }
 
 

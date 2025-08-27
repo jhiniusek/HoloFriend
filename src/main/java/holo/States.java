@@ -8,5 +8,6 @@ public enum States {
     SLEEP,
     DANCE,
     WORK,
-    PULL
+    PULL,
+    PUSH
 }

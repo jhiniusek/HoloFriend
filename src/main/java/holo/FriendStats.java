@@ -32,7 +32,10 @@ public class FriendStats {
     private int cursorY = 0;
     private States state = States.IDLE;
     private String chaseObject = "";
-    private String windowName = "";
+    private WinDef.HWND window;
+    private WinDef.RECT rect = new WinDef.RECT();
+    private int windowSide;
+    private int windowCatchPoint;
     private int clickCounter = 0;
     private boolean ableToWork = true;
     private Lake lake;
@@ -190,6 +193,22 @@ public class FriendStats {
         this.right = goRight;
     }
 
+    public WinDef.HWND getWindow() {
+        return window;
+    }
+
+    public WinDef.RECT getRect() {
+        return rect;
+    }
+
+    public int getWindowCatchPoint() {
+        return windowCatchPoint;
+    }
+
+    public int getWindowSide() {
+        return windowSide;
+    }
+
     public boolean isAbleToWork() {
         return ableToWork;
     }
@@ -338,7 +357,7 @@ public class FriendStats {
         sleepProbability += foodProbability;
         int workProbability = 20 + tiredness + sleepProbability;
         int cursorProbability = 10 + workProbability;
-        int windowProbability = 10 + cursorProbability;
+        int windowProbability = 1000 + cursorProbability;
         int walkProbability = 50 + windowProbability;
 
         int target = (int)(Math.random() * walkProbability);
@@ -349,7 +368,7 @@ public class FriendStats {
         } else if (target > cursorProbability) {
             System.out.println("MOVE WINDOW");
             chaseObject = "Window";
-            windowName = chooseRandomWindow();
+            window = chooseRandomWindow();
         } else if (target > workProbability) {
             System.out.println("CHASE CURSOR");
             chaseObject = "Cursor";
@@ -383,6 +402,17 @@ public class FriendStats {
             case "Cursor":
                 destinationX = cursorX - 84;
                 destinationY = cursorY - 38;
+                evaluateMs();
+                break;
+            case "Window":
+                updateWindowPosition();
+                if(windowSide == 0){
+                    destinationX = rect.left;
+                    destinationY = rect.top + windowCatchPoint;
+                } else {
+                    destinationX = rect.right;
+                    destinationY = rect.top + windowCatchPoint;
+                }
                 evaluateMs();
                 break;
             case "Lake":
@@ -507,7 +537,7 @@ public class FriendStats {
         }
     }
 
-    private String chooseRandomWindow(){
+    private WinDef.HWND chooseRandomWindow(){
         List<WinDef.HWND> windows = new ArrayList<>();
         int WS_EX_TOOLWINDOW = 0x00000080;
 
@@ -554,23 +584,26 @@ public class FriendStats {
             }
         }, null);
 
-        WinDef.HWND randomWindow;
-        String randomWindowTitle = "";
+        WinDef.HWND randomWindow = null;
 
         if (!windows.isEmpty()) {
             Random rand = new Random();
             randomWindow = windows.get(rand.nextInt(windows.size()));
-
-            char[] buffer = new char[512];
-            User32.INSTANCE.GetWindowText(randomWindow, buffer, 512);
-            randomWindowTitle = Native.toString(buffer);
-
-            System.out.println("\nRandom window: " + randomWindowTitle);
-        } else {
-            System.out.println("No windows found!");
+            User32.INSTANCE.GetWindowRect(randomWindow, rect);
+            int height = rect.bottom - rect.top;
+            windowSide = rand.nextInt(2); // 0 -> left   1 -> right
+            windowCatchPoint = rand.nextInt(height);
         }
+        return randomWindow;
+    }
 
-        return randomWindowTitle;
+    public void updateWindowPosition(){
+        User32.INSTANCE.GetWindowRect(window, rect);
+        int height = rect.bottom - rect.top;
+        if(windowCatchPoint > height){
+            Random rand = new Random();
+            windowCatchPoint = rand.nextInt(height);
+        }
     }
 
     public void load(File save) {
