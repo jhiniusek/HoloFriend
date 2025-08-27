@@ -234,6 +234,8 @@ public class Clock implements Runnable{
                     }
                 } else if (stats.getChaseObject() == "Window") {
                     stats.setChaseObject("Random");
+                    stats.setWindow(null);
+                    stats.setRect(null);
                     Random rand = new Random();
                     //int PushOrPull = rand.nextInt(2);
                     int PushOrPull = 0;

@@ -197,8 +197,16 @@ public class FriendStats {
         return window;
     }
 
+    public void setWindow(WinDef.HWND window) {
+        this.window = window;
+    }
+
     public WinDef.RECT getRect() {
         return rect;
+    }
+
+    public void setRect(WinDef.RECT rect) {
+        this.rect = rect;
     }
 
     public int getWindowCatchPoint() {
@@ -357,7 +365,7 @@ public class FriendStats {
         sleepProbability += foodProbability;
         int workProbability = 20 + tiredness + sleepProbability;
         int cursorProbability = 10 + workProbability;
-        int windowProbability = 1000 + cursorProbability;
+        int windowProbability = 10 + cursorProbability;
         int walkProbability = 50 + windowProbability;
 
         int target = (int)(Math.random() * walkProbability);
@@ -405,6 +413,10 @@ public class FriendStats {
                 evaluateMs();
                 break;
             case "Window":
+                if(window == null){
+                    chaseObject = "Random";
+                    break;
+                }
                 updateWindowPosition();
                 if(windowSide == 0){
                     destinationX = rect.left;
