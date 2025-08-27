@@ -590,6 +590,11 @@ public class FriendStats {
             Random rand = new Random();
             randomWindow = windows.get(rand.nextInt(windows.size()));
             User32.INSTANCE.GetWindowRect(randomWindow, rect);
+            if(rect.left == -32000){
+                User32.INSTANCE.ShowWindow(randomWindow, WinUser.SW_RESTORE);
+                User32.INSTANCE.GetWindowRect(randomWindow, rect);
+                User32.INSTANCE.ShowWindow(randomWindow, WinUser.SW_MINIMIZE);
+            }
             int height = rect.bottom - rect.top;
             windowSide = rand.nextInt(2); // 0 -> left   1 -> right
             windowCatchPoint = rand.nextInt(height);
@@ -598,11 +603,18 @@ public class FriendStats {
     }
 
     public void updateWindowPosition(){
-        User32.INSTANCE.GetWindowRect(window, rect);
-        int height = rect.bottom - rect.top;
-        if(windowCatchPoint > height){
-            Random rand = new Random();
-            windowCatchPoint = rand.nextInt(height);
+        WinUser.WINDOWPLACEMENT placement = new WinUser.WINDOWPLACEMENT();
+        User32.INSTANCE.GetWindowPlacement(window, placement);
+
+        boolean minimized = (placement.showCmd == WinUser.SW_SHOWMINIMIZED);
+
+        if(!minimized){
+            User32.INSTANCE.GetWindowRect(window, rect);
+            int height = rect.bottom - rect.top;
+            if(windowCatchPoint > height){
+                Random rand = new Random();
+                windowCatchPoint = rand.nextInt(height);
+            }
         }
     }
 

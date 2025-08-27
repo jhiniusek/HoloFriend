@@ -1,5 +1,8 @@
 package holo;
 
+import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinUser;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -265,6 +268,11 @@ public class Clock implements Runnable{
                     } else {
                         stats.setDestinationY(stats.getDestinationY() - distanceY);
                     }
+
+                    User32.INSTANCE.ShowWindow(stats.getWindow(), WinUser.SW_RESTORE);
+                    User32.INSTANCE.BringWindowToTop(stats.getWindow());
+                    User32.INSTANCE.SetForegroundWindow(stats.getWindow());
+
                 } else {
                     stats.setState(States.IDLE);
                 }
