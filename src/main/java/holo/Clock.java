@@ -25,6 +25,9 @@ public class Clock implements Runnable{
     private String spritePath = "/sprites/IdleL.gif";
     private String newSprite = null;
     private Point mousePoint = new Point (0,0);
+    private boolean pullUp = false;
+    private float topFix;
+    private float botFix;
 
     //IDLE VARIABLES
     private int idleTimer = 60;
@@ -214,10 +217,15 @@ public class Clock implements Runnable{
                 }
             }
 
-            if(stats.getPositionX() == stats.getDestinationX() && stats.getPositionY() == stats.getDestinationY() && (stats.getState()==States.WALK || stats.getState()==States.CHASE || stats.getState()==States.PULL || stats.getState()==States.PUSH)){
+            if(stats.getPositionX() == stats.getDestinationX() && stats.getPositionY() == stats.getDestinationY() && (stats.getState()==States.PULL || stats.getState()==States.PUSH)){
+                stats.setWindow(null);
+                stats.getRect().clear();
+                stats.setState(States.IDLE);
+            }
+
+            if(stats.getPositionX() == stats.getDestinationX() && stats.getPositionY() == stats.getDestinationY() && (stats.getState()==States.WALK || stats.getState()==States.CHASE)){
                 if (stats.getChaseObject() == "Cursor") {
                     stats.setState(States.PULL);
-                    stats.setChaseObject("Random");
                     int pullDistanceX = (int)(Math.random() * 200 + 200);
                     int pullDistanceY = (int)(Math.random() * 50 + 50);
                     if(stats.isRight()){
@@ -233,15 +241,13 @@ public class Clock implements Runnable{
                         stats.setDestinationY(stats.getDestinationY() - pullDistanceY);
                     }
                 } else if (stats.getChaseObject() == "Window") {
-                    stats.setChaseObject("Random");
-                    stats.setWindow(null);
-                    stats.setRect(null);
                     Random rand = new Random();
                     //int PushOrPull = rand.nextInt(2);
                     int PushOrPull = 0;
                     int distanceX = (int)(Math.random() * 200 + 200);
                     int distanceY = (int)(Math.random() * 50 + 50);
-
+                    topFix = stats.getRect().top;
+                    botFix = stats.getRect().bottom;
                     if(stats.getWindowSide() == 0){
                         switch (PushOrPull){
                             case 0:
@@ -267,10 +273,12 @@ public class Clock implements Runnable{
                     }
                     if(distanceY % 2 == 0){
                         stats.setDestinationY(stats.getDestinationY() + distanceY);
+                        pullUp = false;
                     } else {
                         stats.setDestinationY(stats.getDestinationY() - distanceY);
+                        pullUp = true;
                     }
-
+                    stats.evaluateMs();
                     User32.INSTANCE.ShowWindow(stats.getWindow(), WinUser.SW_RESTORE);
                     User32.INSTANCE.BringWindowToTop(stats.getWindow());
                     User32.INSTANCE.SetForegroundWindow(stats.getWindow());
@@ -303,14 +311,15 @@ public class Clock implements Runnable{
             if(stats.getClickCounter() >= 3){
                 stats.setClickCounter(0);
                 stats.setChaseObject("Cursor");
+                stats.setState(States.CHASE);
             }
 
             if(stats.getState() == States.PULL && stats.getChaseObject() == "Cursor"){
                 if(stats.isRight()){
-                    mousePoint.x = (int) (stats.getPositionX() + 53);
+                    mousePoint.x = (int) (stats.getPositionX() + 6);
                     mousePoint.y = (int) (stats.getPositionY() + 43);
                 } else {
-                    mousePoint.x = (int) (stats.getPositionX() + 6);
+                    mousePoint.x = (int) (stats.getPositionX() + 53);
                     mousePoint.y = (int) (stats.getPositionY() + 43);
                 }
                 moveMouse(mousePoint);
@@ -322,7 +331,25 @@ public class Clock implements Runnable{
             //
 
             if(stats.getState() == States.PULL && stats.getChaseObject() == "Window") {
-
+                if(stats.isRight()){
+                    stats.getRect().left += (int)stats.getMsX();
+                    stats.getRect().right += (int)stats.getMsX();
+                } else {
+                    stats.getRect().left -= (int)stats.getMsX();
+                    stats.getRect().right -= (int)stats.getMsX();
+                }
+                if(pullUp){
+                    topFix -= stats.getMsY();
+                    botFix -= stats.getMsY();
+                } else {
+                    if (stats.getRect().top != 0) {
+                        topFix += stats.getMsY();
+                        botFix += stats.getMsY();
+                    }
+                }
+                stats.getRect().top = (int)topFix;
+                stats.getRect().bottom = (int)botFix;
+                User32.INSTANCE.SetWindowPos(stats.getWindow(), null, stats.getRect().left, stats.getRect().top, (stats.getRect().right - stats.getRect().left), (stats.getRect().bottom - stats.getRect().top), 0);
             }
 
             //

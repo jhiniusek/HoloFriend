@@ -408,22 +408,26 @@ public class FriendStats {
                 evaluateMs();
                 break;
             case "Cursor":
-                destinationX = cursorX - 84;
-                destinationY = cursorY - 38;
+                if (state == States.CHASE) {
+                    destinationX = cursorX - 84;
+                    destinationY = cursorY - 38;
+                }
                 evaluateMs();
                 break;
             case "Window":
                 if(window == null){
-                    chaseObject = "Random";
+                    chaseObject = "Random"; //change for main window
                     break;
                 }
-                updateWindowPosition();
-                if(windowSide == 0){
-                    destinationX = rect.left;
-                    destinationY = rect.top + windowCatchPoint;
-                } else {
-                    destinationX = rect.right;
-                    destinationY = rect.top + windowCatchPoint;
+                if (state == States.WALK) {
+                    updateWindowPosition();
+                    if(windowSide == 0){
+                        destinationX = rect.left - 53;
+                        destinationY = rect.top + windowCatchPoint - 53;
+                    } else {
+                        destinationX = rect.right - 15;
+                        destinationY = rect.top + windowCatchPoint - 53;
+                    }
                 }
                 evaluateMs();
                 break;
@@ -454,7 +458,7 @@ public class FriendStats {
     }
 
     public void evaluateMs(){
-        if (state == States.WALK) {
+        if (state == States.WALK || state == States.PULL || state == States.PUSH) {
             right = destinationX > positionX;
         }
 
@@ -472,7 +476,7 @@ public class FriendStats {
         float distanceY = Math.abs(destinationY - positionY);
 
         if (distanceX > distanceY){
-            if (chaseObject == "Cursor") {
+            if (chaseObject == "Cursor" && (state == States.WALK || state == States.CHASE)) {
                 msX = 8;
                 state = States.CHASE;
             } else if (state == States.PULL){
@@ -483,7 +487,7 @@ public class FriendStats {
             float steps = distanceX / msX;
             msY = distanceY / steps;
         } else {
-            if (chaseObject == "Cursor") {
+            if (chaseObject == "Cursor" && (state == States.WALK || state == States.CHASE)) {
                 msY = 8;
                 state = States.CHASE;
             } else  if (state == States.PULL){
