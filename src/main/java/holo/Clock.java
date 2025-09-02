@@ -178,7 +178,7 @@ public class Clock implements Runnable{
             //       MOVEMENT LOGIC
             //
 
-            if((stats.getPositionX() != stats.getDestinationX() || stats.getPositionY() != stats.getDestinationY()) && (stats.getState()==States.WALK || stats.getState()==States.CHASE || stats.getState()==States.PULL)) {
+            if((stats.getPositionX() != stats.getDestinationX() || stats.getPositionY() != stats.getDestinationY()) && (stats.getState()==States.WALK || stats.getState()==States.CHASE || stats.getState()==States.PULL || stats.getState()==States.PUSH)) {
 
                 if (stats.getPositionX() > stats.getDestinationX()){
 
@@ -242,8 +242,7 @@ public class Clock implements Runnable{
                     }
                 } else if (stats.getChaseObject() == "Window") {
                     Random rand = new Random();
-                    //int PushOrPull = rand.nextInt(2);
-                    int PushOrPull = 0;
+                    int PushOrPull = rand.nextInt(2);
                     int distanceX = (int)(Math.random() * 200 + 200);
                     int distanceY = (int)(Math.random() * 50 + 50);
                     topFix = stats.getRect().top;
@@ -330,7 +329,13 @@ public class Clock implements Runnable{
             //                PULL WINDOW
             //
 
-            if(stats.getState() == States.PULL && stats.getChaseObject() == "Window") {
+            if((stats.getState() == States.PULL || stats.getState() == States.PUSH) && stats.getChaseObject() == "Window") {
+                if (!User32.INSTANCE.IsWindow(stats.getWindow())) {
+                    stats.setState(States.WALK);
+                    stats.setWindow(null);
+                    stats.getRect().clear();
+                }
+
                 if(stats.isRight()){
                     stats.getRect().left += (int)stats.getMsX();
                     stats.getRect().right += (int)stats.getMsX();
@@ -350,15 +355,16 @@ public class Clock implements Runnable{
                 stats.getRect().top = (int)topFix;
                 stats.getRect().bottom = (int)botFix;
                 User32.INSTANCE.SetWindowPos(stats.getWindow(), null, stats.getRect().left, stats.getRect().top, (stats.getRect().right - stats.getRect().left), (stats.getRect().bottom - stats.getRect().top), 0);
+                User32.INSTANCE.ShowWindow(stats.getWindow(), WinUser.SW_RESTORE);
             }
 
             //
             //                PUSH WINDOW
             //
 
-            if(stats.getState() == States.PUSH && stats.getChaseObject() == "Window") {
+            //if(stats.getState() == States.PUSH && stats.getChaseObject() == "Window") {
 
-            }
+            //}
 
 
             //
@@ -367,11 +373,13 @@ public class Clock implements Runnable{
 
             if(lake.forceStop){
                 stats.setAbleToWork(false);
+                workCooldown = 320;
             }
 
             if(workCooldown>0){
                 workCooldown--;
             }
+            stats.setAbleToWork(workCooldown == 0);
 
             if(stats.getTiredness()<11){
                 stats.setAbleToWork(false);

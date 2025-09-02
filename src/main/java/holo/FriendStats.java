@@ -34,6 +34,7 @@ public class FriendStats {
     private String chaseObject = "";
     private WinDef.HWND window;
     private WinDef.RECT rect = new WinDef.RECT();
+    WinUser.WINDOWPLACEMENT placement = new WinUser.WINDOWPLACEMENT();
     private int windowSide;
     private int windowCatchPoint;
     private int clickCounter = 0;
@@ -479,7 +480,7 @@ public class FriendStats {
             if (chaseObject == "Cursor" && (state == States.WALK || state == States.CHASE)) {
                 msX = 8;
                 state = States.CHASE;
-            } else if (state == States.PULL){
+            } else if (state == States.PULL || state == States.PUSH){
                 msX = 2;
             } else {
                 msX = 4;
@@ -490,7 +491,7 @@ public class FriendStats {
             if (chaseObject == "Cursor" && (state == States.WALK || state == States.CHASE)) {
                 msY = 8;
                 state = States.CHASE;
-            } else  if (state == States.PULL){
+            } else  if (state == States.PULL || state == States.PUSH){
                 msY = 2;
             } else {
                 msY = 4;
@@ -588,9 +589,10 @@ public class FriendStats {
                         boolean hasTitleBar = (style & WinUser.WS_CAPTION) != 0;
                         boolean hasSysMenu  = (style & WinUser.WS_SYSMENU) != 0;
                         boolean maximized = (style & WinUser.WS_MAXIMIZE) != 0;
+                        boolean minimized = (style & WinUser.WS_MINIMIZE) != 0;
                         boolean isToolWindow = (exStyle & WS_EX_TOOLWINDOW) != 0;
 
-                        if (hasTitleBar && hasSysMenu && !isToolWindow && !maximized) {
+                        if (hasTitleBar && hasSysMenu && !isToolWindow && !maximized && !minimized) {
                             System.out.println("Found: " + windowTitle);
                             windows.add(hWnd);
                         }
@@ -619,7 +621,12 @@ public class FriendStats {
     }
 
     public void updateWindowPosition(){
-        WinUser.WINDOWPLACEMENT placement = new WinUser.WINDOWPLACEMENT();
+        if (!User32.INSTANCE.IsWindow(window)) {
+            state = States.WALK;
+            window = null;
+            rect.clear();
+        }
+
         User32.INSTANCE.GetWindowPlacement(window, placement);
 
         boolean minimized = (placement.showCmd == WinUser.SW_SHOWMINIMIZED);
@@ -632,6 +639,8 @@ public class FriendStats {
                 windowCatchPoint = rand.nextInt(height);
             }
         }
+
+
     }
 
     public void load(File save) {
