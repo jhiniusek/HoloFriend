@@ -556,7 +556,7 @@ public class Clock implements Runnable{
                 window.tiredBar.setValue(stats.getTiredness());
                 counter = 1;
                 if(hintRefresh == 5){
-                    UpdateHint();
+                    window.UpdateHint();
                     hintRefresh = 1;
                 } else {
                     hintRefresh++;
@@ -693,10 +693,6 @@ public class Clock implements Runnable{
                 }
             }
         }
-    }
-
-    private void UpdateHint(){
-        window.hint.setText(window.tips[(int)(Math.random() * (window.tips.length - 1) + 1)]);
     }
 
     public void moveMouse(Point p) {

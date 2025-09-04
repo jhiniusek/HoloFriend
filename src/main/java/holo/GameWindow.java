@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GameWindow extends JFrame{
+    public JLabel menuImage = new JLabel(new ImageIcon(getClass().getResource("/sprites/MenuENG.png")));
     public JProgressBar hungerBar = new JProgressBar(0,100);
     public JProgressBar tiredBar = new JProgressBar(0,100);
     public JLabel currency = new JLabel();
@@ -19,7 +20,8 @@ public class GameWindow extends JFrame{
     private JFrame byeFriend = new JFrame("Bye Friend");
     private JFrame help = new JFrame("Help");
     private Point initialClick;
-    public String[] tips = {"Hi Friends!",
+    public String[] tips;
+    final String[] tipsENG = {"Hi Friends!",
             "Click on a cog(earring) to open options",
             "Fubuki gets hungry over time",
             "Fubuki dies and loses gold when starved",
@@ -33,6 +35,25 @@ public class GameWindow extends JFrame{
             "You can spend gold in the shop",
             "Click on wardrobe to change clothes",
             "If you pet Fubuki too much, she gets angry"};
+
+    JList<String> listOfTips = new JList<String>(tipsENG);
+
+    final String[] tipsJP = {"Hi Friends!",
+            "オプションを開くために歯車（イヤリング）をクリックして",
+            "フブキは時間が経つとお腹が空いてく",
+            "フブキは飢えると死にコインを失う",
+            "フブキに食べさせるためにバーガーを作ろう",
+            "バーガーはコイン２枚かかる",
+            "オブジェクトを掴んで動かすにはLMBを長押しする",
+            "フブキは時間が経つとスタミナを回復していく",
+            "釣りをしてコインを稼ごう",
+            "釣りはスタミナを消費する",
+            "寝るとスタミナが回復する",
+            "ショップでコインを使えるよ",
+            "ワードローブをクリックして服を着替える",
+            "TOTRANSLATE"};
+
+    Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/Micro5-Regular.ttf"));
 
     public GameWindow(FriendStats stats, ArrayList<Food> foodList, Shop shop) throws IOException, FontFormatException {
         Map<Integer, Point> burgerMap = new HashMap<Integer, Point>();
@@ -52,10 +73,8 @@ public class GameWindow extends JFrame{
         setLayout(null);
         setUndecorated(true);
         setBackground(new Color(1.0f,1.0f,1.0f,0f));
-        ImageIcon imageIcon = new ImageIcon(getClass().getResource("/sprites/Menu.png"));
-        JLabel imageLabel = new JLabel(imageIcon);
-        imageLabel.setBounds(0, 0, imageIcon.getIconWidth(), imageIcon.getIconHeight());
-        add(imageLabel);
+        menuImage.setBounds(0, 0, menuImage.getIcon().getIconWidth(), menuImage.getIcon().getIconHeight());
+        add(menuImage);
 
 
         hungerBar.setValue(stats.getHunger());
@@ -134,7 +153,7 @@ public class GameWindow extends JFrame{
 
 
         options.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
-        options.setSize(240, 310);
+        options.setSize(240, 360);
         options.setLayout(null);
         options.setLocationRelativeTo(null);
         options.setResizable(false);
@@ -208,13 +227,54 @@ public class GameWindow extends JFrame{
             }
         });
 
+        JButton englishButton = new JButton("English");
+        englishButton.setBounds(20, 270, 90, 30);
+        options.add(englishButton);
+
+        englishButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tips = tipsENG;
+                listOfTips.setListData(tipsENG);
+                try {
+                    font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/Micro5-Regular.ttf"));
+                } catch (Exception ex) {
+                    System.out.println("ERROR FONT NOT FOUND");
+                }
+                hint.setFont(font.deriveFont(16f));
+                UpdateHint();
+                menuImage.setIcon(new ImageIcon(getClass().getResource("/sprites/MenuENG.png")));
+            }
+        });
+
+        JButton japaneseButton = new JButton("Japanese");
+        japaneseButton.setBounds(120, 270, 90, 30);
+        options.add(japaneseButton);
+
+        japaneseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tips = tipsJP;
+                listOfTips.setListData(tipsJP);
+                try {
+                    font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/DotGothic16-Regular.ttf"));
+                } catch (Exception ex) {
+                    System.out.println("ERROR FONT NOT FOUND");
+                }
+                hint.setFont(font.deriveFont(8f));
+                UpdateHint();
+                menuImage.setIcon(new ImageIcon(getClass().getResource("/sprites/MenuJP.png")));
+            }
+        });
+
+        tips = tipsENG;
+
         help.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
-        help.setSize(280, 310);
+        help.setSize(370, 310);
         help.setLayout(null);
         help.setLocationRelativeTo(null);
         help.setResizable(false);
-        JList<String> listOfTips = new JList<String>(tips);
-        listOfTips.setBounds(10,10,245,251);
+        listOfTips.setBounds(10,10,335,251);
         help.add(listOfTips);
 
         JButton optionsButton = new JButton();
@@ -279,7 +339,7 @@ public class GameWindow extends JFrame{
         });
         add(openShop);
 
-        Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/Micro5-Regular.ttf"));
+
         currency.setText(String.valueOf(stats.getCurrency()));
         currency.setFont(font.deriveFont(35f));
         currency.setForeground(new Color(39,199,255,255));
@@ -337,6 +397,9 @@ public class GameWindow extends JFrame{
         stats.setDestinationX(getX()+325);
         stats.setPositionY(getY()+210);
         stats.setDestinationY(getY()+210);
+    }
 
+    public void UpdateHint(){
+        hint.setText(tips[(int)(Math.random() * (tips.length - 1) + 1)]);
     }
 }
