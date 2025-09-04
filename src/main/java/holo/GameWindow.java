@@ -1,6 +1,9 @@
 package holo;
 
 import javax.swing.*;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -17,7 +20,7 @@ public class GameWindow extends JFrame{
     private JFrame options = new JFrame("Options");
     private JFrame byeFriend = new JFrame("Bye Friend");
     private JFrame help = new JFrame("Help");
-    JLabel quitMessage = new JLabel();
+    JTextPane quitMessage = new JTextPane();
     JButton closeButton = new JButton();
     JButton stayButton = new JButton();
     JLabel optionsMessage = new JLabel();
@@ -60,9 +63,10 @@ public class GameWindow extends JFrame{
             "寝るとスタミナが回復する",
             "ショップでコインを使えるよ",
             "ワードローブをクリックして服を着替える",
-            "TOTRANSLATE"};
+            "フブキを撫ですぎると、怒ってしまいます。"};
 
     Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/Micro5-Regular.ttf"));
+    private float fontSize = 20f;
 
     public GameWindow(FriendStats stats, ArrayList<Food> foodList, Shop shop) throws IOException, FontFormatException {
         Messages.setLocale(Locale.ENGLISH);
@@ -107,11 +111,17 @@ public class GameWindow extends JFrame{
         byeFriend.setLocationRelativeTo(null);
         byeFriend.setResizable(false);
 
-        quitMessage.setHorizontalAlignment(SwingConstants.CENTER);
-        quitMessage.setBounds(20, 10, 190, 70);
+        quitMessage.setEditable(false);
+        quitMessage.setOpaque(false);
+        quitMessage.setFocusable(false);
+        StyledDocument style = quitMessage.getStyledDocument();
+        SimpleAttributeSet align= new SimpleAttributeSet();
+        StyleConstants.setAlignment(align, StyleConstants.ALIGN_CENTER);
+        style.setParagraphAttributes(0, style.getLength(), align, false);
+        quitMessage.setBounds(10, 20, 210, 70);
         byeFriend.add(quitMessage);
 
-        closeButton.setBounds(40, 90, 60, 30);
+        closeButton.setBounds(35, 90, 70, 30);
         byeFriend.add(closeButton);
 
         closeButton.addActionListener(new ActionListener() {
@@ -130,7 +140,7 @@ public class GameWindow extends JFrame{
                 System.exit(0);
             }
         });
-        stayButton.setBounds(125, 90, 60, 30);
+        stayButton.setBounds(120, 90, 70, 30);
         byeFriend.add(stayButton);
 
         stayButton.addActionListener(new ActionListener() {
@@ -161,16 +171,16 @@ public class GameWindow extends JFrame{
 
 
         options.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
-        options.setSize(240, 360);
+        options.setSize(250, 360);
         options.setLayout(null);
         options.setLocationRelativeTo(null);
         options.setResizable(false);
 
         optionsMessage.setHorizontalAlignment(SwingConstants.CENTER);
-        optionsMessage.setBounds(20, 10, 190, 40);
+        optionsMessage.setBounds(15, 10, 210, 40);
         options.add(optionsMessage);
 
-        respawnLake.setBounds(40, 50, 144, 30);
+        respawnLake.setBounds(45, 50, 144, 30);
         options.add(respawnLake);
 
         respawnLake.addActionListener(new ActionListener() {
@@ -181,7 +191,7 @@ public class GameWindow extends JFrame{
             }
         });
 
-        respawnBed.setBounds(40, 90, 144, 30);
+        respawnBed.setBounds(45, 90, 144, 30);
         options.add(respawnBed);
 
         respawnBed.addActionListener(new ActionListener() {
@@ -194,7 +204,7 @@ public class GameWindow extends JFrame{
             }
         });
 
-        respawnRadio.setBounds(40, 130, 144, 30);
+        respawnRadio.setBounds(45, 130, 144, 30);
         options.add(respawnRadio);
 
         respawnRadio.addActionListener(new ActionListener() {
@@ -207,7 +217,7 @@ public class GameWindow extends JFrame{
             }
         });
 
-        respawnWardrobe.setBounds(40, 170, 144, 30);
+        respawnWardrobe.setBounds(45, 170, 144, 30);
         options.add(respawnWardrobe);
 
         respawnWardrobe.addActionListener(new ActionListener() {
@@ -220,7 +230,7 @@ public class GameWindow extends JFrame{
             }
         });
 
-        helpButton.setBounds(40, 230, 144, 30);
+        helpButton.setBounds(45, 230, 144, 30);
         options.add(helpButton);
 
         helpButton.addActionListener(new ActionListener() {
@@ -230,44 +240,46 @@ public class GameWindow extends JFrame{
             }
         });
 
-        englishButton.setBounds(20, 270, 90, 30);
+        englishButton.setBounds(25, 270, 90, 30);
         options.add(englishButton);
 
         englishButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Messages.setLocale(Locale.ENGLISH);
-                UpdateText();
                 tips = tipsENG;
                 listOfTips.setListData(tipsENG);
                 try {
                     font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/Micro5-Regular.ttf"));
+                    fontSize = 20f;
                 } catch (Exception ex) {
                     System.out.println("ERROR FONT NOT FOUND");
                 }
                 hint.setFont(font.deriveFont(16f));
                 UpdateHint();
+                UpdateText();
                 menuImage.setIcon(new ImageIcon(getClass().getResource("/sprites/MenuENG.png")));
             }
         });
 
-        japaneseButton.setBounds(120, 270, 90, 30);
+        japaneseButton.setBounds(125, 270, 90, 30);
         options.add(japaneseButton);
 
         japaneseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Messages.setLocale(Locale.JAPANESE);
-                UpdateText();
                 tips = tipsJP;
                 listOfTips.setListData(tipsJP);
                 try {
                     font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/DotGothic16-Regular.ttf"));
+                    fontSize = 12f;
                 } catch (Exception ex) {
                     System.out.println("ERROR FONT NOT FOUND");
                 }
                 hint.setFont(font.deriveFont(8f));
                 UpdateHint();
+                UpdateText();
                 menuImage.setIcon(new ImageIcon(getClass().getResource("/sprites/MenuJP.png")));
             }
         });
@@ -411,16 +423,27 @@ public class GameWindow extends JFrame{
 
     public void UpdateText(){
         quitMessage.setText(Messages.get("text.quit"));
+        quitMessage.setFont(font.deriveFont(fontSize));
         closeButton.setText(Messages.get("button.yes"));
+        closeButton.setFont(font.deriveFont(fontSize));
         stayButton.setText(Messages.get("button.no"));
+        stayButton.setFont(font.deriveFont(fontSize));
         optionsMessage.setText(Messages.get("text.options"));
+        optionsMessage.setFont(font.deriveFont(fontSize));
         respawnLake.setText(Messages.get("button.lake"));
+        respawnLake.setFont(font.deriveFont(fontSize));
         respawnBed.setText(Messages.get("button.bed"));
+        respawnBed.setFont(font.deriveFont(fontSize));
         respawnRadio.setText(Messages.get("button.radio"));
+        respawnRadio.setFont(font.deriveFont(fontSize));
         respawnWardrobe.setText(Messages.get("button.wardrobe"));
+        respawnWardrobe.setFont(font.deriveFont(fontSize));
         helpButton.setText(Messages.get("button.help"));
+        helpButton.setFont(font.deriveFont(fontSize));
         englishButton.setText(Messages.get("button.english"));
+        englishButton.setFont(font.deriveFont(fontSize));
         japaneseButton.setText(Messages.get("button.japanese"));
+        japaneseButton.setFont(font.deriveFont(fontSize));
     }
 }
 
