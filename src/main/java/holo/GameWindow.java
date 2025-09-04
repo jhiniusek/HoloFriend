@@ -6,9 +6,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class GameWindow extends JFrame{
     public JLabel menuImage = new JLabel(new ImageIcon(getClass().getResource("/sprites/MenuENG.png")));
@@ -19,6 +17,17 @@ public class GameWindow extends JFrame{
     private JFrame options = new JFrame("Options");
     private JFrame byeFriend = new JFrame("Bye Friend");
     private JFrame help = new JFrame("Help");
+    JLabel quitMessage = new JLabel();
+    JButton closeButton = new JButton();
+    JButton stayButton = new JButton();
+    JLabel optionsMessage = new JLabel();
+    JButton respawnLake = new JButton();
+    JButton respawnBed = new JButton();
+    JButton respawnRadio = new JButton();
+    JButton respawnWardrobe = new JButton();
+    JButton helpButton = new JButton();
+    JButton englishButton = new JButton();
+    JButton japaneseButton = new JButton();
     private Point initialClick;
     public String[] tips;
     final String[] tipsENG = {"Hi Friends!",
@@ -56,6 +65,7 @@ public class GameWindow extends JFrame{
     Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/Micro5-Regular.ttf"));
 
     public GameWindow(FriendStats stats, ArrayList<Food> foodList, Shop shop) throws IOException, FontFormatException {
+        Messages.setLocale(Locale.ENGLISH);
         Map<Integer, Point> burgerMap = new HashMap<Integer, Point>();
         burgerMap.put(0, new Point(178,230));
         burgerMap.put(1, new Point(219,230));
@@ -97,11 +107,10 @@ public class GameWindow extends JFrame{
         byeFriend.setLocationRelativeTo(null);
         byeFriend.setResizable(false);
 
-        JLabel quitMessage = new JLabel("<html>Are you sure you want to quit?<br/>Progress will be saved.", SwingConstants.CENTER);
+        quitMessage.setHorizontalAlignment(SwingConstants.CENTER);
         quitMessage.setBounds(20, 10, 190, 70);
         byeFriend.add(quitMessage);
 
-        JButton closeButton = new JButton("YES");
         closeButton.setBounds(40, 90, 60, 30);
         byeFriend.add(closeButton);
 
@@ -121,7 +130,6 @@ public class GameWindow extends JFrame{
                 System.exit(0);
             }
         });
-        JButton stayButton = new JButton("NO");
         stayButton.setBounds(125, 90, 60, 30);
         byeFriend.add(stayButton);
 
@@ -158,11 +166,10 @@ public class GameWindow extends JFrame{
         options.setLocationRelativeTo(null);
         options.setResizable(false);
 
-        JLabel optionsMessage = new JLabel("Object lost? Respawn it:", SwingConstants.CENTER);
+        optionsMessage.setHorizontalAlignment(SwingConstants.CENTER);
         optionsMessage.setBounds(20, 10, 190, 40);
         options.add(optionsMessage);
 
-        JButton respawnLake = new JButton("Lake");
         respawnLake.setBounds(40, 50, 144, 30);
         options.add(respawnLake);
 
@@ -174,7 +181,6 @@ public class GameWindow extends JFrame{
             }
         });
 
-        JButton respawnBed = new JButton("Bed");
         respawnBed.setBounds(40, 90, 144, 30);
         options.add(respawnBed);
 
@@ -188,7 +194,6 @@ public class GameWindow extends JFrame{
             }
         });
 
-        JButton respawnRadio = new JButton("Radio");
         respawnRadio.setBounds(40, 130, 144, 30);
         options.add(respawnRadio);
 
@@ -202,7 +207,6 @@ public class GameWindow extends JFrame{
             }
         });
 
-        JButton respawnWardrobe = new JButton("Wardrobe");
         respawnWardrobe.setBounds(40, 170, 144, 30);
         options.add(respawnWardrobe);
 
@@ -216,7 +220,6 @@ public class GameWindow extends JFrame{
             }
         });
 
-        JButton helpButton = new JButton("Help");
         helpButton.setBounds(40, 230, 144, 30);
         options.add(helpButton);
 
@@ -227,13 +230,14 @@ public class GameWindow extends JFrame{
             }
         });
 
-        JButton englishButton = new JButton("English");
         englishButton.setBounds(20, 270, 90, 30);
         options.add(englishButton);
 
         englishButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Messages.setLocale(Locale.ENGLISH);
+                UpdateText();
                 tips = tipsENG;
                 listOfTips.setListData(tipsENG);
                 try {
@@ -247,13 +251,14 @@ public class GameWindow extends JFrame{
             }
         });
 
-        JButton japaneseButton = new JButton("Japanese");
         japaneseButton.setBounds(120, 270, 90, 30);
         options.add(japaneseButton);
 
         japaneseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Messages.setLocale(Locale.JAPANESE);
+                UpdateText();
                 tips = tipsJP;
                 listOfTips.setListData(tipsJP);
                 try {
@@ -391,6 +396,7 @@ public class GameWindow extends JFrame{
                 setLocation(X, Y);
             }
         });
+        UpdateText();
         setVisible(true);
 
         stats.setPositionX(getX()+325);
@@ -402,4 +408,19 @@ public class GameWindow extends JFrame{
     public void UpdateHint(){
         hint.setText(tips[(int)(Math.random() * (tips.length - 1) + 1)]);
     }
+
+    public void UpdateText(){
+        quitMessage.setText(Messages.get("text.quit"));
+        closeButton.setText(Messages.get("button.yes"));
+        stayButton.setText(Messages.get("button.no"));
+        optionsMessage.setText(Messages.get("text.options"));
+        respawnLake.setText(Messages.get("button.lake"));
+        respawnBed.setText(Messages.get("button.bed"));
+        respawnRadio.setText(Messages.get("button.radio"));
+        respawnWardrobe.setText(Messages.get("button.wardrobe"));
+        helpButton.setText(Messages.get("button.help"));
+        englishButton.setText(Messages.get("button.english"));
+        japaneseButton.setText(Messages.get("button.japanese"));
+    }
 }
+
