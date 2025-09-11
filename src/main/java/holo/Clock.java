@@ -172,6 +172,24 @@ public class Clock implements Runnable{
                         spritePath = newSprite;
                     }
                 }
+            } else if (stats.getState() == States.PUSH) {
+                friend.setSize(64,128);
+                friend.sprite.setBounds(3,0,64,128);
+                if(stats.isRight()){
+                    friend.shadow.setBounds(0,116,60,11);
+                    newSprite = "/sprites/"+stats.getSkin()+"PushR.gif";
+                    if(!newSprite.equals(spritePath)){
+                        friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        spritePath = newSprite;
+                    }
+                } else {
+                    friend.shadow.setBounds(5,116,60,11);
+                    newSprite = "/sprites/" + stats.getSkin() + "PushL.gif";
+                    if (!newSprite.equals(spritePath)) {
+                        friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                        spritePath = newSprite;
+                    }
+                }
             }
 
             //
@@ -326,7 +344,7 @@ public class Clock implements Runnable{
 
 
             //
-            //                PULL WINDOW
+            //                PULL or PUSH WINDOW
             //
 
             if((stats.getState() == States.PULL || stats.getState() == States.PUSH) && stats.getChaseObject() == "Window") {
@@ -354,18 +372,10 @@ public class Clock implements Runnable{
                 }
                 stats.getRect().top = (int)topFix;
                 stats.getRect().bottom = (int)botFix;
+
                 User32.INSTANCE.SetWindowPos(stats.getWindow(), null, stats.getRect().left, stats.getRect().top, (stats.getRect().right - stats.getRect().left), (stats.getRect().bottom - stats.getRect().top), 0);
                 User32.INSTANCE.ShowWindow(stats.getWindow(), WinUser.SW_RESTORE);
             }
-
-            //
-            //                PUSH WINDOW
-            //
-
-            //if(stats.getState() == States.PUSH && stats.getChaseObject() == "Window") {
-
-            //}
-
 
             //
             //                        WORK
@@ -523,6 +533,7 @@ public class Clock implements Runnable{
                     danceTimer++;
                 }
                 if(currentDance == "RatDance"){
+                    friend.setSize(78,128);
                     danceLenght = 2176;
 
                     newSprite = "/sprites/"+stats.getSkin()+"RatDance.gif";
