@@ -32,6 +32,7 @@ public class Main {
         Shop shop = new Shop(stats, bed, radio, wardrobe);
         GameWindow window = new  GameWindow(stats, foodList, shop);
         shop.setMainWindow(window);
+        stats.setGameWindow(window);
 
         Friend friend = new Friend(stats);
         Lake lake = new Lake(window.getLocation().x - 270,window.getLocation().y + 100);

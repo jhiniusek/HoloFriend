@@ -32,6 +32,7 @@ public class FriendStats {
     private int cursorY = 0;
     private States state = States.IDLE;
     private String chaseObject = "";
+    private GameWindow gameWindow;
     private WinDef.HWND window;
     private WinDef.RECT rect = new WinDef.RECT();
     WinUser.WINDOWPLACEMENT placement = new WinUser.WINDOWPLACEMENT();
@@ -192,6 +193,14 @@ public class FriendStats {
 
     public void setRight(boolean goRight) {
         this.right = goRight;
+    }
+
+    public GameWindow getGameWindow() {
+        return gameWindow;
+    }
+
+    public void setGameWindow(GameWindow gameWindow) {
+        this.gameWindow = gameWindow;
     }
 
     public WinDef.HWND getWindow() {
@@ -417,7 +426,7 @@ public class FriendStats {
                 break;
             case "Window":
                 if(window == null){
-                    chaseObject = "Random"; //change for main window
+                    chaseObject = "GameWindow";
                     break;
                 }
                 if (state == States.WALK) {
@@ -428,6 +437,19 @@ public class FriendStats {
                     } else {
                         destinationX = rect.right - 15;
                         destinationY = rect.top + windowCatchPoint - 53;
+                    }
+                }
+                evaluateMs();
+                break;
+            case "GameWindow":
+                if (state == States.WALK) {
+                    updateWindowPosition();
+                    if(windowSide == 0){
+                        destinationX = gameWindow.getX() - 53;
+                        destinationY = gameWindow.getY() + windowCatchPoint - 53;
+                    } else {
+                        destinationX = gameWindow.getX() + 300 - 15;
+                        destinationY = gameWindow.getY() + windowCatchPoint - 53;
                     }
                 }
                 evaluateMs();
@@ -603,9 +625,9 @@ public class FriendStats {
         }, null);
 
         WinDef.HWND randomWindow = null;
+        Random rand = new Random();
 
         if (!windows.isEmpty()) {
-            Random rand = new Random();
             randomWindow = windows.get(rand.nextInt(windows.size()));
             User32.INSTANCE.GetWindowRect(randomWindow, rect);
             if(rect.left == -32000){
@@ -616,31 +638,41 @@ public class FriendStats {
             int height = rect.bottom - rect.top;
             windowSide = rand.nextInt(2); // 0 -> left   1 -> right
             windowCatchPoint = rand.nextInt(height);
+        } else {
+            windowSide = rand.nextInt(2); // 0 -> left   1 -> right
+            windowCatchPoint = rand.nextInt(gameWindow.getHeight());
         }
         return randomWindow;
     }
 
     public void updateWindowPosition(){
-        if (!User32.INSTANCE.IsWindow(window)) {
-            state = States.WALK;
-            window = null;
-            rect.clear();
-        }
-
-        User32.INSTANCE.GetWindowPlacement(window, placement);
-
-        boolean minimized = (placement.showCmd == WinUser.SW_SHOWMINIMIZED);
-
-        if(!minimized){
-            User32.INSTANCE.GetWindowRect(window, rect);
-            int height = rect.bottom - rect.top;
-            if(windowCatchPoint > height){
-                Random rand = new Random();
-                windowCatchPoint = rand.nextInt(height);
+        if (chaseObject == "Window") {
+            if (!User32.INSTANCE.IsWindow(window)) {
+                state = States.WALK;
+                window = null;
+                rect.clear();
             }
+
+            User32.INSTANCE.GetWindowPlacement(window, placement);
+
+            boolean minimized = (placement.showCmd == WinUser.SW_SHOWMINIMIZED);
+
+            if(!minimized){
+                User32.INSTANCE.GetWindowRect(window, rect);
+                int height = rect.bottom - rect.top;
+                if(windowCatchPoint > height){
+                    Random rand = new Random();
+                    windowCatchPoint = rand.nextInt(height);
+                }
+            }
+        } else if (chaseObject == "GameWindow") {
+            if(windowCatchPoint >  gameWindow.getHeight()){
+                Random rand = new Random();
+                windowCatchPoint = rand.nextInt(gameWindow.getHeight());
+            }
+            rect.left = gameWindow.getX();
+            rect.top = gameWindow.getY();
         }
-
-
     }
 
     public void load(File save) {
