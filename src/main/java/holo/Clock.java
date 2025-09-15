@@ -239,6 +239,7 @@ public class Clock implements Runnable{
                 stats.setWindow(null);
                 stats.getRect().clear();
                 stats.setState(States.IDLE);
+                window.setAlwaysOnTop(false);
             }
 
             if(stats.getPositionX() == stats.getDestinationX() && stats.getPositionY() == stats.getDestinationY() && (stats.getState()==States.WALK || stats.getState()==States.CHASE)){
@@ -392,6 +393,7 @@ public class Clock implements Runnable{
                 }
                 stats.getRect().top = (int)topFix;
                 window.setLocation(stats.getRect().left, stats.getRect().top);
+                window.setAlwaysOnTop(true);
             }
 
             //
