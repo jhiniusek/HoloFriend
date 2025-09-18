@@ -373,7 +373,10 @@ public class FriendStats {
         int sleepProbability = 50 - tiredness;
         if (sleepProbability < 0) {sleepProbability = 0;}
         sleepProbability += foodProbability;
-        int workProbability = 20 + tiredness + sleepProbability;
+        int workProbability = sleepProbability;
+        if(ableToWork){
+            workProbability = 20 + tiredness + sleepProbability;
+        }
         int cursorProbability = 10 + workProbability;
         int windowProbability = 10 + cursorProbability;
         int walkProbability = 50 + windowProbability;
