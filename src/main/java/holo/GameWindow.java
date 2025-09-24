@@ -129,7 +129,7 @@ public class GameWindow extends JFrame{
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                stats.SaveJsonTest();
+                stats.Save();
                 System.exit(0);
             }
         });

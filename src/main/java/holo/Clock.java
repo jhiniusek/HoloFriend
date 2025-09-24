@@ -7,10 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
@@ -630,7 +626,7 @@ public class Clock implements Runnable{
                         stats.setCurrency(0);
                         stats.setHunger(100);
                         stats.setTiredness(100);
-                        stats.SaveJsonTest();
+                        stats.Save();
                         System.exit(0);
                     }
                 });

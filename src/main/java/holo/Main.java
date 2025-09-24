@@ -1,7 +1,6 @@
 package holo;
 
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -9,7 +8,8 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException, IOException, FontFormatException {
         FriendStats stats = new FriendStats();
-        stats.LoadJsonTest();
+        stats.Load();
+        //stats.LoadDebug();
 
         ArrayList<Food> foodList= new ArrayList<>();
         for(int i = 0; i < 6; i++){

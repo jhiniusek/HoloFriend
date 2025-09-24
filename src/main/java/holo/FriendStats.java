@@ -10,11 +10,11 @@ import com.sun.jna.platform.win32.WinUser;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.*;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class FriendStats {
     private int hunger = 100;
@@ -713,29 +713,38 @@ public class FriendStats {
         }
     }
 
-    public void SaveJsonTest(){
+    public void Save(){
         Save save = new Save(hunger,tiredness,currency,goodRod,superRod,bedOwned,bedPositionX,bedPositionY,wardrobeOwned,wardrobePositionX,wardrobePositionY,radioOwned,radioPositionX,radioPositionY,chessSlowed,kurokami,skin,locale);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        try (FileWriter writer = new FileWriter("save.json")) {
+        try (FileOutputStream fos = new FileOutputStream("save.sav");
+            GZIPOutputStream gos = new GZIPOutputStream(fos);
+            OutputStreamWriter writer = new OutputStreamWriter(gos)) {
             gson.toJson(save, writer);
-            System.out.println("Zapisano save!");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
     }
 
-    public void LoadJsonTest(){
+    public void Load(){
+        Gson gson = new Gson();
+
+        try (FileInputStream fis = new FileInputStream("save.sav");
+            GZIPInputStream gis = new GZIPInputStream(fis);
+            InputStreamReader reader = new InputStreamReader(gis)) {
+            Save save = gson.fromJson(reader, Save.class);
+            save.Load(this);
+        } catch (Exception ignored) {
+        }
+        checkOutOfBounds();
+    }
+
+    public void LoadDebug(){
         Gson gson = new Gson();
 
         try (FileReader reader = new FileReader("save.json")) {
             Save save = gson.fromJson(reader, Save.class);
             save.Load(this);
-            System.out.println("Wczytano!");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
-
-        checkOutOfBounds();
     }
 
     @Override
