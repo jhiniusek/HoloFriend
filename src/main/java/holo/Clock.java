@@ -72,10 +72,10 @@ public class Clock implements Runnable{
                 }
             }
 
-            if(stats.getGoodRod() == 1){
+            if(stats.getGoodRod()){
                 rodSpeed = 120;
             }
-            if(stats.getSuperRod() == 1){
+            if(stats.getSuperRod()){
                 rodSpeed = 80;
             }
 
@@ -533,7 +533,7 @@ public class Clock implements Runnable{
                     bed.removeForcableStop();
                 }
 
-            } else if(stats.getBedOwned() == 1 && stats.isAbleToSleep() && sleepCooldown == 0 && (stats.getChaseObject() == "Bed" ||  stats.getState() == States.HOLD)){
+            } else if(stats.getBedOwned() && stats.isAbleToSleep() && sleepCooldown == 0 && (stats.getChaseObject() == "Bed" ||  stats.getState() == States.HOLD)){
                 CheckBedCollision();
             }
 

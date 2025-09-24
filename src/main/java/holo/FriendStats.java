@@ -1,5 +1,7 @@
 package holo;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.User32;
@@ -9,6 +11,8 @@ import com.sun.jna.platform.win32.WinUser;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -49,23 +53,23 @@ public class FriendStats {
     private String currentTrack = "NoDisk";
 
     //EQUIPMENT
-    private int goodRod = 0;
-    private int superRod = 0;
+    private boolean goodRod = false;
+    private boolean superRod = false;
 
-    private int bedOwned = 0;
+    private boolean bedOwned = false;
     public int bedPositionX = 0;
     public int bedPositionY = 0;
 
-    private int wardrobeOwned = 0;
+    private boolean wardrobeOwned = false;
     public int wardrobePositionX = 0;
     public int wardrobePositionY = 0;
-    private int kurokami = 0;
+    private boolean kurokami = false;
     private int skin = 0;
 
-    private int radioOwned = 0;
+    private boolean radioOwned = false;
     public int radioPositionX = 0;
     public int radioPositionY = 0;
-    private int chessSlowed = 0;
+    private boolean chessSlowed = false;
 
     public FriendStats() throws InterruptedException {
         getScreens();
@@ -251,6 +255,14 @@ public class FriendStats {
         this.bed = bed;
     }
 
+    public void setBedPositionX(int bedPositionX) {
+        this.bedPositionX = bedPositionX;
+    }
+
+    public void setBedPositionY(int bedPositionY) {
+        this.bedPositionY = bedPositionY;
+    }
+
     public Wardrobe getWardrobe() {
         return wardrobe;
     }
@@ -259,12 +271,28 @@ public class FriendStats {
         this.wardrobe = wardrobe;
     }
 
+    public void setWardrobePositionX(int wardrobePositionX) {
+        this.wardrobePositionX = wardrobePositionX;
+    }
+
+    public void setWardrobePositionY(int wardrobePositionY) {
+        this.wardrobePositionY = wardrobePositionY;
+    }
+
     public Radio getRadio() {
         return radio;
     }
 
     public void setRadio(Radio radio) {
         this.radio = radio;
+    }
+
+    public void setRadioPositionX(int radioPositionX) {
+        this.radioPositionX = radioPositionX;
+    }
+
+    public void setRadioPositionY(int radioPositionY) {
+        this.radioPositionY = radioPositionY;
     }
 
     public int getCurrency() {
@@ -299,59 +327,59 @@ public class FriendStats {
         return currentTrack;
     }
 
-    public int getGoodRod() {
+    public boolean getGoodRod() {
         return goodRod;
     }
 
-    public void setGoodRod(int goodRod) {
+    public void setGoodRod(boolean goodRod) {
         this.goodRod = goodRod;
     }
 
-    public int getSuperRod() {
+    public boolean getSuperRod() {
         return superRod;
     }
 
-    public void setSuperRod(int superRod) {
+    public void setSuperRod(boolean superRod) {
         this.superRod = superRod;
     }
 
-    public int getBedOwned() {
+    public boolean getBedOwned() {
         return bedOwned;
     }
 
-    public void setBedOwned(int bedOwned) {
+    public void setBedOwned(boolean bedOwned) {
         this.bedOwned = bedOwned;
     }
 
-    public int getWardrobeOwned() {
+    public boolean getWardrobeOwned() {
         return wardrobeOwned;
     }
 
-    public void setWardrobeOwned(int wardrobeOwned) {
+    public void setWardrobeOwned(boolean wardrobeOwned) {
         this.wardrobeOwned = wardrobeOwned;
     }
 
-    public int getKurokami() {
+    public boolean getKurokami() {
         return kurokami;
     }
 
-    public void setKurokami(int kurokami) {
+    public void setKurokami(boolean kurokami) {
         this.kurokami = kurokami;
     }
 
-    public int getRadioOwned() {
+    public boolean getRadioOwned() {
         return radioOwned;
     }
 
-    public void setRadioOwned(int radioOwned) {
+    public void setRadioOwned(boolean radioOwned) {
         this.radioOwned = radioOwned;
     }
 
-    public int getChessSlowed() {
+    public boolean getChessSlowed() {
         return chessSlowed;
     }
 
-    public void setChessSlowed(int chessSlowed) {
+    public void setChessSlowed(boolean chessSlowed) {
         this.chessSlowed = chessSlowed;
     }
 
@@ -396,7 +424,7 @@ public class FriendStats {
         } else if (target > sleepProbability) {
             System.out.println("GO TO WORK");
             chaseObject = "Lake";
-        } else if (target > foodProbability && getBedOwned() == 1) {
+        } else if (target > foodProbability && getBedOwned()) {
             System.out.println("GO TO SLEEP");
             chaseObject = "Bed";
         } else {
@@ -529,7 +557,7 @@ public class FriendStats {
     public void changeSkin(){
         ArrayList<Integer> skinList =  new ArrayList<>();
         skinList.add(0);
-        if(kurokami==1){
+        if(kurokami){
             skinList.add(1);
         }
         int index = skinList.indexOf(skin);
@@ -678,35 +706,28 @@ public class FriendStats {
         }
     }
 
-    public void load(File save) {
-        ArrayList<Integer> load = new ArrayList();
-        try {
-            Scanner scanner = new Scanner(save);
-            while (scanner.hasNextLine()) {
-                String data = scanner.nextLine();
-                load.add(Integer.parseInt(data));
-            }
-            scanner.close();
-            hunger = load.get(0);
-            tiredness = load.get(1);
-            currency = load.get(2);
-            goodRod = load.get(3);
-            superRod = load.get(4);
-            bedOwned = load.get(5);
-            bedPositionX = load.get(6);
-            bedPositionY = load.get(7);
-            wardrobeOwned = load.get(8);
-            wardrobePositionX = load.get(9);
-            wardrobePositionY = load.get(10);
-            kurokami = load.get(11);
-            skin = load.get(12);
-            radioOwned = load.get(13);
-            radioPositionX = load.get(14);
-            radioPositionY = load.get(15);
-            chessSlowed = load.get(16);
+    public void SaveJsonTest(){
+        Save save = new Save(hunger,tiredness,currency,goodRod,superRod,bedOwned,bedPositionX,bedPositionY,wardrobeOwned,wardrobePositionX,wardrobePositionY,radioOwned,radioPositionX,radioPositionY,chessSlowed,kurokami,skin);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try (FileWriter writer = new FileWriter("save.json")) {
+            gson.toJson(save, writer);
+            System.out.println("Zapisano save!");
         } catch (Exception e) {
-            System.out.println("save corrupted"); // Soon Display options here, if restart or try to fix a save and restart the software
+            e.printStackTrace();
         }
+    }
+
+    public void LoadJsonTest(){
+        Gson gson = new Gson();
+
+        try (FileReader reader = new FileReader("save.json")) {
+            Save save = gson.fromJson(reader, Save.class);
+            save.Load(this);
+            System.out.println("Wczytano!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         checkOutOfBounds();
     }
 

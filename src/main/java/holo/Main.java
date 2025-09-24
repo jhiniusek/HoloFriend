@@ -9,12 +9,7 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException, IOException, FontFormatException {
         FriendStats stats = new FriendStats();
-
-        File saveFile = new File("save.txt");
-        if(saveFile.createNewFile()){
-        } else {
-            stats.load(saveFile);
-        }
+        stats.LoadJsonTest();
 
         ArrayList<Food> foodList= new ArrayList<>();
         for(int i = 0; i < 6; i++){
@@ -37,6 +32,12 @@ public class Main {
         Friend friend = new Friend(stats);
         Lake lake = new Lake(window.getLocation().x - 270,window.getLocation().y + 100);
         stats.setLake(lake);
+
+//        CollabNames[] collabNames = CollabNames.values();
+//        ArrayList<Collab> listOfCollabs = new ArrayList<>();
+//        for (int i = 0; i < collabNames.length; i++) {
+//            listOfCollabs.add(new Collab(collabNames[i].name()));
+//        }
 
         Thread clock = new Thread(new Clock(stats, friend, window, foodList, lake, bed));
         clock.start();

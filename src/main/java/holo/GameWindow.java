@@ -127,16 +127,7 @@ public class GameWindow extends JFrame{
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                File save = new File("save.txt");
-                FileWriter myWriter = null;
-                try {
-                    myWriter = new FileWriter("save.txt");
-                    myWriter.write(stats.toString());
-                    myWriter.close();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
+                stats.SaveJsonTest();
                 System.exit(0);
             }
         });
@@ -197,7 +188,7 @@ public class GameWindow extends JFrame{
         respawnBed.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(stats.getBedOwned() == 1){
+                if(stats.getBedOwned()){
                     stats.getBed().setLocation(stats.getCursorX(), stats.getCursorY());
                     stats.getBed().toFront();
                 }
@@ -210,7 +201,7 @@ public class GameWindow extends JFrame{
         respawnRadio.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(stats.getRadioOwned() == 1){
+                if(stats.getRadioOwned()){
                     stats.getRadio().setLocation(stats.getCursorX(), stats.getCursorY());
                     stats.getRadio().toFront();
                 }
@@ -223,7 +214,7 @@ public class GameWindow extends JFrame{
         respawnWardrobe.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(stats.getWardrobeOwned() == 1){
+                if(stats.getWardrobeOwned()){
                     stats.getWardrobe().setLocation(stats.getCursorX(), stats.getCursorY());
                     stats.getWardrobe().toFront();
                 }
@@ -323,7 +314,6 @@ public class GameWindow extends JFrame{
         foodSpawner.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 if(stats.getCurrency()>2){
                     for(int i = 0; i < foodList.size(); i++){
                         if(foodList.get(i) == null){

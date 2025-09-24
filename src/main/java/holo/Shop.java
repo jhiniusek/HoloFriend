@@ -72,7 +72,7 @@ public class Shop extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (stats.getCurrency()>=500) {
                     buySuperRod.setEnabled(false);
-                    stats.setSuperRod(1);
+                    stats.setSuperRod(true);
                     stats.setCurrency(stats.getCurrency() - 500);
                     mainWindow.currency.setText(String.valueOf(stats.getCurrency()));
                     SoldOut(103, 51);
@@ -80,9 +80,9 @@ public class Shop extends JFrame {
 
             }
         });
-        if(stats.getSuperRod() == 0 && stats.getGoodRod() == 1){
+        if(!stats.getSuperRod() && stats.getGoodRod()){
             add(buySuperRod);
-        } else if (stats.getSuperRod() == 1){
+        } else if (stats.getSuperRod()){
             JLabel superRodSold = new JLabel(soldOut);
             superRodSold.setBounds(103, 51, soldOut.getIconWidth(), soldOut.getIconHeight());
             add(superRodSold);
@@ -105,7 +105,7 @@ public class Shop extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (stats.getCurrency()>=200) {
                     buyGoodRod.setEnabled(false);
-                    stats.setGoodRod(1);
+                    stats.setGoodRod(true);
                     stats.setCurrency(stats.getCurrency() - 200);
                     mainWindow.currency.setText(String.valueOf(stats.getCurrency()));
                     SoldOut(34, 51);
@@ -115,7 +115,7 @@ public class Shop extends JFrame {
 
             }
         });
-        if(stats.getGoodRod() == 0){
+        if(!stats.getGoodRod()){
             add(buyGoodRod);
             add(superRodLocked);
             getContentPane().setComponentZOrder(superRodLocked, 0);
@@ -143,7 +143,7 @@ public class Shop extends JFrame {
                 if (stats.getCurrency()>=350) {
                     bed.setVisible(true);
                     buyBed.setEnabled(false);
-                    stats.setBedOwned(1);
+                    stats.setBedOwned(true);
                     stats.setCurrency(stats.getCurrency() - 350);
                     mainWindow.currency.setText(String.valueOf(stats.getCurrency()));
                     bed.setLocation(getLocation().x + 306, getLocation().y + 162);
@@ -154,7 +154,7 @@ public class Shop extends JFrame {
 
             }
         });
-        if(stats.getBedOwned() == 0){
+        if(!stats.getBedOwned()){
             add(buyBed);
         } else {
             JLabel bedSold = new JLabel(soldOut);
@@ -177,7 +177,7 @@ public class Shop extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (stats.getCurrency()>=500) {
                     buyKurokami.setEnabled(false);
-                    stats.setKurokami(1);
+                    stats.setKurokami(true);
                     stats.setCurrency(stats.getCurrency() - 500);
                     mainWindow.currency.setText(String.valueOf(stats.getCurrency()));
                     SoldOut(34, 151);
@@ -185,9 +185,9 @@ public class Shop extends JFrame {
 
             }
         });
-        if(stats.getKurokami() == 0 && stats.getWardrobeOwned() == 1){
+        if(!stats.getKurokami() && stats.getWardrobeOwned()){
             add(buyKurokami);
-        } else if (stats.getKurokami() == 1){
+        } else if (stats.getKurokami()){
             JLabel kurokamiSold = new JLabel(soldOut);
             kurokamiSold.setBounds(34, 151, soldOut.getIconWidth(), soldOut.getIconHeight());
             add(kurokamiSold);
@@ -210,7 +210,7 @@ public class Shop extends JFrame {
                 if (stats.getCurrency()>=100) {
                     wardrobe.setVisible(true);
                     buyWardrobe.setEnabled(false);
-                    stats.setWardrobeOwned(1);
+                    stats.setWardrobeOwned(true);
                     stats.setCurrency(stats.getCurrency() - 100);
                     mainWindow.currency.setText(String.valueOf(stats.getCurrency()));
                     wardrobe.setLocation(getLocation().x + 310, getLocation().y + 95);
@@ -223,7 +223,7 @@ public class Shop extends JFrame {
 
             }
         });
-        if(stats.getWardrobeOwned() == 0){
+        if(!stats.getWardrobeOwned()){
             add(buyWardrobe);
             add(kurokamiLocked);
             getContentPane().setComponentZOrder(kurokamiLocked, 0);
@@ -250,7 +250,7 @@ public class Shop extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (stats.getCurrency()>=200) {
                     buyChessTypeBeat.setEnabled(false);
-                    stats.setChessSlowed(1);
+                    stats.setChessSlowed(true);
                     stats.setCurrency(stats.getCurrency() - 200);
                     mainWindow.currency.setText(String.valueOf(stats.getCurrency()));
                     SoldOut(172, 151);
@@ -259,9 +259,9 @@ public class Shop extends JFrame {
 
             }
         });
-        if(stats.getChessSlowed() == 0 && stats.getRadioOwned() == 1){
+        if(!stats.getChessSlowed() && stats.getRadioOwned()){
             add(buyChessTypeBeat);
-        } else if (stats.getChessSlowed() == 1){
+        } else if (stats.getChessSlowed()){
             JLabel chessTypeBeatSold = new JLabel(soldOut);
             chessTypeBeatSold.setBounds(172, 151, soldOut.getIconWidth(), soldOut.getIconHeight());
             add(chessTypeBeatSold);
@@ -283,7 +283,7 @@ public class Shop extends JFrame {
                 if (stats.getCurrency()>=200) {
                     radio.setVisible(true);
                     buyRadio.setEnabled(false);
-                    stats.setRadioOwned(1);
+                    stats.setRadioOwned(true);
                     stats.setCurrency(stats.getCurrency() - 200);
                     mainWindow.currency.setText(String.valueOf(stats.getCurrency()));
                     radio.setLocation(getLocation().x + 310, getLocation().y + 195);
@@ -296,7 +296,7 @@ public class Shop extends JFrame {
 
             }
         });
-        if(stats.getRadioOwned() == 0){
+        if(!stats.getRadioOwned()){
             add(buyRadio);
             add(chessTypeBeatLocked);
             getContentPane().setComponentZOrder(chessTypeBeatLocked, 0);

@@ -166,7 +166,7 @@ public class Radio extends JFrame {
             }
         });
         setVisible(true);
-        setVisible(stats.getRadioOwned() == 1);
+        setVisible(stats.getRadioOwned());
         setLocation(stats.radioPositionX, stats.radioPositionY);
     }
 
@@ -177,7 +177,7 @@ public class Radio extends JFrame {
     public void updateTrackList(){
         trackList = new ArrayList<>();
         trackList.add("NoDisk");
-        if(stats.getChessSlowed() == 1){
+        if(stats.getChessSlowed()){
             trackList.add("RatDance");
         }
     }
