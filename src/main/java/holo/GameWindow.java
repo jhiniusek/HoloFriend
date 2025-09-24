@@ -6,8 +6,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -32,6 +30,7 @@ public class GameWindow extends JFrame{
     JButton englishButton = new JButton();
     JButton japaneseButton = new JButton();
     private Point initialClick;
+    private MyLocale locale;
     public String[] tips;
     final String[] tipsENG = {"Hi Friends!",
             "Click on a cog(earring) to open options",
@@ -69,7 +68,10 @@ public class GameWindow extends JFrame{
     private float fontSize = 20f;
 
     public GameWindow(FriendStats stats, ArrayList<Food> foodList, Shop shop) throws IOException, FontFormatException {
-        Messages.setLocale(Locale.ENGLISH);
+        locale = stats.getLocale();
+        Messages.setLocale(locale.getLocale());
+        changeLocale(stats);
+        UpdateText();
         Map<Integer, Point> burgerMap = new HashMap<Integer, Point>();
         burgerMap.put(0, new Point(178,230));
         burgerMap.put(1, new Point(219,230));
@@ -237,19 +239,9 @@ public class GameWindow extends JFrame{
         englishButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Messages.setLocale(Locale.ENGLISH);
-                tips = tipsENG;
-                listOfTips.setListData(tipsENG);
-                try {
-                    font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/Micro5-Regular.ttf"));
-                    fontSize = 20f;
-                } catch (Exception ex) {
-                    System.out.println("ERROR FONT NOT FOUND");
-                }
-                hint.setFont(font.deriveFont(16f));
-                UpdateHint();
-                UpdateText();
-                menuImage.setIcon(new ImageIcon(getClass().getResource("/sprites/MenuENG.png")));
+                stats.setLocale(MyLocale.ENGLISH);
+                locale = stats.getLocale();
+                changeLocale(stats);
             }
         });
 
@@ -259,23 +251,13 @@ public class GameWindow extends JFrame{
         japaneseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Messages.setLocale(Locale.JAPANESE);
-                tips = tipsJP;
-                listOfTips.setListData(tipsJP);
-                try {
-                    font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/DotGothic16-Regular.ttf"));
-                    fontSize = 12f;
-                } catch (Exception ex) {
-                    System.out.println("ERROR FONT NOT FOUND");
-                }
-                hint.setFont(font.deriveFont(8f));
-                UpdateHint();
-                UpdateText();
-                menuImage.setIcon(new ImageIcon(getClass().getResource("/sprites/MenuJP.png")));
+                stats.setLocale(MyLocale.JAPANESE);
+                locale = stats.getLocale();
+                changeLocale(stats);
             }
         });
 
-        tips = tipsENG;
+
 
         help.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
         help.setSize(370, 310);
@@ -348,7 +330,8 @@ public class GameWindow extends JFrame{
 
 
         currency.setText(String.valueOf(stats.getCurrency()));
-        currency.setFont(font.deriveFont(35f));
+        Font currencyFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/Micro5-Regular.ttf"));
+        currency.setFont(currencyFont.deriveFont(35f));
         currency.setForeground(new Color(39,199,255,255));
         currency.setBounds(205, 270, 90, 35);
         add(currency);
@@ -398,6 +381,7 @@ public class GameWindow extends JFrame{
                 setLocation(X, Y);
             }
         });
+        changeLocale(stats);
         UpdateText();
         setVisible(true);
 
@@ -409,6 +393,40 @@ public class GameWindow extends JFrame{
 
     public void UpdateHint(){
         hint.setText(tips[(int)(Math.random() * (tips.length - 1) + 1)]);
+    }
+
+    public void changeLocale(FriendStats stats){
+        if (locale == MyLocale.ENGLISH) {
+            Messages.setLocale(Locale.ENGLISH);
+            tips = tipsENG;
+            listOfTips.setListData(tipsENG);
+            try {
+                font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/Micro5-Regular.ttf"));
+                fontSize = 20f;
+            } catch (Exception ex) {
+                System.out.println("ERROR FONT NOT FOUND");
+            }
+            hint.setFont(font.deriveFont(16f));
+            UpdateHint();
+            UpdateText();
+            menuImage.setIcon(new ImageIcon(getClass().getResource("/sprites/MenuENG.png")));
+        } else if (locale == MyLocale.JAPANESE) {
+            Messages.setLocale(Locale.JAPANESE);
+            tips = tipsJP;
+            listOfTips.setListData(tipsJP);
+            try {
+                font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/DotGothic16-Regular.ttf"));
+                fontSize = 12f;
+            } catch (Exception ex) {
+                System.out.println("ERROR FONT NOT FOUND");
+            }
+            hint.setFont(font.deriveFont(8f));
+            UpdateHint();
+            UpdateText();
+            menuImage.setIcon(new ImageIcon(getClass().getResource("/sprites/MenuJP.png")));
+        }
+
+
     }
 
     public void UpdateText(){

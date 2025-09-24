@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.Locale;
 
 public class Save {
     int hunger;
@@ -24,8 +25,9 @@ public class Save {
     boolean chessTypeBeat;
     boolean kurokami;
     int skin;
+    MyLocale locale;
 
-    public Save(int hunger, int tiredness, int currency, boolean goodRod, boolean superRod, boolean bed, int bedX, int bedY, boolean wardrobe, int wardrobeX, int wardrobeY, boolean radio, int radioX, int radioY, boolean chessTypeBeat, boolean kurokami, int skin) {
+    public Save(int hunger, int tiredness, int currency, boolean goodRod, boolean superRod, boolean bed, int bedX, int bedY, boolean wardrobe, int wardrobeX, int wardrobeY, boolean radio, int radioX, int radioY, boolean chessTypeBeat, boolean kurokami, int skin, MyLocale locale) {
         this.hunger = hunger;
         this.tiredness = tiredness;
         this.currency = currency;
@@ -43,6 +45,7 @@ public class Save {
         this.chessTypeBeat = chessTypeBeat;
         this.kurokami = kurokami;
         this.skin = skin;
+        this.locale = locale;
     }
 
     public void Load(FriendStats stats){
@@ -63,5 +66,8 @@ public class Save {
         stats.setChessSlowed(chessTypeBeat);
         stats.setKurokami(kurokami);
         stats.setSkin(skin);
+        if (locale!=null) {
+            stats.setLocale(locale);
+        }
     }
 }

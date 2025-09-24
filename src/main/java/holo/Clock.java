@@ -630,15 +630,7 @@ public class Clock implements Runnable{
                         stats.setCurrency(0);
                         stats.setHunger(100);
                         stats.setTiredness(100);
-                        File save = new File("save.txt");
-                        FileWriter myWriter = null;
-                        try {
-                            myWriter = new FileWriter("save.txt");
-                            myWriter.write(stats.toString());
-                            myWriter.close();
-                        } catch (IOException ex) {
-                            throw new RuntimeException(ex);
-                        }
+                        stats.SaveJsonTest();
                         System.exit(0);
                     }
                 });

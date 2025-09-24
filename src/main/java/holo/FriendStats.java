@@ -13,10 +13,8 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
 
 public class FriendStats {
     private int hunger = 100;
@@ -51,6 +49,7 @@ public class FriendStats {
     private boolean ableToSleep = true;
     String[] skins = new String[] {"basic/", "kurokami/"};
     private String currentTrack = "NoDisk";
+    private MyLocale locale = MyLocale.ENGLISH;
 
     //EQUIPMENT
     private boolean goodRod = false;
@@ -383,6 +382,14 @@ public class FriendStats {
         this.chessSlowed = chessSlowed;
     }
 
+    public MyLocale getLocale() {
+        return locale;
+    }
+
+    public void setLocale(MyLocale locale) {
+        this.locale = locale;
+    }
+
     private void getScreens() throws InterruptedException {
         GraphicsDevice[] gs = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
         JFrame screenDetector = new JFrame();
@@ -707,7 +714,7 @@ public class FriendStats {
     }
 
     public void SaveJsonTest(){
-        Save save = new Save(hunger,tiredness,currency,goodRod,superRod,bedOwned,bedPositionX,bedPositionY,wardrobeOwned,wardrobePositionX,wardrobePositionY,radioOwned,radioPositionX,radioPositionY,chessSlowed,kurokami,skin);
+        Save save = new Save(hunger,tiredness,currency,goodRod,superRod,bedOwned,bedPositionX,bedPositionY,wardrobeOwned,wardrobePositionX,wardrobePositionY,radioOwned,radioPositionX,radioPositionY,chessSlowed,kurokami,skin,locale);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileWriter writer = new FileWriter("save.json")) {
             gson.toJson(save, writer);

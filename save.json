@@ -1,19 +1,20 @@
 {
-  "hunger": 94,
-  "tiredness": 46,
-  "currency": 965,
+  "hunger": 81,
+  "tiredness": 15,
+  "currency": 1060,
   "goodRod": true,
   "superRod": true,
   "bed": true,
-  "bedX": 0,
-  "bedY": 0,
+  "bedX": 543,
+  "bedY": 324,
   "wardrobe": true,
-  "wardrobeX": 0,
-  "wardrobeY": 0,
+  "wardrobeX": 382,
+  "wardrobeY": 728,
   "radio": true,
   "radioX": 242,
   "radioY": 561,
   "chessTypeBeat": true,
   "kurokami": true,
-  "skin": 1
+  "skin": 0,
+  "locale": "JAPANESE"
 }
