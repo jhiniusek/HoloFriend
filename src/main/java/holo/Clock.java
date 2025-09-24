@@ -394,6 +394,12 @@ public class Clock implements Runnable{
                 stats.getRect().top = (int)topFix;
                 window.setLocation(stats.getRect().left, stats.getRect().top);
                 window.setAlwaysOnTop(true);
+                for (int i = 0; i <foodList.size() ; i++) {
+                    try {
+                        foodList.get(i).moved=true;
+                    } catch (Exception e) {
+                    }
+                }
             }
 
             //
