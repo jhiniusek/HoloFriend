@@ -23,6 +23,7 @@ public class Main {
         stats.setRadio(radio);
         Wardrobe wardrobe = new Wardrobe(stats);
         stats.setWardrobe(wardrobe);
+        PC pc = new PC(stats);
 
         Shop shop = new Shop(stats, bed, radio, wardrobe);
         GameWindow window = new  GameWindow(stats, foodList, shop);
