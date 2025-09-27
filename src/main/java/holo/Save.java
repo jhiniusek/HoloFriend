@@ -1,12 +1,5 @@
 package holo;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.Locale;
-
 public class Save {
     int hunger;
     int tiredness;
@@ -23,11 +16,16 @@ public class Save {
     int radioX;
     int radioY;
     boolean chessTypeBeat;
+    boolean pc;
+    int pcX;
+    int pcY;
     boolean kurokami;
     int skin;
     MyLocale locale;
 
-    public Save(int hunger, int tiredness, int currency, boolean goodRod, boolean superRod, boolean bed, int bedX, int bedY, boolean wardrobe, int wardrobeX, int wardrobeY, boolean radio, int radioX, int radioY, boolean chessTypeBeat, boolean kurokami, int skin, MyLocale locale) {
+    public Save(int hunger, int tiredness, int currency, boolean goodRod, boolean superRod, boolean bed, int bedX,
+                int bedY, boolean wardrobe, int wardrobeX, int wardrobeY, boolean radio, int radioX, int radioY,
+                boolean chessTypeBeat, boolean pc, int pcX, int pcY, boolean kurokami, int skin, MyLocale locale) {
         this.hunger = hunger;
         this.tiredness = tiredness;
         this.currency = currency;
@@ -43,6 +41,9 @@ public class Save {
         this.radioX = radioX;
         this.radioY = radioY;
         this.chessTypeBeat = chessTypeBeat;
+        this.pc = pc;
+        this.pcX = pcX;
+        this.pcY = pcY;
         this.kurokami = kurokami;
         this.skin = skin;
         this.locale = locale;
@@ -63,6 +64,9 @@ public class Save {
         stats.setRadioOwned(radio);
         stats.setRadioPositionX(radioX);
         stats.setRadioPositionY(radioY);
+        stats.setPcOwned(pc);
+        stats.setPcPositionX(pcX);
+        stats.setPcPositionY(pcY);
         stats.setChessSlowed(chessTypeBeat);
         stats.setKurokami(kurokami);
         stats.setSkin(skin);

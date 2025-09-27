@@ -46,6 +46,7 @@ public class FriendStats {
     private Bed bed;
     private Wardrobe wardrobe;
     private Radio radio;
+    private PC pc;
     private boolean ableToSleep = true;
     String[] skins = new String[] {"basic/", "kurokami/"};
     private String currentTrack = "NoDisk";
@@ -69,6 +70,10 @@ public class FriendStats {
     public int radioPositionX = 0;
     public int radioPositionY = 0;
     private boolean chessSlowed = false;
+
+    private boolean pcOwned = false;
+    public int pcPositionX = 0;
+    public int pcPositionY = 0;
 
     public FriendStats() throws InterruptedException {
         getScreens();
@@ -294,6 +299,21 @@ public class FriendStats {
         this.radioPositionY = radioPositionY;
     }
 
+    public PC getPc() {
+        return pc;
+    }
+    public void setPc(PC pc){
+        this.pc = pc;
+    }
+
+    public void setPcPositionX(int pcPositionX) {
+        this.pcPositionX = pcPositionX;
+    }
+
+    public void setPcPositionY(int pcPositionY) {
+        this.pcPositionY = pcPositionY;
+    }
+
     public int getCurrency() {
         return currency;
     }
@@ -380,6 +400,14 @@ public class FriendStats {
 
     public void setChessSlowed(boolean chessSlowed) {
         this.chessSlowed = chessSlowed;
+    }
+
+    public boolean isPcOwned() {
+        return pcOwned;
+    }
+
+    public void setPcOwned(boolean pcOwned) {
+        this.pcOwned = pcOwned;
     }
 
     public MyLocale getLocale() {
@@ -714,7 +742,7 @@ public class FriendStats {
     }
 
     public void Save(){
-        Save save = new Save(hunger,tiredness,currency,goodRod,superRod,bedOwned,bedPositionX,bedPositionY,wardrobeOwned,wardrobePositionX,wardrobePositionY,radioOwned,radioPositionX,radioPositionY,chessSlowed,kurokami,skin,locale);
+        Save save = new Save(hunger,tiredness,currency,goodRod,superRod,bedOwned,bedPositionX,bedPositionY,wardrobeOwned,wardrobePositionX,wardrobePositionY,radioOwned,radioPositionX,radioPositionY,chessSlowed,pcOwned,pcPositionX,pcPositionY,kurokami,skin,locale);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileOutputStream fos = new FileOutputStream("save.sav");
             GZIPOutputStream gos = new GZIPOutputStream(fos);

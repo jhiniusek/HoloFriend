@@ -18,6 +18,7 @@ public class Clock implements Runnable{
     private ArrayList<Food> foodList;
     private Lake lake;
     private Bed bed;
+    private PC pc;
     private String spritePath = "/sprites/IdleL.gif";
     private String newSprite = null;
     private Point mousePoint = new Point (0,0);
@@ -46,13 +47,14 @@ public class Clock implements Runnable{
     private int danceLenght = 0;
     private int danceTimer = 0;
 
-    public Clock(FriendStats stats, Friend friend, GameWindow window, ArrayList<Food> foodList, Lake lake, Bed bed) {
+    public Clock(FriendStats stats, Friend friend, GameWindow window, ArrayList<Food> foodList, Lake lake, Bed bed, PC pc) {
         this.stats = stats;
         this.friend = friend;
         this.window = window;
         this.foodList = foodList;
         this.lake = lake;
         this.bed = bed;
+        this.pc = pc;
     }
 
     @Override

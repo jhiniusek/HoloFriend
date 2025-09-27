@@ -24,8 +24,9 @@ public class Main {
         Wardrobe wardrobe = new Wardrobe(stats);
         stats.setWardrobe(wardrobe);
         PC pc = new PC(stats);
+        stats.setPc(pc);
 
-        Shop shop = new Shop(stats, bed, radio, wardrobe);
+        Shop shop = new Shop(stats, bed, radio, wardrobe, pc);
         GameWindow window = new  GameWindow(stats, foodList, shop);
         shop.setMainWindow(window);
         stats.setGameWindow(window);
@@ -40,7 +41,7 @@ public class Main {
 //            listOfCollabs.add(new Collab(collabNames[i].name()));
 //        }
 
-        Thread clock = new Thread(new Clock(stats, friend, window, foodList, lake, bed));
+        Thread clock = new Thread(new Clock(stats, friend, window, foodList, lake, bed, pc));
         clock.start();
     }
 }

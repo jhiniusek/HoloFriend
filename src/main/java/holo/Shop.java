@@ -10,7 +10,7 @@ public class Shop extends JFrame {
     ImageIcon soldOut = new ImageIcon(getClass().getResource("/sprites/Shop_Sold.png"));
     ImageIcon locked = new ImageIcon(getClass().getResource("/sprites/Shop_Locked.png"));
 
-    public Shop(FriendStats stats, Bed bed, Radio radio, Wardrobe wardrobe) {
+    public Shop(FriendStats stats, Bed bed, Radio radio, Wardrobe wardrobe, PC pc) {
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setType(Window.Type.UTILITY);

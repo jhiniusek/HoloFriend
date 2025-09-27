@@ -12,8 +12,7 @@ public class PC extends JFrame {
     JLabel desktopSprite = new JLabel(new ImageIcon(getClass().getResource("/sprites/PC UI.png")));
     JButton closeDesktop = new JButton();
     JButton openYoutubeButton = new JButton();
-    JButton startStreamButton = new JButton();
-    JButton stopStreamButton = new JButton();
+    JButton streamButton = new JButton();
     JButton closeYoutube = new JButton();
     public boolean stream = false;
     public int subscribers = 0;
@@ -23,11 +22,11 @@ public class PC extends JFrame {
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setType(Window.Type.UTILITY);
-        setSize(73,74);
+        setSize(85,79);
         setLayout(null);
         setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
         setBackground(new Color(1.0f,1.0f,1.0f,0f));
-        sprite.setBounds(0, 0, 73, 74);
+        sprite.setBounds(0, 0, 85, 79);
         add(sprite);
 
         getContentPane().addMouseListener(new MouseAdapter() {
@@ -47,14 +46,15 @@ public class PC extends JFrame {
                 int X = thisX + xMoved;
                 int Y = thisY + yMoved;
                 setLocation(X, Y);
-//                stats.wardrobePositionX = X;
-//                stats.wardrobePositionY = Y;
+                stats.pcPositionX = X;
+                stats.pcPositionY = Y;
             }
         });
 
         getContentPane().addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 desktop.setVisible(true);
+                desktop.setLocation(PC.super.getX()+50, PC.super.getY()-80);
             }
         });
 
@@ -87,8 +87,6 @@ public class PC extends JFrame {
                 int X = thisX + xMoved;
                 int Y = thisY + yMoved;
                 desktop.setLocation(X, Y);
-//                stats.wardrobePositionX = X;
-//                stats.wardrobePositionY = Y;
             }
         });
 
@@ -129,20 +127,45 @@ public class PC extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 desktopSprite.setIcon(new ImageIcon(getClass().getResource("/sprites/PC UI.png")));
                 desktop.remove(closeYoutube);
+                desktop.remove(streamButton);
                 desktop.add(openYoutubeButton);
             }
         });
+
+        streamButton.setBounds(205, 136, 73, 14);
+        streamButton.setContentAreaFilled(false);
+        streamButton.setBorderPainted(false);
+        streamButton.setFocusPainted(false);
+        streamButton.setOpaque(false);
+        streamButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stream();
+            }
+        });
+
+        setLocation(stats.pcPositionX, stats.pcPositionY);
     }
 
     public void OpenYoutube(){
         if(!stream){
             desktopSprite.setIcon(new ImageIcon(getClass().getResource("/sprites/StreamOffline.png")));
-
         } else {
             desktopSprite.setIcon(new ImageIcon(getClass().getResource("/sprites/StreamOnline.png")));
 
         }
         desktop.remove(openYoutubeButton);
+        desktop.add(streamButton);
         desktop.add(closeYoutube);
+    }
+
+    public void stream(){
+        if(!stream){
+            desktopSprite.setIcon(new ImageIcon(getClass().getResource("/sprites/StreamOnline.png")));
+            stream = true;
+        } else {
+            desktopSprite.setIcon(new ImageIcon(getClass().getResource("/sprites/StreamOffline.png")));
+            stream = false;
+        }
     }
 }
