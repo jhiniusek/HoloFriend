@@ -20,6 +20,7 @@ public class FriendStats {
     private int hunger = 100;
     private int tiredness = 100;
     private int currency = 10;
+    private int subscribers = 0;
     private boolean alive = true;
     private ArrayList<Screen> screens = new ArrayList<>();
     private ArrayList<Food> foodList;
@@ -79,6 +80,8 @@ public class FriendStats {
         getScreens();
     }
 
+    // STATS
+
     public int getHunger() {
         return hunger;
     }
@@ -95,9 +98,48 @@ public class FriendStats {
         this.tiredness = tiredness;
     }
 
-    public void setFoodList(ArrayList<Food> foodList) {
-        this.foodList = foodList;
+    public int getCurrency() {
+        return currency;
     }
+
+    public void setCurrency(int currency) {
+        this.currency = currency;
+    }
+
+    public int getSubscribers() {
+        return subscribers;
+    }
+
+    public void setSubscribers(int subscribers) {
+        this.subscribers = subscribers;
+    }
+
+    public States getState() {
+        return state;
+    }
+
+    public void setState(States state) {
+        this.state = state;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
+    public int getClickCounter() {
+        return clickCounter;
+    }
+
+    public void setClickCounter(int clickCounter) {
+        this.clickCounter = clickCounter;
+    }
+
+
+    // POSITIONS + MOVEMENTS
 
     public float getPositionX() {
         return positionX;
@@ -131,30 +173,6 @@ public class FriendStats {
         this.cursorY = cursorY;
     }
 
-    public States getState() {
-        return state;
-    }
-
-    public void setState(States state) {
-        this.state = state;
-    }
-
-    public String getChaseObject() {
-        return chaseObject;
-    }
-
-    public void setChaseObject(String chaseObject) {
-        this.chaseObject = chaseObject;
-    }
-
-    public int getClickCounter() {
-        return clickCounter;
-    }
-
-    public void setClickCounter(int clickCounter) {
-        this.clickCounter = clickCounter;
-    }
-
     public float getDestinationX() {
         return destinationX;
     }
@@ -169,14 +187,6 @@ public class FriendStats {
 
     public void setDestinationY(float destinationY) {
         this.destinationY = destinationY;
-    }
-
-    public boolean isAlive() {
-        return alive;
-    }
-
-    public void setAlive(boolean alive) {
-        this.alive = alive;
     }
 
     public float getMsX() {
@@ -201,6 +211,16 @@ public class FriendStats {
 
     public void setRight(boolean goRight) {
         this.right = goRight;
+    }
+
+    // OBJECTS
+
+    public String getChaseObject() {
+        return chaseObject;
+    }
+
+    public void setChaseObject(String chaseObject) {
+        this.chaseObject = chaseObject;
     }
 
     public GameWindow getGameWindow() {
@@ -235,13 +255,7 @@ public class FriendStats {
         return windowSide;
     }
 
-    public boolean isAbleToWork() {
-        return ableToWork;
-    }
-
-    public void setAbleToWork(boolean ableToWork) {
-        this.ableToWork = ableToWork;
-    }
+            // LAKE
 
     public void setLake(Lake lake) {
         this.lake = lake;
@@ -249,101 +263,6 @@ public class FriendStats {
 
     public Lake getLake() {
         return lake;
-    }
-
-    public Bed getBed() {
-        return bed;
-    }
-
-    public void setBed(Bed bed) {
-        this.bed = bed;
-    }
-
-    public void setBedPositionX(int bedPositionX) {
-        this.bedPositionX = bedPositionX;
-    }
-
-    public void setBedPositionY(int bedPositionY) {
-        this.bedPositionY = bedPositionY;
-    }
-
-    public Wardrobe getWardrobe() {
-        return wardrobe;
-    }
-
-    public void setWardrobe(Wardrobe wardrobe) {
-        this.wardrobe = wardrobe;
-    }
-
-    public void setWardrobePositionX(int wardrobePositionX) {
-        this.wardrobePositionX = wardrobePositionX;
-    }
-
-    public void setWardrobePositionY(int wardrobePositionY) {
-        this.wardrobePositionY = wardrobePositionY;
-    }
-
-    public Radio getRadio() {
-        return radio;
-    }
-
-    public void setRadio(Radio radio) {
-        this.radio = radio;
-    }
-
-    public void setRadioPositionX(int radioPositionX) {
-        this.radioPositionX = radioPositionX;
-    }
-
-    public void setRadioPositionY(int radioPositionY) {
-        this.radioPositionY = radioPositionY;
-    }
-
-    public PC getPc() {
-        return pc;
-    }
-    public void setPc(PC pc){
-        this.pc = pc;
-    }
-
-    public void setPcPositionX(int pcPositionX) {
-        this.pcPositionX = pcPositionX;
-    }
-
-    public void setPcPositionY(int pcPositionY) {
-        this.pcPositionY = pcPositionY;
-    }
-
-    public int getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(int currency) {
-        this.currency = currency;
-    }
-
-    public boolean isAbleToSleep() {
-        return ableToSleep;
-    }
-
-    public void setAbleToSleep(boolean ableToSleep) {
-        this.ableToSleep = ableToSleep;
-    }
-
-    public void setSkin(int skin){
-        this.skin = skin;
-    }
-
-    public String getSkin(){
-        return skins[skin];
-    }
-
-    public void setCurrentTrack(String track){
-        this.currentTrack = track;
-    }
-
-    public String getCurrentTrack(){
-        return currentTrack;
     }
 
     public boolean getGoodRod() {
@@ -362,7 +281,17 @@ public class FriendStats {
         this.superRod = superRod;
     }
 
-    public boolean getBedOwned() {
+    public boolean isAbleToWork() {
+        return ableToWork;
+    }
+
+    public void setAbleToWork(boolean ableToWork) {
+        this.ableToWork = ableToWork;
+    }
+
+            // BED
+
+    public boolean isBedOwned() {
         return bedOwned;
     }
 
@@ -370,12 +299,54 @@ public class FriendStats {
         this.bedOwned = bedOwned;
     }
 
-    public boolean getWardrobeOwned() {
+    public Bed getBed() {
+        return bed;
+    }
+
+    public void setBed(Bed bed) {
+        this.bed = bed;
+    }
+
+    public void setBedPositionX(int bedPositionX) {
+        this.bedPositionX = bedPositionX;
+    }
+
+    public void setBedPositionY(int bedPositionY) {
+        this.bedPositionY = bedPositionY;
+    }
+
+    public boolean isAbleToSleep() {
+        return ableToSleep;
+    }
+
+    public void setAbleToSleep(boolean ableToSleep) {
+        this.ableToSleep = ableToSleep;
+    }
+
+            // WARDROBE
+
+    public boolean isWardrobeOwned() {
         return wardrobeOwned;
     }
 
     public void setWardrobeOwned(boolean wardrobeOwned) {
         this.wardrobeOwned = wardrobeOwned;
+    }
+
+    public Wardrobe getWardrobe() {
+        return wardrobe;
+    }
+
+    public void setWardrobe(Wardrobe wardrobe) {
+        this.wardrobe = wardrobe;
+    }
+
+    public void setWardrobePositionX(int wardrobePositionX) {
+        this.wardrobePositionX = wardrobePositionX;
+    }
+
+    public void setWardrobePositionY(int wardrobePositionY) {
+        this.wardrobePositionY = wardrobePositionY;
     }
 
     public boolean getKurokami() {
@@ -386,12 +357,46 @@ public class FriendStats {
         this.kurokami = kurokami;
     }
 
-    public boolean getRadioOwned() {
+    public void setSkin(int skin){
+        this.skin = skin;
+    }
+
+    public String getSkin(){
+        return skins[skin];
+    }
+
+            // RADIO
+
+    public boolean isRadioOwned() {
         return radioOwned;
     }
 
     public void setRadioOwned(boolean radioOwned) {
         this.radioOwned = radioOwned;
+    }
+
+    public Radio getRadio() {
+        return radio;
+    }
+
+    public void setRadio(Radio radio) {
+        this.radio = radio;
+    }
+
+    public void setRadioPositionX(int radioPositionX) {
+        this.radioPositionX = radioPositionX;
+    }
+
+    public void setRadioPositionY(int radioPositionY) {
+        this.radioPositionY = radioPositionY;
+    }
+
+    public void setCurrentTrack(String track){
+        this.currentTrack = track;
+    }
+
+    public String getCurrentTrack(){
+        return currentTrack;
     }
 
     public boolean getChessSlowed() {
@@ -402,12 +407,36 @@ public class FriendStats {
         this.chessSlowed = chessSlowed;
     }
 
+            // PC
+
     public boolean isPcOwned() {
         return pcOwned;
     }
 
     public void setPcOwned(boolean pcOwned) {
         this.pcOwned = pcOwned;
+    }
+
+    public PC getPc() {
+        return pc;
+    }
+    public void setPc(PC pc){
+        this.pc = pc;
+    }
+
+    public void setPcPositionX(int pcPositionX) {
+        this.pcPositionX = pcPositionX;
+    }
+
+    public void setPcPositionY(int pcPositionY) {
+        this.pcPositionY = pcPositionY;
+    }
+
+
+    // OTHERS
+
+    public void setFoodList(ArrayList<Food> foodList) {
+        this.foodList = foodList;
     }
 
     public MyLocale getLocale() {
@@ -417,6 +446,8 @@ public class FriendStats {
     public void setLocale(MyLocale locale) {
         this.locale = locale;
     }
+
+
 
     private void getScreens() throws InterruptedException {
         GraphicsDevice[] gs = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
@@ -459,7 +490,7 @@ public class FriendStats {
         } else if (target > sleepProbability) {
             System.out.println("GO TO WORK");
             chaseObject = "Lake";
-        } else if (target > foodProbability && getBedOwned()) {
+        } else if (target > foodProbability && isBedOwned()) {
             System.out.println("GO TO SLEEP");
             chaseObject = "Bed";
         } else {
@@ -742,7 +773,9 @@ public class FriendStats {
     }
 
     public void Save(){
-        Save save = new Save(hunger,tiredness,currency,goodRod,superRod,bedOwned,bedPositionX,bedPositionY,wardrobeOwned,wardrobePositionX,wardrobePositionY,radioOwned,radioPositionX,radioPositionY,chessSlowed,pcOwned,pcPositionX,pcPositionY,kurokami,skin,locale);
+        Save save = new Save(hunger,tiredness,currency,subscribers,goodRod,superRod,bedOwned,bedPositionX,bedPositionY,wardrobeOwned,
+                wardrobePositionX,wardrobePositionY,radioOwned,radioPositionX,radioPositionY,chessSlowed,pcOwned,
+                pcPositionX,pcPositionY,kurokami,skin,locale);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileOutputStream fos = new FileOutputStream("save.sav");
             GZIPOutputStream gos = new GZIPOutputStream(fos);
@@ -774,13 +807,4 @@ public class FriendStats {
         } catch (Exception ignored) {
         }
     }
-
-    @Override
-    public String toString() {
-        return hunger + "\n" + tiredness + "\n" + currency + "\n" + goodRod + "\n" + superRod + "\n" + bedOwned + "\n" +
-                bedPositionX + "\n" + bedPositionY + "\n" + wardrobeOwned + "\n" + wardrobePositionX + "\n" +
-                wardrobePositionY + "\n" + kurokami + "\n" + skin + "\n" + radioOwned + "\n" + radioPositionX + "\n" +
-                radioPositionY + "\n" + chessSlowed;
-    }
-
 }

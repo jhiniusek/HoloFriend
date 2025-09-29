@@ -59,7 +59,7 @@ public class Bed extends JFrame {
                 stats.bedPositionY = Y;
             }
         });
-        setVisible(stats.getBedOwned());
+        setVisible(stats.isBedOwned());
         setLocation(stats.bedPositionX, stats.bedPositionY);
     }
 

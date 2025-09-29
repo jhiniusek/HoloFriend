@@ -190,7 +190,7 @@ public class GameWindow extends JFrame{
         respawnBed.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(stats.getBedOwned()){
+                if(stats.isBedOwned()){
                     stats.getBed().setLocation(stats.getCursorX(), stats.getCursorY());
                     stats.getBed().toFront();
                 }
@@ -203,7 +203,7 @@ public class GameWindow extends JFrame{
         respawnRadio.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(stats.getRadioOwned()){
+                if(stats.isRadioOwned()){
                     stats.getRadio().setLocation(stats.getCursorX(), stats.getCursorY());
                     stats.getRadio().toFront();
                 }
@@ -216,7 +216,7 @@ public class GameWindow extends JFrame{
         respawnWardrobe.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(stats.getWardrobeOwned()){
+                if(stats.isWardrobeOwned()){
                     stats.getWardrobe().setLocation(stats.getCursorX(), stats.getCursorY());
                     stats.getWardrobe().toFront();
                 }

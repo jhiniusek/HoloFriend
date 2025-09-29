@@ -154,7 +154,7 @@ public class Shop extends JFrame {
 
             }
         });
-        if(!stats.getBedOwned()){
+        if(!stats.isBedOwned()){
             add(buyBed);
         } else {
             JLabel bedSold = new JLabel(soldOut);
@@ -185,7 +185,7 @@ public class Shop extends JFrame {
 
             }
         });
-        if(!stats.getKurokami() && stats.getWardrobeOwned()){
+        if(!stats.getKurokami() && stats.isWardrobeOwned()){
             add(buyKurokami);
         } else if (stats.getKurokami()){
             JLabel kurokamiSold = new JLabel(soldOut);
@@ -223,7 +223,7 @@ public class Shop extends JFrame {
 
             }
         });
-        if(!stats.getWardrobeOwned()){
+        if(!stats.isWardrobeOwned()){
             add(buyWardrobe);
             add(kurokamiLocked);
             getContentPane().setComponentZOrder(kurokamiLocked, 0);
@@ -259,7 +259,7 @@ public class Shop extends JFrame {
 
             }
         });
-        if(!stats.getChessSlowed() && stats.getRadioOwned()){
+        if(!stats.getChessSlowed() && stats.isRadioOwned()){
             add(buyChessTypeBeat);
         } else if (stats.getChessSlowed()){
             JLabel chessTypeBeatSold = new JLabel(soldOut);
@@ -296,7 +296,7 @@ public class Shop extends JFrame {
 
             }
         });
-        if(!stats.getRadioOwned()){
+        if(!stats.isRadioOwned()){
             add(buyRadio);
             add(chessTypeBeatLocked);
             getContentPane().setComponentZOrder(chessTypeBeatLocked, 0);

@@ -531,7 +531,7 @@ public class Clock implements Runnable{
                     bed.removeForcableStop();
                 }
 
-            } else if(stats.getBedOwned() && stats.isAbleToSleep() && sleepCooldown == 0 && (stats.getChaseObject() == "Bed" ||  stats.getState() == States.HOLD)){
+            } else if(stats.isBedOwned() && stats.isAbleToSleep() && sleepCooldown == 0 && (stats.getChaseObject() == "Bed" ||  stats.getState() == States.HOLD)){
                 CheckBedCollision();
             }
 

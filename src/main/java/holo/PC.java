@@ -3,6 +3,7 @@ package holo;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 public class PC extends JFrame {
     private Point initialClickPC;
@@ -14,11 +15,13 @@ public class PC extends JFrame {
     JButton openYoutubeButton = new JButton();
     JButton streamButton = new JButton();
     JButton closeYoutube = new JButton();
+    Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/Micro5-Regular.ttf"));
+    JLabel viewerCount = new JLabel();
+    JLabel subscriberCount = new JLabel();
     public boolean stream = false;
-    public int subscribers = 0;
-    public int viewers = 0;
+    public int viewers = 1234567890;
 
-    public PC(FriendStats stats) {
+    public PC(FriendStats stats) throws IOException, FontFormatException {
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setType(Window.Type.UTILITY);
@@ -113,9 +116,22 @@ public class PC extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 OpenYoutube();
+                desktop.add(subscriberCount);
+                desktop.getContentPane().setComponentZOrder(subscriberCount, 0);
             }
         });
         desktop.add(openYoutubeButton);
+
+
+        subscriberCount.setText(String.valueOf(stats.getSubscribers()));
+        subscriberCount.setFont(font.deriveFont(20f));
+        subscriberCount.setHorizontalAlignment(SwingConstants.RIGHT);
+        subscriberCount.setBounds(200,34,58,11);
+
+        viewerCount.setText(String.valueOf(viewers));
+        viewerCount.setFont(font.deriveFont(20f));
+        viewerCount.setHorizontalAlignment(SwingConstants.LEFT);
+        viewerCount.setBounds(62,138,80,11);
 
         closeYoutube.setBounds(275, 22, 13, 13);
         closeYoutube.setContentAreaFilled(false);
@@ -126,6 +142,7 @@ public class PC extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 desktopSprite.setIcon(new ImageIcon(getClass().getResource("/sprites/PC UI.png")));
+                desktop.remove(subscriberCount);
                 desktop.remove(closeYoutube);
                 desktop.remove(streamButton);
                 desktop.add(openYoutubeButton);
@@ -141,6 +158,10 @@ public class PC extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 stream();
+
+                //TEST
+                stats.setSubscribers(stats.getSubscribers()*2);
+                updateStreamStats(stats);
             }
         });
 
@@ -150,9 +171,11 @@ public class PC extends JFrame {
     public void OpenYoutube(){
         if(!stream){
             desktopSprite.setIcon(new ImageIcon(getClass().getResource("/sprites/StreamOffline.png")));
+            desktop.remove(viewerCount);
         } else {
             desktopSprite.setIcon(new ImageIcon(getClass().getResource("/sprites/StreamOnline.png")));
-
+            desktop.add(viewerCount);
+            desktop.getContentPane().setComponentZOrder(viewerCount, 0);
         }
         desktop.remove(openYoutubeButton);
         desktop.add(streamButton);
@@ -162,10 +185,18 @@ public class PC extends JFrame {
     public void stream(){
         if(!stream){
             desktopSprite.setIcon(new ImageIcon(getClass().getResource("/sprites/StreamOnline.png")));
+            desktop.add(viewerCount);
+            desktop.getContentPane().setComponentZOrder(viewerCount, 0);
             stream = true;
         } else {
             desktopSprite.setIcon(new ImageIcon(getClass().getResource("/sprites/StreamOffline.png")));
+            desktop.remove(viewerCount);
             stream = false;
         }
+    }
+
+    public void updateStreamStats(FriendStats stats){
+        subscriberCount.setText(String.valueOf(stats.getSubscribers()));
+        viewerCount.setText(String.valueOf(viewers));
     }
 }
