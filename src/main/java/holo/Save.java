@@ -4,6 +4,7 @@ public class Save {
     int hunger;
     int tiredness;
     int currency;
+    int subscribers;
     boolean goodRod;
     boolean superRod;
     boolean bed;
@@ -23,12 +24,13 @@ public class Save {
     int skin;
     MyLocale locale;
 
-    public Save(int hunger, int tiredness, int currency, boolean goodRod, boolean superRod, boolean bed, int bedX,
+    public Save(int hunger, int tiredness, int currency, int subscribers, boolean goodRod, boolean superRod, boolean bed, int bedX,
                 int bedY, boolean wardrobe, int wardrobeX, int wardrobeY, boolean radio, int radioX, int radioY,
                 boolean chessTypeBeat, boolean pc, int pcX, int pcY, boolean kurokami, int skin, MyLocale locale) {
         this.hunger = hunger;
         this.tiredness = tiredness;
         this.currency = currency;
+        this.subscribers = subscribers;
         this.goodRod = goodRod;
         this.superRod = superRod;
         this.bed = bed;
@@ -53,6 +55,7 @@ public class Save {
         stats.setHunger(hunger);
         stats.setTiredness(tiredness);
         stats.setCurrency(currency);
+        stats.setSubscribers(subscribers);
         stats.setGoodRod(goodRod);
         stats.setSuperRod(superRod);
         stats.setBedOwned(bed);

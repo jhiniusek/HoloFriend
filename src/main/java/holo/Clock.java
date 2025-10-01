@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Clock implements Runnable{
     private FriendStats stats;
@@ -46,6 +47,9 @@ public class Clock implements Runnable{
     //DANCE VARIABLES
     private int danceLenght = 0;
     private int danceTimer = 0;
+
+    //STREAM VARIABLES
+    private int streamTimer = 0;
 
     public Clock(FriendStats stats, Friend friend, GameWindow window, ArrayList<Food> foodList, Lake lake, Bed bed, PC pc) {
         this.stats = stats;
@@ -574,6 +578,52 @@ public class Clock implements Runnable{
             } else {
                 danceTimer = 0;
             }
+
+
+            // STREAMING
+
+            if(pc.stream){
+                streamTimer++;
+                if(streamTimer == 160){
+                    int actualViewers = pc.viewers;
+                    int newViewers;
+
+                    //ENGAGING STREAM = VIEWERS COME
+                    if (stats.getState() == States.WORK || stats.getState() == States.CHASE || stats.getState() == States.PULL || stats.getState() == States.PUSH || stats.getState() == States.HOLD || stats.getState() == States.DANCE ) {
+                        int randomNum = ThreadLocalRandom.current().nextInt(1, 5 + 1);  //ADD MULTIPLIERS IF COLLAB SOON
+                        newViewers = actualViewers + (actualViewers * randomNum / 100);
+                        if(newViewers <= actualViewers){
+                            pc.viewers = pc.viewers + 1;
+                        } else {
+                            pc.viewers = newViewers;
+                        }
+
+                    //BORING STREAM == VIEWERS LEAVE
+                    } else if (stats.getState() == States.IDLE || stats.getState() == States.SLEEP) {
+                        int randomNum = ThreadLocalRandom.current().nextInt(1, 10 + 1);
+                        newViewers = actualViewers - (actualViewers * randomNum / 100);
+                        if(newViewers < actualViewers){
+                            pc.viewers = newViewers;
+                        }
+                    }
+
+                    //NEW SUBSCRIBERS
+                    if(stats.getSubscribers() < pc.viewers){
+                        int randomNum = ThreadLocalRandom.current().nextInt(10, 20 + 1);
+                        int newSubs = (pc.viewers - stats.getSubscribers()) * randomNum / 100;
+                        stats.setSubscribers(stats.getSubscribers() + newSubs);
+                    }
+
+                    //PAYMENTS
+                    stats.setCurrency(stats.getCurrency() + pc.viewers/1000);
+                    window.currency.setText(String.valueOf(stats.getCurrency()));
+
+                    streamTimer = 0;
+                    pc.updateStreamStats(stats);
+                }
+            }
+
+
 
 
             // CLOCK

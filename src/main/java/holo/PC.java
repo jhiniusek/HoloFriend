@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PC extends JFrame {
     private Point initialClickPC;
@@ -19,9 +20,11 @@ public class PC extends JFrame {
     JLabel viewerCount = new JLabel();
     JLabel subscriberCount = new JLabel();
     public boolean stream = false;
-    public int viewers = 1234567890;
+    public int subscribers = 0;
+    public int viewers = 0;
 
     public PC(FriendStats stats) throws IOException, FontFormatException {
+        subscribers = stats.getSubscribers();
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setType(Window.Type.UTILITY);
@@ -158,9 +161,6 @@ public class PC extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 stream();
-
-                //TEST
-                stats.setSubscribers(stats.getSubscribers()*2);
                 updateStreamStats(stats);
             }
         });
@@ -186,6 +186,8 @@ public class PC extends JFrame {
         if(!stream){
             desktopSprite.setIcon(new ImageIcon(getClass().getResource("/sprites/StreamOnline.png")));
             desktop.add(viewerCount);
+            int randomNum = ThreadLocalRandom.current().nextInt(60, 70 + 1);
+            viewers = (subscribers * randomNum) / 100 + 1;
             desktop.getContentPane().setComponentZOrder(viewerCount, 0);
             stream = true;
         } else {
@@ -196,7 +198,8 @@ public class PC extends JFrame {
     }
 
     public void updateStreamStats(FriendStats stats){
-        subscriberCount.setText(String.valueOf(stats.getSubscribers()));
+        subscribers = stats.getSubscribers();
+        subscriberCount.setText(String.valueOf(subscribers));
         viewerCount.setText(String.valueOf(viewers));
     }
 }
