@@ -15,8 +15,7 @@ public class Collab extends JFrame {
     private float destinationY;
     private String name;
     private States state = States.IDLE;
-    private String spritePath = "/sprites/collabs/NaN";
-    private JLabel sprite = new JLabel(new ImageIcon(getClass().getResource("/sprites/basic/IdleL.gif")));
+    private JLabel sprite;
     private JLabel shadow = new JLabel(new ImageIcon(getClass().getResource("/sprites/Shadow.png")));
 
     Point initialClick;
@@ -24,23 +23,29 @@ public class Collab extends JFrame {
     long releaseTime;
     int clickCounter;
 
+    @Override
+    public String getName(){
+        return name;
+    }
+
     public Collab(String name){
         this.name = name;
         String path = "/sprites/collabs/" + name;
         sprite = new JLabel(new ImageIcon(getClass().getResource(path + "/IdleL.gif")));
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setType(Window.Type.UTILITY);
-        setSize(64,128);
+        setSize(60,129); //Different sizes for different names
         setLayout(null);
         setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
-        shadow.setBounds(0,116,60,11);
+        shadow.setBounds(1,118,60,11);
         add(shadow);
         sprite.setBounds(0,0,64,126);
         add(sprite);
+        getContentPane().setComponentZOrder(sprite, 0);
         setUndecorated(true);
         setAlwaysOnTop(true);
         setBackground(new Color(1.0f,1.0f,1.0f,0f));
-        setVisible(true);
+        setVisible(false);
 
         getContentPane().addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {

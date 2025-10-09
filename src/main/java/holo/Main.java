@@ -23,7 +23,13 @@ public class Main {
         stats.setRadio(radio);
         Wardrobe wardrobe = new Wardrobe(stats);
         stats.setWardrobe(wardrobe);
-        PC pc = new PC(stats);
+
+        CollabNames[] collabNames = CollabNames.values();
+        ArrayList<Collab> listOfCollabs = new ArrayList<>();
+        for (int i = 0; i < collabNames.length; i++) {
+            listOfCollabs.add(new Collab(collabNames[i].name()));
+        }
+        PC pc = new PC(stats, listOfCollabs);
         stats.setPc(pc);
 
         Shop shop = new Shop(stats, bed, radio, wardrobe, pc);
@@ -34,12 +40,6 @@ public class Main {
         Friend friend = new Friend(stats);
         Lake lake = new Lake(window.getLocation().x - 270,window.getLocation().y + 100);
         stats.setLake(lake);
-
-//        CollabNames[] collabNames = CollabNames.values();
-//        ArrayList<Collab> listOfCollabs = new ArrayList<>();
-//        for (int i = 0; i < collabNames.length; i++) {
-//            listOfCollabs.add(new Collab(collabNames[i].name()));
-//        }
 
         Thread clock = new Thread(new Clock(stats, friend, window, foodList, lake, bed, pc));
         clock.start();
