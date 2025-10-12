@@ -1,5 +1,8 @@
 package holo;
 
+import java.sql.Time;
+import java.util.ArrayList;
+
 public class Save {
     int hunger;
     int tiredness;
@@ -23,10 +26,14 @@ public class Save {
     boolean kurokami;
     int skin;
     MyLocale locale;
+    ArrayList<Integer> listOfLevel;
+    ArrayList<Integer> listOfExp;
+    ArrayList<Time> listOfTime;
 
     public Save(int hunger, int tiredness, int currency, int subscribers, boolean goodRod, boolean superRod, boolean bed, int bedX,
                 int bedY, boolean wardrobe, int wardrobeX, int wardrobeY, boolean radio, int radioX, int radioY,
-                boolean chessTypeBeat, boolean pc, int pcX, int pcY, boolean kurokami, int skin, MyLocale locale) {
+                boolean chessTypeBeat, boolean pc, int pcX, int pcY, boolean kurokami, int skin, MyLocale locale, ArrayList<Integer> listOfLevel,
+                ArrayList<Integer> listOfExp, ArrayList<Time> listOfTime) {
         this.hunger = hunger;
         this.tiredness = tiredness;
         this.currency = currency;
@@ -49,6 +56,9 @@ public class Save {
         this.kurokami = kurokami;
         this.skin = skin;
         this.locale = locale;
+        this.listOfLevel = listOfLevel;
+        this.listOfExp = listOfExp;
+        this.listOfTime = listOfTime;
     }
 
     public void Load(FriendStats stats){
@@ -75,6 +85,15 @@ public class Save {
         stats.setSkin(skin);
         if (locale!=null) {
             stats.setLocale(locale);
+        }
+        if (listOfLevel!=null){
+            stats.setListOfLevels(listOfLevel);
+        }
+        if (listOfExp!=null){
+            stats.setListOfExp(listOfExp);
+        }
+        if (listOfTime!=null){
+            stats.setListOfTime(listOfTime);
         }
     }
 }

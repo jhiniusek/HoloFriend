@@ -11,6 +11,7 @@ import com.sun.jna.platform.win32.WinUser;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.sql.Time;
 import java.util.*;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
@@ -76,8 +77,19 @@ public class FriendStats {
     public int pcPositionX = 0;
     public int pcPositionY = 0;
 
+    //COLLABS
+    public ArrayList<Integer> listOfLevels = new ArrayList<>();
+    public ArrayList<Integer> listOfExp = new ArrayList<>();
+    public ArrayList<Time> listOfTime = new ArrayList<>();
+
     public FriendStats() throws InterruptedException {
         getScreens();
+        CollabNames[] collabNames = CollabNames.values();
+        for (int i = 0; i < collabNames.length; i++) {
+            listOfLevels.add(null);
+            listOfExp.add(null);
+            listOfTime.add(null);
+        }
     }
 
     // STATS
@@ -432,6 +444,55 @@ public class FriendStats {
         this.pcPositionY = pcPositionY;
     }
 
+    // COLLABS
+
+    public ArrayList<Integer> getListOfLevels() {
+        return listOfLevels;
+    }
+
+    public void setListOfLevels(ArrayList<Integer> listOfLevels) {
+        this.listOfLevels = listOfLevels;
+    }
+
+    public ArrayList<Integer> getListOfExp() {
+        return listOfExp;
+    }
+
+    public void setListOfExp(ArrayList<Integer> listOfExp) {
+        this.listOfExp = listOfExp;
+    }
+
+    public ArrayList<Time> getListOfTime() {
+        return listOfTime;
+    }
+
+    public void setListOfTime(ArrayList<Time> listOfTime) {
+        this.listOfTime = listOfTime;
+    }
+
+    public void updateLevel(int id, int level){
+        listOfLevels.set(id, level);
+    }
+
+    public void updateExp(int id, int exp){
+        listOfExp.set(id, exp);
+    }
+
+    public void updateTime(int id, Time time){
+        listOfTime.set(id, time);
+    }
+
+    public int getLevelById(int id){
+        return listOfLevels.get(id);
+    }
+
+    public int getExpById(int id){
+        return listOfExp.get(id);
+    }
+
+    public Time getTimeById(int id){
+        return listOfTime.get(id);
+    }
 
     // OTHERS
 
@@ -775,7 +836,7 @@ public class FriendStats {
     public void Save(){
         Save save = new Save(hunger,tiredness,currency,subscribers,goodRod,superRod,bedOwned,bedPositionX,bedPositionY,wardrobeOwned,
                 wardrobePositionX,wardrobePositionY,radioOwned,radioPositionX,radioPositionY,chessSlowed,pcOwned,
-                pcPositionX,pcPositionY,kurokami,skin,locale);
+                pcPositionX,pcPositionY,kurokami,skin,locale, listOfLevels, listOfExp, listOfTime);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileOutputStream fos = new FileOutputStream("save.sav");
             GZIPOutputStream gos = new GZIPOutputStream(fos);

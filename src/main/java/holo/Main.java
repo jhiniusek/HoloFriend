@@ -27,10 +27,12 @@ public class Main {
         CollabNames[] collabNames = CollabNames.values();
         ArrayList<Collab> listOfCollabs = new ArrayList<>();
         for (int i = 0; i < collabNames.length; i++) {
-            listOfCollabs.add(new Collab(collabNames[i].name()));
+            listOfCollabs.add(new Collab(stats, collabNames[i].name(), i));
         }
         PC pc = new PC(stats, listOfCollabs);
         stats.setPc(pc);
+
+
 
         Shop shop = new Shop(stats, bed, radio, wardrobe, pc);
         GameWindow window = new  GameWindow(stats, foodList, shop);

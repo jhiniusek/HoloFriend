@@ -5,15 +5,21 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.sql.Time;
 
 public class Collab extends JFrame {
+    private FriendStats stats;
     public float positionX;
     public float positionY;
     private float msX;
     private float msY;
     private float destinationX;
     private float destinationY;
+    private int id;
     private String name;
+    private int level;
+    private int experience;
+    private Time time;
     private States state = States.IDLE;
     private JLabel sprite;
     private JLabel shadow = new JLabel(new ImageIcon(getClass().getResource("/sprites/Shadow.png")));
@@ -28,8 +34,85 @@ public class Collab extends JFrame {
         return name;
     }
 
-    public Collab(String name){
+    public int getId() {
+        return id;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public int getExperience() {
+        return experience;
+    }
+
+    public void setExperience(int experience) {
+        this.experience = experience;
+    }
+
+    public Time getTime() {
+        return time;
+    }
+
+    public void setTime(Time time) {
+        this.time = time;
+    }
+
+    public States getCollabState() {
+        return state;
+    }
+
+    public void setCollabState(States state) {
+        this.state = state;
+    }
+
+    public float getDestinationY() {
+        return destinationY;
+    }
+
+    public void setDestinationY(float destinationY) {
+        this.destinationY = destinationY;
+    }
+
+    public float getDestinationX() {
+        return destinationX;
+    }
+
+    public void setDestinationX(float destinationX) {
+        this.destinationX = destinationX;
+    }
+
+    public Collab(FriendStats stats, String name, int id){
+        this.stats = stats;
         this.name = name;
+        this.id = id;
+        try {
+            setLevel(stats.getLevelById(id));
+        } catch (Exception e) {
+            System.out.println("Collab " + name + " could not load Level");
+            setLevel(1);
+        }
+        try {
+            setExperience(stats.getExpById(id));
+        } catch (Exception e) {
+            System.out.println("Collab " + name + " could not load EXP");
+            setExperience(0);
+        }
+        try {
+            setTime(stats.getTimeById(id));
+        } catch (Exception e) {
+            System.out.println("Collab " + name + " could not load Time");
+        }
+
+        stats.updateLevel(id, level);
+        stats.updateExp(id, experience);
+        stats.updateTime(id, time);
+
+
         String path = "/sprites/collabs/" + name;
         sprite = new JLabel(new ImageIcon(getClass().getResource(path + "/IdleL.gif")));
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -100,6 +183,11 @@ public class Collab extends JFrame {
 
     public void evaluateMs(){
 
+    }
+
+    @Override
+    public String toString(){
+        return "";
     }
 
 }
