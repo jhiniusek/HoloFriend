@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.sql.Time;
+import java.sql.Timestamp;
 
 public class Collab extends JFrame {
     private FriendStats stats;
@@ -16,10 +17,11 @@ public class Collab extends JFrame {
     private float destinationX;
     private float destinationY;
     private int id;
+    private int chatOption = 1;
     private String name;
     private int level;
     private int experience;
-    private Time time;
+    private long time;
     private States state = States.IDLE;
     private JLabel sprite;
     private JLabel shadow = new JLabel(new ImageIcon(getClass().getResource("/sprites/Shadow.png")));
@@ -38,12 +40,21 @@ public class Collab extends JFrame {
         return id;
     }
 
+    public int getChatOption() {
+        return chatOption;
+    }
+
+    public void setChatOption(int chatOption) {
+        this.chatOption = chatOption;
+    }
+
     public int getLevel() {
         return level;
     }
 
     public void setLevel(int level) {
         this.level = level;
+        stats.updateLevel(id, level);
     }
 
     public int getExperience() {
@@ -52,14 +63,16 @@ public class Collab extends JFrame {
 
     public void setExperience(int experience) {
         this.experience = experience;
+        stats.updateExp(id, experience);
     }
 
-    public Time getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(Time time) {
+    public void setTime(long time) {
         this.time = time;
+        stats.updateTime(id, time);
     }
 
     public States getCollabState() {

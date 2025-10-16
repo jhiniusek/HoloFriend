@@ -1,6 +1,7 @@
 package holo;
 
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class Save {
@@ -28,12 +29,12 @@ public class Save {
     MyLocale locale;
     ArrayList<Integer> listOfLevel;
     ArrayList<Integer> listOfExp;
-    ArrayList<Time> listOfTime;
+    ArrayList<Long> listOfTime;
 
     public Save(int hunger, int tiredness, int currency, int subscribers, boolean goodRod, boolean superRod, boolean bed, int bedX,
                 int bedY, boolean wardrobe, int wardrobeX, int wardrobeY, boolean radio, int radioX, int radioY,
                 boolean chessTypeBeat, boolean pc, int pcX, int pcY, boolean kurokami, int skin, MyLocale locale, ArrayList<Integer> listOfLevel,
-                ArrayList<Integer> listOfExp, ArrayList<Time> listOfTime) {
+                ArrayList<Integer> listOfExp, ArrayList<Long> listOfTime) {
         this.hunger = hunger;
         this.tiredness = tiredness;
         this.currency = currency;

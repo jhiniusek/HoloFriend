@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
@@ -80,7 +81,7 @@ public class FriendStats {
     //COLLABS
     public ArrayList<Integer> listOfLevels = new ArrayList<>();
     public ArrayList<Integer> listOfExp = new ArrayList<>();
-    public ArrayList<Time> listOfTime = new ArrayList<>();
+    public ArrayList<Long> listOfTime = new ArrayList<Long>();
 
     public FriendStats() throws InterruptedException {
         getScreens();
@@ -462,11 +463,11 @@ public class FriendStats {
         this.listOfExp = listOfExp;
     }
 
-    public ArrayList<Time> getListOfTime() {
+    public ArrayList<Long> getListOfTime() {
         return listOfTime;
     }
 
-    public void setListOfTime(ArrayList<Time> listOfTime) {
+    public void setListOfTime(ArrayList<Long> listOfTime) {
         this.listOfTime = listOfTime;
     }
 
@@ -478,7 +479,7 @@ public class FriendStats {
         listOfExp.set(id, exp);
     }
 
-    public void updateTime(int id, Time time){
+    public void updateTime(int id, long time){
         listOfTime.set(id, time);
     }
 
@@ -490,7 +491,7 @@ public class FriendStats {
         return listOfExp.get(id);
     }
 
-    public Time getTimeById(int id){
+    public long getTimeById(int id){
         return listOfTime.get(id);
     }
 

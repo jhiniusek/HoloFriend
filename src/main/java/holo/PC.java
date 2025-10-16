@@ -5,6 +5,8 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -17,6 +19,7 @@ public class PC extends JFrame {
     JPanel discordPanel;
     ImageIcon desktopSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/PC UI.png"));
     ImageIcon youtubeSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/StreamOffline.png"));
+    ImageIcon discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat1.png"));
     Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/Micro5-Regular.ttf"));
     JLabel viewerCount = new JLabel();
     JLabel subscriberCount = new JLabel();
@@ -24,14 +27,14 @@ public class PC extends JFrame {
     public int subscribers = 0;
     public int viewers = 0;
     private ArrayList<Collab> listOfCollabs;
-    private String activeName;
+    private String activeName = "mio";
 
     public PC(FriendStats stats, ArrayList<Collab> listOfCollabs) throws IOException, FontFormatException {
         subscribers = stats.getSubscribers();
         this.listOfCollabs = listOfCollabs;
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setType(Window.Type.UTILITY);
+        setType(Type.UTILITY);
         setSize(85,79);
         setLayout(null);
         setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
@@ -187,7 +190,6 @@ public class PC extends JFrame {
         viewerCount.setFont(font.deriveFont(20f));
         viewerCount.setHorizontalAlignment(SwingConstants.LEFT);
         viewerCount.setBounds(62,138,80,11);
-        youtubePanel.add(viewerCount);
 
         JButton streamButton = new JButton();
         streamButton.setContentAreaFilled(false);
@@ -209,8 +211,6 @@ public class PC extends JFrame {
         // EKRAN DISCORD
         // =========================
         discordPanel = new JPanel(null) {
-            private final Image background =
-                    new ImageIcon(getClass().getResource("/sprites/Desktop/Discord.png")).getImage();
 
             {
                 setDoubleBuffered(true);
@@ -223,7 +223,7 @@ public class PC extends JFrame {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-                g2.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+                g2.drawImage(discordSprite.getImage(), 0, 0, getWidth(), getHeight(), this);
                 g2.dispose();
             }
         };
@@ -248,7 +248,7 @@ public class PC extends JFrame {
 
             btn.addActionListener(e -> {
                 activeName = listOfCollabs.get(finalI).getName();
-                updateDiscord();
+                updateDiscord(listOfCollabs.get(finalI));
             });
             iconsPanel.add(btn);
             if (i < 12) iconsPanel.add(Box.createVerticalStrut(10));
@@ -289,6 +289,14 @@ public class PC extends JFrame {
         closeBtn3.setBounds(308, 5, 7, 7);
         discordPanel.add(closeBtn3);
 
+        JButton chatBtn = new JButton();
+        chatBtn.setContentAreaFilled(false);
+        chatBtn.setBorderPainted(false);
+        chatBtn.setFocusPainted(false);
+        chatBtn.setOpaque(false);
+        chatBtn.setBounds(103, 128, 124, 12);
+        discordPanel.add(chatBtn);
+
         discordPanel.add(scrollPane);
 
         // =========================
@@ -312,6 +320,31 @@ public class PC extends JFrame {
             updateStreamStats(stats);
         });
         openDiscord.addActionListener(e -> cl.show(frame.getContentPane(), "discord"));
+        chatBtn.addActionListener(e -> {
+            Collab collab = null;
+            for (int i = 0; i < listOfCollabs.size(); i++) {
+                if(activeName == listOfCollabs.get(i).getName()){
+                    collab = listOfCollabs.get(i);
+                }
+            }
+            switch (collab.getChatOption()){
+                case 1:
+                    collab.setChatOption(2);
+                    collab.setVisible(true);
+                    collab.setTime(System.currentTimeMillis());
+                    updateDiscord(collab);
+                    break;
+                case 2:
+                    collab.setChatOption(4);
+                    collab.setVisible(false);
+                    updateDiscord(collab);
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+            }
+        });
         backBtn1.addActionListener(e -> cl.show(frame.getContentPane(), "desktop"));
         backBtn2.addActionListener(e -> cl.show(frame.getContentPane(), "desktop"));
         closeBtn1.addActionListener(e -> frame.setVisible(false));
@@ -333,10 +366,12 @@ public class PC extends JFrame {
             int randomNum = ThreadLocalRandom.current().nextInt(60, 70 + 1);
             viewers = (subscribers * randomNum) / 100 + 1;
             stream = true;
+            youtubePanel.add(viewerCount);
             youtubePanel.repaint();
         } else {
             youtubeSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/StreamOffline.png"));
             stream = false;
+            youtubePanel.remove(viewerCount);
             youtubePanel.repaint();
         }
     }
@@ -347,8 +382,21 @@ public class PC extends JFrame {
         viewerCount.setText(String.valueOf(viewers));
     }
 
-    public void updateDiscord(){
-
+    public void updateDiscord(Collab collab){
+        switch (collab.getChatOption()){
+            case 1:
+                discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat1.png"));
+                break;
+            case 2:
+                discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat2.png"));
+                break;
+            case 3:
+                discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat3.png"));
+                break;
+            case 4:
+                discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat4.png"));
+                break;
+        }
         discordPanel.repaint();
     }
 }
