@@ -331,6 +331,7 @@ public class PC extends JFrame {
                 case 1:
                     collab.setChatOption(2);
                     collab.setVisible(true);
+                    collab.start();
                     collab.setTime(System.currentTimeMillis());
                     updateDiscord(collab);
                     break;

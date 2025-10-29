@@ -43,7 +43,7 @@ public class Main {
         Lake lake = new Lake(window.getLocation().x - 270,window.getLocation().y + 100);
         stats.setLake(lake);
 
-        Thread clock = new Thread(new Clock(stats, friend, window, foodList, lake, bed, pc));
+        Thread clock = new Thread(new Clock(stats, friend, window, foodList, lake, bed, pc, listOfCollabs));
         clock.start();
     }
 }

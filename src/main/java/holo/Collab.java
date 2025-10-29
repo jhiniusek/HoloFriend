@@ -1,5 +1,11 @@
 package holo;
 
+import com.sun.jna.Native;
+import com.sun.jna.Pointer;
+import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinDef;
+import com.sun.jna.platform.win32.WinUser;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -7,6 +13,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
 public class Collab extends JFrame {
     private FriendStats stats;
@@ -16,6 +26,21 @@ public class Collab extends JFrame {
     private float msY;
     private float destinationX;
     private float destinationY;
+    private boolean right = true;
+    private boolean isActive = false;
+
+    private String chaseObject = "";
+    private GameWindow gameWindow;
+    private WinDef.HWND window;
+    private WinDef.RECT rect = new WinDef.RECT();
+    WinUser.WINDOWPLACEMENT placement = new WinUser.WINDOWPLACEMENT();
+    private int windowSide;
+    private int windowCatchPoint;
+    private boolean pullUp = false;
+    private float topFix;
+    private float botFix;
+    private Point mousePoint = new Point (0,0);
+
     private int id;
     private int chatOption = 1;
     private String name;
@@ -23,7 +48,11 @@ public class Collab extends JFrame {
     private int experience;
     private long time;
     private States state = States.IDLE;
+    private int idleTimer;
+
     private JLabel sprite;
+    private String newSprite;
+    private String spritePath;
     private JLabel shadow = new JLabel(new ImageIcon(getClass().getResource("/sprites/Shadow.png")));
 
     Point initialClick;
@@ -38,6 +67,15 @@ public class Collab extends JFrame {
 
     public int getId() {
         return id;
+    }
+
+    @Override
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     public int getChatOption() {
@@ -127,7 +165,7 @@ public class Collab extends JFrame {
 
 
         String path = "/sprites/collabs/" + name;
-        sprite = new JLabel(new ImageIcon(getClass().getResource(path + "/IdleL.gif")));
+        sprite = new JLabel(new ImageIcon(getClass().getResource(path + "/IdleR.gif")));
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setType(Window.Type.UTILITY);
         setSize(60,129); //Different sizes for different names
@@ -135,7 +173,7 @@ public class Collab extends JFrame {
         setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
         shadow.setBounds(1,118,60,11);
         add(shadow);
-        sprite.setBounds(0,0,64,126);
+        sprite.setBounds(0,0,60,129);
         add(sprite);
         getContentPane().setComponentZOrder(sprite, 0);
         setUndecorated(true);
@@ -194,8 +232,511 @@ public class Collab extends JFrame {
         });
     }
 
-    public void evaluateMs(){
+    public void start(){
+        isActive = true;
+        state = States.WALK;
+        positionX = -100;
+        positionY = stats.getRandomY();
+        setLocation((int)positionX, (int)positionY);
+        destinationX = 100;
+        destinationY = positionY;
+        evaluateMs();
+        idleTimer = 60;
+    }
 
+    public void end(){
+        destinationX = -100;
+        destinationY = stats.getRandomY();
+        evaluateMs();
+    }
+
+    public void updateSprite(){
+        setLocation((int)positionX, (int)positionY);
+
+        if(state == States.IDLE){
+            setSize(60,129);
+            sprite.setBounds(0,0,60,129);
+            shadow.setBounds(1,118,60,11);
+            if(right){
+                newSprite = "/sprites/collabs/"+name+"/IdleR.gif";
+                if(!newSprite.equals(spritePath)){
+                    sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                    spritePath = newSprite;
+                }
+
+            } else {
+                newSprite = "/sprites/collabs/"+name+"/IdleL.gif";
+                if(!newSprite.equals(spritePath)){
+                    sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                    spritePath = newSprite;
+                }
+            }
+
+        } else if (state == States.WALK) {
+            setSize(60,129);
+            sprite.setBounds(0,0,60,129);
+            shadow.setBounds(1,118,60,11);
+            if(right){
+                newSprite = "/sprites/collabs/"+name+"/WalkR.gif";
+                if(!newSprite.equals(spritePath)){
+                    sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                    spritePath = newSprite;
+                }
+            } else {
+                newSprite = "/sprites/collabs/"+name+"/WalkL.gif";
+                if(!newSprite.equals(spritePath)){
+                    sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                    spritePath = newSprite;
+                }
+            }
+
+        } //else if (state == States.CHASE) {
+//            friend.setSize(175,128);
+//            friend.sprite.setBounds(0,0,175,128);
+//            stats.evaluateMs();
+//            if(stats.isRight()){
+//                friend.shadow.setBounds(0,116,60,11);
+//                newSprite = "/sprites/"+stats.getSkin()+"ChaseR.gif";
+//                if(!newSprite.equals(spritePath)){
+//                    friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+//                    spritePath = newSprite;
+//                }
+//            } else {
+//                friend.shadow.setBounds(80,116,60,11);
+//                newSprite = "/sprites/"+stats.getSkin()+"ChaseL.gif";
+//                if(!newSprite.equals(spritePath)){
+//                    friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+//                    spritePath = newSprite;
+//                }
+//            }
+//
+//        }else if (state == States.HOLD) {
+//            friend.setSize(64,128);
+//            friend.sprite.setBounds(0,0,64,128);
+//            friend.shadow.setBounds(0,116,60,11);
+//            if(stats.isRight()){
+//                newSprite = "/sprites/"+stats.getSkin()+"Hold1R.png";
+//                if(!newSprite.equals(spritePath)){
+//                    friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+//                    spritePath = newSprite;
+//                }
+//            } else {
+//                newSprite = "/sprites/"+stats.getSkin()+"Hold1L.png";
+//                if(!newSprite.equals(spritePath)){
+//                    friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+//                    spritePath = newSprite;
+//                }
+//            }
+//        } else if (state == States.PULL) {
+//            friend.setSize(64,128);
+//            friend.sprite.setBounds(0,0,64,128);
+//            friend.shadow.setBounds(0,116,60,11);
+//            if(stats.isRight()){
+//                newSprite = "/sprites/"+stats.getSkin()+"PullR.gif";
+//                if(!newSprite.equals(spritePath)){
+//                    friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+//                    spritePath = newSprite;
+//                }
+//            } else {
+//                newSprite = "/sprites/" + stats.getSkin() + "PullL.gif";
+//                if (!newSprite.equals(spritePath)) {
+//                    friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+//                    spritePath = newSprite;
+//                }
+//            }
+//        } else if (state == States.PUSH) {
+//            friend.setSize(64,128);
+//            friend.sprite.setBounds(3,0,64,128);
+//            if(stats.isRight()){
+//                friend.shadow.setBounds(0,116,60,11);
+//                newSprite = "/sprites/"+stats.getSkin()+"PushR.gif";
+//                if(!newSprite.equals(spritePath)){
+//                    friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+//                    spritePath = newSprite;
+//                }
+//            } else {
+//                friend.shadow.setBounds(5,116,60,11);
+//                newSprite = "/sprites/" + stats.getSkin() + "PushL.gif";
+//                if (!newSprite.equals(spritePath)) {
+//                    friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+//                    spritePath = newSprite;
+//                }
+//            }
+//        }
+    }
+
+    public void doStep(){
+        updateDestination();
+        if((positionX != destinationX || positionY != destinationY) && (state==States.WALK || state==States.CHASE || state==States.PULL || state==States.PUSH)) {
+
+            if (positionX > destinationX){
+
+                if ((positionX - destinationX) < msX) {
+                    positionX = destinationX;
+                } else {
+                    positionX = (positionX - msX);
+                }
+
+            } else if (positionX < destinationX){
+
+                if ((destinationX - positionX) < msX) {
+                    positionX = destinationX;
+                } else {
+                    positionX = (positionX + msX);
+                }
+
+            }
+
+            if (positionY > destinationY){
+
+                if ((positionY - destinationY) < msY) {
+                    positionY = destinationY;
+                } else {
+                    positionY = (positionY - msY);
+                }
+
+            } else if (positionY < destinationY){
+
+                if ((destinationY - positionY) < msY) {
+                    positionY = destinationY;
+                } else {
+                    positionY = (positionY + msY);
+                }
+
+            }
+        }
+
+        if(positionX == destinationX && positionY == destinationY && (state==States.PULL || state==States.PUSH)){
+            window = null;
+            rect.clear();
+            state = States.IDLE;
+            //window.setAlwaysOnTop(false);  <- ???  has to be gamewindow I think xdd
+        }
+
+        if(positionX == destinationX && positionY == destinationY && (state==States.WALK || state==States.CHASE)){
+            if (chaseObject == "Cursor") {
+                state=States.PULL;
+                int pullDistanceX = (int)(Math.random() * 200 + 200);
+                int pullDistanceY = (int)(Math.random() * 50 + 50);
+                if(right){
+                    positionX = (positionX + 20);
+                    destinationX = (destinationX - pullDistanceX);
+                } else {
+                    positionX = (positionX + 80);
+                    destinationX = (destinationX + pullDistanceX);
+                }
+                if(pullDistanceY % 2 == 0){
+                    destinationY = (destinationY + pullDistanceY);
+                } else {
+                    destinationY = (destinationY - pullDistanceY);
+                }
+            } else if (chaseObject == "Window" || chaseObject == "GameWindow") {
+                Random rand = new Random();
+                int PushOrPull = rand.nextInt(2);
+                int distanceX = (int)(Math.random() * 200 + 200);
+                int distanceY = (int)(Math.random() * 50 + 50);
+                topFix = rect.top;
+                botFix = rect.bottom;
+                if(windowSide == 0){
+                    switch (PushOrPull){
+                        case 0:
+                            state = States.PULL;
+                            destinationX = (destinationX - distanceX);
+                            break;
+                        case 1:
+                            state = States.PUSH;
+                            destinationX = (destinationX + distanceX);
+                            break;
+                    }
+                } else {
+                    switch (PushOrPull){
+                        case 0:
+                            state = States.PULL;
+                            destinationX = (destinationX + distanceX);
+                            break;
+                        case 1:
+                            state = States.PUSH;
+                            destinationX = (destinationX - distanceX);
+                            break;
+                    }
+                }
+                if(distanceY % 2 == 0){
+                    destinationY = (destinationY + distanceY);
+                    pullUp = false;
+                } else {
+                    destinationY = (destinationY - distanceY);
+                    pullUp = true;
+                }
+                evaluateMs();
+                User32.INSTANCE.ShowWindow(window, WinUser.SW_RESTORE);
+                User32.INSTANCE.BringWindowToTop(window);
+                User32.INSTANCE.SetForegroundWindow(window);
+
+            } else {
+                state = States.IDLE;
+            }
+        }
+
+        if(idleTimer != 0 && state == States.IDLE){
+            idleTimer--;
+        }
+
+        if (positionX == destinationX && positionY == destinationY && idleTimer == 0) {
+            idleTimer = (int)(Math.random() * 80 + 64);
+            chooseDestination();
+            state = States.WALK;
+        }
+
+        if (state == States.IDLE && idleTimer == 0 && (positionX != destinationX || positionY != destinationY)){
+            evaluateMs();
+            state = States.WALK;
+        }
+
+        // PULL CURSORR
+
+        if(state == States.PULL && chaseObject == "Cursor"){
+            if(right){
+                mousePoint.x = (int) (positionX + 6);
+                mousePoint.y = (int) (positionY + 43);
+            } else {
+                mousePoint.x = (int) (positionX + 53);
+                mousePoint.y = (int) (positionY + 43);
+            }
+            moveMouse(mousePoint);
+        }
+
+    }
+
+    public void chooseDestination(){
+        int cursorProbability = 1000;
+        int windowProbability = 10 + cursorProbability;
+        int walkProbability = 50 + windowProbability;
+
+        int target = (int)(Math.random() * walkProbability);
+        System.out.println("TEST RANDOM DESTINY: " + target + "  Cursor: " + cursorProbability + "  Window: " + windowProbability + "  Walk: " + walkProbability);
+        if(target > windowProbability){
+            System.out.println("WALK RANDOMLY");
+            chaseObject = "Random";
+        } else if (target > cursorProbability) {
+            System.out.println("MOVE WINDOW");
+            chaseObject = "Window";
+            window = chooseRandomWindow();
+        } else {
+            System.out.println("CHASE CURSOR");
+            chaseObject = "Cursor";
+        }
+
+        Point point = stats.getRandomPoint();
+        destinationX = point.x;
+        destinationY = point.y;
+        evaluateMs();
+    }
+
+    public void updateDestination(){
+        switch(chaseObject) {
+            case "Random":
+                evaluateMs();
+                break;
+            case "Cursor":
+                if (state == States.CHASE) {
+                    destinationX = stats.getCursorX() - 84;
+                    destinationY = stats.getCursorY() - 38;
+                }
+                evaluateMs();
+                break;
+            case "Window":
+                if(window == null){
+                    chaseObject = "GameWindow";
+                    break;
+                }
+                if (state == States.WALK) {
+                    updateWindowPosition();
+                    if(windowSide == 0){
+                        destinationX = rect.left - 53;
+                        destinationY = rect.top + windowCatchPoint - 53;
+                    } else {
+                        destinationX = rect.right - 15;
+                        destinationY = rect.top + windowCatchPoint - 53;
+                    }
+                }
+                evaluateMs();
+                break;
+            case "GameWindow":
+                if (state == States.WALK) {
+                    updateWindowPosition();
+                    if(windowSide == 0){
+                        destinationX = gameWindow.getX() - 53;
+                        destinationY = gameWindow.getY() + windowCatchPoint - 53;
+                    } else {
+                        destinationX = gameWindow.getX() + 300 - 15;
+                        destinationY = gameWindow.getY() + windowCatchPoint - 53;
+                    }
+                }
+                evaluateMs();
+                break;
+            default:
+                evaluateMs();
+                break;
+        }
+    }
+
+    private WinDef.HWND chooseRandomWindow(){
+        List<WinDef.HWND> windows = new ArrayList<>();
+        int WS_EX_TOOLWINDOW = 0x00000080;
+
+        User32.INSTANCE.EnumWindows(new WinUser.WNDENUMPROC() {
+            @Override
+            public boolean callback(WinDef.HWND hWnd, Pointer data) {
+                if (User32.INSTANCE.IsWindowVisible(hWnd) && User32.INSTANCE.IsWindowEnabled(hWnd)) {
+                    char[] buffer = new char[512];
+                    User32.INSTANCE.GetWindowText(hWnd, buffer, 512);
+                    String windowTitle = Native.toString(buffer);
+
+                    if (!windowTitle.isBlank() && User32.INSTANCE.IsWindowVisible(hWnd)) {
+                        WinDef.HWND root = User32.INSTANCE.GetAncestor(hWnd, WinUser.GA_ROOT);
+                        if (!hWnd.equals(root)) {
+                            return true;
+                        }
+
+                        char[] className = new char[512];
+                        User32.INSTANCE.GetClassName(hWnd, className, 512);
+                        String wndClass = Native.toString(className);
+
+                        if (wndClass.equals("ApplicationFrameWindow")) {
+                            WinDef.HWND child = User32.INSTANCE.FindWindowEx(hWnd, null, "Windows.UI.Core.CoreWindow", null);
+                            if (child == null || !User32.INSTANCE.IsWindowVisible(child)) {
+                                return true;
+                            }
+                        }
+
+                        int style = User32.INSTANCE.GetWindowLong(hWnd, WinUser.GWL_STYLE);
+                        int exStyle = User32.INSTANCE.GetWindowLong(hWnd, WinUser.GWL_EXSTYLE);
+
+                        boolean hasTitleBar = (style & WinUser.WS_CAPTION) != 0;
+                        boolean hasSysMenu  = (style & WinUser.WS_SYSMENU) != 0;
+                        boolean maximized = (style & WinUser.WS_MAXIMIZE) != 0;
+                        boolean minimized = (style & WinUser.WS_MINIMIZE) != 0;
+                        boolean isToolWindow = (exStyle & WS_EX_TOOLWINDOW) != 0;
+
+                        if (hasTitleBar && hasSysMenu && !isToolWindow && !maximized && !minimized) {
+                            System.out.println("Found: " + windowTitle);
+                            windows.add(hWnd);
+                        }
+                    }
+                }
+                return true;
+            }
+        }, null);
+
+        WinDef.HWND randomWindow = null;
+        Random rand = new Random();
+
+        if (!windows.isEmpty()) {
+            randomWindow = windows.get(rand.nextInt(windows.size()));
+            User32.INSTANCE.GetWindowRect(randomWindow, rect);
+            if(rect.left == -32000){
+                User32.INSTANCE.ShowWindow(randomWindow, WinUser.SW_RESTORE);
+                User32.INSTANCE.GetWindowRect(randomWindow, rect);
+                User32.INSTANCE.ShowWindow(randomWindow, WinUser.SW_MINIMIZE);
+            }
+            int height = rect.bottom - rect.top;
+            windowSide = rand.nextInt(2); // 0 -> left   1 -> right
+            windowCatchPoint = rand.nextInt(height);
+        } else {
+            windowSide = rand.nextInt(2); // 0 -> left   1 -> right
+            windowCatchPoint = rand.nextInt(gameWindow.getHeight());
+        }
+        return randomWindow;
+    }
+
+    public void updateWindowPosition(){
+        if (chaseObject == "Window") {
+            if (!User32.INSTANCE.IsWindow(window)) {
+                state = States.WALK;
+                window = null;
+                rect.clear();
+            }
+
+            User32.INSTANCE.GetWindowPlacement(window, placement);
+
+            boolean minimized = (placement.showCmd == WinUser.SW_SHOWMINIMIZED);
+
+            if(!minimized){
+                User32.INSTANCE.GetWindowRect(window, rect);
+                int height = rect.bottom - rect.top;
+                if(windowCatchPoint > height){
+                    Random rand = new Random();
+                    windowCatchPoint = rand.nextInt(height);
+                }
+            }
+        } else if (chaseObject == "GameWindow") {
+            if(windowCatchPoint >  gameWindow.getHeight()){
+                Random rand = new Random();
+                windowCatchPoint = rand.nextInt(gameWindow.getHeight());
+            }
+            rect.left = gameWindow.getX();
+            rect.top = gameWindow.getY();
+        }
+    }
+
+    public void evaluateMs(){
+        if (state == States.WALK || state == States.PULL || state == States.PUSH) {
+            right = destinationX > positionX;
+        }
+
+        if(state == States.CHASE && right && destinationX < positionX){
+            right = false;
+            positionX = positionX - 60;
+        }
+
+        if(state == States.CHASE && !right && destinationX > positionX){
+            right = true;
+            positionX = positionX + 60;
+        }
+
+        float distanceX = Math.abs(destinationX - positionX);
+        float distanceY = Math.abs(destinationY - positionY);
+
+        if (distanceX > distanceY){
+            if (chaseObject == "Cursor" && (state == States.WALK || state == States.CHASE)) {
+                msX = 8;
+                state = States.CHASE;
+            } else if (state == States.PULL || state == States.PUSH){
+                msX = 2;
+            } else {
+                msX = 4;
+            }
+            float steps = distanceX / msX;
+            msY = distanceY / steps;
+        } else {
+            if (chaseObject == "Cursor" && (state == States.WALK || state == States.CHASE)) {
+                msY = 8;
+                state = States.CHASE;
+            } else  if (state == States.PULL || state == States.PUSH){
+                msY = 2;
+            } else {
+                msY = 4;
+            }
+            float steps = distanceY / msY;
+            msX = distanceX / steps;
+        }
+    }
+
+    public void moveMouse(Point p) {
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice[] gs = ge.getScreenDevices();
+        for (GraphicsDevice device: gs) {
+            GraphicsConfiguration[] configurations = device.getConfigurations();
+            for (GraphicsConfiguration config: configurations) {
+                try {
+                    Robot r = new Robot(device);
+                    r.mouseMove(p.x, p.y);
+                } catch (AWTException e) {
+                    e.printStackTrace();
+                }
+                return;
+            }
+        }
     }
 
     @Override

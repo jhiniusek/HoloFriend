@@ -2,6 +2,7 @@ package holo;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Screen {
     private int xMin;
@@ -30,6 +31,10 @@ public class Screen {
 
         System.out.println("NEW DESTINATION: " + point);
         return point;
+    }
+
+    int getRandomY(){
+        return ThreadLocalRandom.current().nextInt(yMin, yMax + 1);
     }
 
     public boolean checkIfVisible(Point point){

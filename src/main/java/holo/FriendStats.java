@@ -496,6 +496,14 @@ public class FriendStats {
     }
 
     // OTHERS
+    public int getRandomY(){
+        return screens.get(0).getRandomY();
+    }
+
+    public Point getRandomPoint(){
+        Screen randomScreen = screens.get((int)(Math.random() * screens.size()));
+        return randomScreen.getRandomPoint();
+    }
 
     public void setFoodList(ArrayList<Food> foodList) {
         this.foodList = foodList;
@@ -564,8 +572,7 @@ public class FriendStats {
             chaseObject = "Food";
         }
 
-        Screen randomScreen = screens.get((int)(Math.random() * screens.size()));
-        Point point = randomScreen.getRandomPoint();
+        Point point = getRandomPoint();
         destinationX = point.x;
         destinationY = point.y;
         evaluateMs();

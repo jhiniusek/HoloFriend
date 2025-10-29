@@ -17,6 +17,7 @@ public class Clock implements Runnable{
     private Friend friend;
     private GameWindow window;
     private ArrayList<Food> foodList;
+    private ArrayList<Collab> listOfCollabs;
     private Lake lake;
     private Bed bed;
     private PC pc;
@@ -51,7 +52,7 @@ public class Clock implements Runnable{
     //STREAM VARIABLES
     private int streamTimer = 0;
 
-    public Clock(FriendStats stats, Friend friend, GameWindow window, ArrayList<Food> foodList, Lake lake, Bed bed, PC pc) {
+    public Clock(FriendStats stats, Friend friend, GameWindow window, ArrayList<Food> foodList, Lake lake, Bed bed, PC pc, ArrayList<Collab> listOfCollabs) {
         this.stats = stats;
         this.friend = friend;
         this.window = window;
@@ -59,6 +60,7 @@ public class Clock implements Runnable{
         this.lake = lake;
         this.bed = bed;
         this.pc = pc;
+        this.listOfCollabs = listOfCollabs;
     }
 
     @Override
@@ -623,7 +625,14 @@ public class Clock implements Runnable{
                 }
             }
 
-
+            // COLLABS
+            for (int i = 0; i < listOfCollabs.size(); i++) {
+                Collab collab = listOfCollabs.get(i);
+                if(collab.isActive()){
+                    collab.updateSprite();
+                    collab.doStep();
+                }
+            }
 
 
             // CLOCK
