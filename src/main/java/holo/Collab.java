@@ -44,9 +44,9 @@ public class Collab extends JFrame {
     private int id;
     private int chatOption = 1;
     private String name;
-    private int level;
+    private int level = 1;
     private int experience;
-    private long time;
+    private long time = 0;
     private States state = States.IDLE;
     private int idleTimer;
 
@@ -108,6 +108,56 @@ public class Collab extends JFrame {
         return time;
     }
 
+    public boolean checkCooldown(){
+        long now = System.currentTimeMillis();
+                       //10 min
+        if(now - time > 600000){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean checkTimeUp(){
+        long now = System.currentTimeMillis();
+        //10 min
+        switch(level){
+            case 5:
+                return true;
+            case 4:             //25 min
+                if(now - time > 1500000){
+                    return true;
+                } else {
+                    return false;
+                }
+            case 3:             //10 min
+                if(now - time > 600000){
+                    return true;
+                } else {
+                    return false;
+                }
+            case 2:             //5 min
+                if(now - time > 300000){
+                    return true;
+                } else {
+                    return false;
+                }
+            case 1:             //2 min
+                if(now - time > 120000){
+                    return true;
+                } else {
+                    return false;
+                }
+        }
+
+
+        if(now - time > 600000){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void setTime(long time) {
         this.time = time;
         stats.updateTime(id, time);
@@ -162,7 +212,6 @@ public class Collab extends JFrame {
         stats.updateLevel(id, level);
         stats.updateExp(id, experience);
         stats.updateTime(id, time);
-
 
         String path = "/sprites/collabs/" + name;
         sprite = new JLabel(new ImageIcon(getClass().getResource(path + "/IdleR.gif")));
@@ -290,79 +339,79 @@ public class Collab extends JFrame {
                 }
             }
 
-        } //else if (state == States.CHASE) {
-//            friend.setSize(175,128);
-//            friend.sprite.setBounds(0,0,175,128);
-//            stats.evaluateMs();
-//            if(stats.isRight()){
-//                friend.shadow.setBounds(0,116,60,11);
-//                newSprite = "/sprites/"+stats.getSkin()+"ChaseR.gif";
-//                if(!newSprite.equals(spritePath)){
-//                    friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
-//                    spritePath = newSprite;
-//                }
-//            } else {
-//                friend.shadow.setBounds(80,116,60,11);
-//                newSprite = "/sprites/"+stats.getSkin()+"ChaseL.gif";
-//                if(!newSprite.equals(spritePath)){
-//                    friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
-//                    spritePath = newSprite;
-//                }
-//            }
-//
-//        }else if (state == States.HOLD) {
-//            friend.setSize(64,128);
-//            friend.sprite.setBounds(0,0,64,128);
-//            friend.shadow.setBounds(0,116,60,11);
-//            if(stats.isRight()){
-//                newSprite = "/sprites/"+stats.getSkin()+"Hold1R.png";
-//                if(!newSprite.equals(spritePath)){
-//                    friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
-//                    spritePath = newSprite;
-//                }
-//            } else {
-//                newSprite = "/sprites/"+stats.getSkin()+"Hold1L.png";
-//                if(!newSprite.equals(spritePath)){
-//                    friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
-//                    spritePath = newSprite;
-//                }
-//            }
-//        } else if (state == States.PULL) {
-//            friend.setSize(64,128);
-//            friend.sprite.setBounds(0,0,64,128);
-//            friend.shadow.setBounds(0,116,60,11);
-//            if(stats.isRight()){
-//                newSprite = "/sprites/"+stats.getSkin()+"PullR.gif";
-//                if(!newSprite.equals(spritePath)){
-//                    friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
-//                    spritePath = newSprite;
-//                }
-//            } else {
-//                newSprite = "/sprites/" + stats.getSkin() + "PullL.gif";
-//                if (!newSprite.equals(spritePath)) {
-//                    friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
-//                    spritePath = newSprite;
-//                }
-//            }
-//        } else if (state == States.PUSH) {
-//            friend.setSize(64,128);
-//            friend.sprite.setBounds(3,0,64,128);
-//            if(stats.isRight()){
-//                friend.shadow.setBounds(0,116,60,11);
-//                newSprite = "/sprites/"+stats.getSkin()+"PushR.gif";
-//                if(!newSprite.equals(spritePath)){
-//                    friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
-//                    spritePath = newSprite;
-//                }
-//            } else {
-//                friend.shadow.setBounds(5,116,60,11);
-//                newSprite = "/sprites/" + stats.getSkin() + "PushL.gif";
-//                if (!newSprite.equals(spritePath)) {
-//                    friend.sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
-//                    spritePath = newSprite;
-//                }
-//            }
-//        }
+        } else if (state == States.CHASE) {
+            setSize(163,127);
+            sprite.setBounds(0,0,163,127);
+            evaluateMs();
+            if(right){
+                shadow.setBounds(6,117,60,11);
+                newSprite = "/sprites/collabs/"+name+"/ChaseR.gif";
+                if(!newSprite.equals(spritePath)){
+                    sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                    spritePath = newSprite;
+                }
+            } else {
+                shadow.setBounds(100,117,60,11);
+                newSprite = "/sprites/collabs/"+name+"/ChaseL.gif";
+                if(!newSprite.equals(spritePath)){
+                    sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                    spritePath = newSprite;
+                }
+            }
+
+        }else if (state == States.HOLD) {
+            setSize(60,129);
+            sprite.setBounds(0,0,60,129);
+            shadow.setBounds(0,119,60,11);
+            if(right){
+                newSprite = "/sprites/collabs/"+name+"/HoldR.png";
+                if(!newSprite.equals(spritePath)){
+                    sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                    spritePath = newSprite;
+                }
+            } else {
+                newSprite = "/sprites/collabs/"+name+"/HoldL.png";
+                if(!newSprite.equals(spritePath)){
+                    sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                    spritePath = newSprite;
+                }
+            }
+        } else if (state == States.PULL) {
+            setSize(60,129);
+            sprite.setBounds(0,0,60,129);
+            shadow.setBounds(0,119,60,11);
+            if(right){
+                newSprite = "/sprites/collabs/"+name+"/PullR.gif";
+                if(!newSprite.equals(spritePath)){
+                    sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                    spritePath = newSprite;
+                }
+            } else {
+                newSprite = "/sprites/collabs/"+name+"/PullL.gif";
+                if (!newSprite.equals(spritePath)) {
+                    sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                    spritePath = newSprite;
+                }
+            }
+        } else if (state == States.PUSH) {
+            setSize(72,129);
+            sprite.setBounds(0,0,72,129);
+            if(right){
+                shadow.setBounds(0,119,60,11);
+                newSprite = "/sprites/collabs/"+name+"/PushR.gif";
+                if(!newSprite.equals(spritePath)){
+                    sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                    spritePath = newSprite;
+                }
+            } else {
+                shadow.setBounds(14,119,60,11);
+                newSprite = "/sprites/collabs/"+name+"/PushL.gif";
+                if (!newSprite.equals(spritePath)) {
+                    sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                    spritePath = newSprite;
+                }
+            }
+        }
     }
 
     public void doStep(){
@@ -492,7 +541,7 @@ public class Collab extends JFrame {
             state = States.WALK;
         }
 
-        // PULL CURSORR
+        // PULL CURSOR
 
         if(state == States.PULL && chaseObject == "Cursor"){
             if(right){
@@ -508,7 +557,7 @@ public class Collab extends JFrame {
     }
 
     public void chooseDestination(){
-        int cursorProbability = 1000;
+        int cursorProbability = 10;
         int windowProbability = 10 + cursorProbability;
         int walkProbability = 50 + windowProbability;
 
@@ -539,8 +588,8 @@ public class Collab extends JFrame {
                 break;
             case "Cursor":
                 if (state == States.CHASE) {
-                    destinationX = stats.getCursorX() - 84;
-                    destinationY = stats.getCursorY() - 38;
+                    destinationX = stats.getCursorX() - 80;
+                    destinationY = stats.getCursorY() - 47;
                 }
                 evaluateMs();
                 break;

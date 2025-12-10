@@ -329,11 +329,16 @@ public class PC extends JFrame {
             }
             switch (collab.getChatOption()){
                 case 1:
-                    collab.setChatOption(2);
-                    collab.setVisible(true);
-                    collab.start();
-                    collab.setTime(System.currentTimeMillis());
-                    updateDiscord(collab);
+                    if(collab.checkCooldown()){
+                        collab.setChatOption(2);
+                        collab.setVisible(true);
+                        collab.start();
+                        collab.setTime(System.currentTimeMillis());
+                        updateDiscord(collab);
+                    } else {
+                        collab.setChatOption(3);
+                        updateDiscord(collab);
+                    }
                     break;
                 case 2:
                     collab.setChatOption(4);
@@ -397,6 +402,33 @@ public class PC extends JFrame {
             case 4:
                 discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat4.png"));
                 break;
+        }
+        discordPanel.repaint();
+    }
+
+    public void updateDiscord(){
+        Collab collab = null;
+        for (int i = 0; i < listOfCollabs.size(); i++) {
+            Collab checkingCollab = listOfCollabs.get(i);
+            if (checkingCollab.getName() == activeName) {
+                collab = checkingCollab;
+            }
+        }
+        if (collab != null) {
+            switch (collab.getChatOption()){
+                case 1:
+                    discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat1.png"));
+                    break;
+                case 2:
+                    discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat2.png"));
+                    break;
+                case 3:
+                    discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat3.png"));
+                    break;
+                case 4:
+                    discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat4.png"));
+                    break;
+            }
         }
         discordPanel.repaint();
     }

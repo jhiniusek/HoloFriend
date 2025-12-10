@@ -654,6 +654,17 @@ public class Clock implements Runnable{
                 } else {
                     hintRefresh++;
                 }
+
+                for (int i = 0; i < listOfCollabs.size(); i++) {
+                    Collab collab = listOfCollabs.get(i);
+                    if (!collab.isActive()) {
+                        if(collab.checkCooldown()){
+                            collab.setChatOption(1);
+                            pc.updateDiscord();
+                        }
+                    }
+                }
+
             }
 
             try {
