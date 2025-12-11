@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Radio extends JFrame {
     private Point initialClick;
     private FriendStats stats;
+    private ArrayList<Collab> listOfCollabs;
     JLabel lcd = new JLabel(new ImageIcon(getClass().getResource("/sprites/RadioLCD_NoDisk.gif")));
     private Clip clip;
     private ArrayList<String> trackList;
@@ -80,6 +81,12 @@ public class Radio extends JFrame {
                 if(stats.getState() == States.DANCE){
                     stats.setState(States.IDLE);
                 }
+                for (int i = 0; i < listOfCollabs.size(); i++) {
+                    Collab collab = listOfCollabs.get(i);
+                    if(collab.isActive() && collab.getCollabState() == States.DANCE){
+                        collab.setCollabState(States.IDLE);
+                    }
+                }
                 if(currentTrack == trackList.size() - 1){
                     currentTrack = 0;
                 } else {
@@ -108,6 +115,12 @@ public class Radio extends JFrame {
                 if(stats.getState() == States.DANCE){
                     stats.setState(States.IDLE);
                 }
+                for (int i = 0; i < listOfCollabs.size(); i++) {
+                    Collab collab = listOfCollabs.get(i);
+                    if(collab.isActive() && collab.getCollabState() == States.DANCE){
+                        collab.setCollabState(States.IDLE);
+                    }
+                }
             }
         });
         add(stop);
@@ -135,6 +148,12 @@ public class Radio extends JFrame {
                     clip.start();
                     if(stats.getState() != States.SLEEP || stats.getState() != States.WORK){
                         stats.setState(States.DANCE);
+                    }
+                    for (int i = 0; i < listOfCollabs.size(); i++) {
+                        Collab collab = listOfCollabs.get(i);
+                        if(collab.isActive()){
+                            collab.setCollabState(States.DANCE);
+                        }
                     }
                 } catch (UnsupportedAudioFileException | IOException | LineUnavailableException exception) {
                 }
@@ -168,6 +187,10 @@ public class Radio extends JFrame {
         setVisible(true);
         setVisible(stats.isRadioOwned());
         setLocation(stats.radioPositionX, stats.radioPositionY);
+    }
+
+    public void setListOfCollabs(ArrayList<Collab> listOfCollabs){
+        this.listOfCollabs = listOfCollabs;
     }
 
     public String getCurrentTrack(){

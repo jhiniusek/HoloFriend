@@ -31,13 +31,16 @@ public class Main {
         }
         PC pc = new PC(stats, listOfCollabs);
         stats.setPc(pc);
-
-
+        radio.setListOfCollabs(listOfCollabs);
 
         Shop shop = new Shop(stats, bed, radio, wardrobe, pc);
         GameWindow window = new  GameWindow(stats, foodList, shop);
         shop.setMainWindow(window);
         stats.setGameWindow(window);
+
+        for (int i = 0; i < listOfCollabs.size(); i++) {
+            listOfCollabs.get(i).setGameWindow(window);
+        }
 
         Friend friend = new Friend(stats);
         Lake lake = new Lake(window.getLocation().x - 270,window.getLocation().y + 100);

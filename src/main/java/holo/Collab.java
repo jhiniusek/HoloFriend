@@ -41,6 +41,9 @@ public class Collab extends JFrame {
     private float botFix;
     private Point mousePoint = new Point (0,0);
 
+    private int danceLenght = 0;
+    private int danceTimer = 0;
+
     private int id;
     private int chatOption = 1;
     private String name;
@@ -67,6 +70,10 @@ public class Collab extends JFrame {
 
     public int getId() {
         return id;
+    }
+
+    public void setGameWindow(GameWindow gameWindow){
+        this.gameWindow = gameWindow;
     }
 
     @Override
@@ -554,11 +561,98 @@ public class Collab extends JFrame {
             moveMouse(mousePoint);
         }
 
+        // MOVE WINDOW
+
+        if((state == States.PULL || state == States.PUSH) && chaseObject == "Window") {
+            if (!User32.INSTANCE.IsWindow(window)) {
+                state = States.WALK;
+                window = null;
+                rect.clear();
+            }
+
+            if(right){
+                rect.left += (int) msX;
+                rect.right += (int) msX;
+            } else {
+                rect.left -= (int) msX;
+                rect.right -= (int) msX;
+            }
+            if(pullUp){
+                topFix -= msY;
+                botFix -= msY;
+            } else {
+                if (rect.top != 0) {
+                    topFix += msY;
+                    botFix += msY;
+                }
+            }
+            rect.top = (int)topFix;
+            rect.bottom = (int)botFix;
+
+            User32.INSTANCE.SetWindowPos(window, null, rect.left, rect.top, (rect.right - rect.left), (rect.bottom - rect.top), 0);
+            User32.INSTANCE.ShowWindow(window, WinUser.SW_RESTORE);
+        }
+
+        if((state == States.PULL || state == States.PUSH) && chaseObject == "GameWindow"){
+            if(right){
+                rect.left += (int) msX;
+            } else {
+                rect.left -= (int) msX;
+            }
+            if(pullUp){
+                topFix -= msY;
+            } else {
+                if (rect.top != 0) {
+                    topFix += msY;
+                }
+            }
+            rect.top = (int)topFix;
+            gameWindow.setLocation(rect.left, rect.top);
+            gameWindow.setAlwaysOnTop(true);
+        }
+
+        //DANCING
+
+        if(state == States.DANCE){
+            String currentDance = stats.getCurrentTrack();
+            if(currentDance == "NoDisk"){
+                danceLenght = 140;
+
+                newSprite = "/sprites/collabs/"+name+"/IdleL.gif";
+                if(!newSprite.equals(spritePath)){
+                    sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                    spritePath = newSprite;
+                }
+
+                if(danceTimer == danceLenght){
+                    state = States.IDLE;
+                }
+                danceTimer++;
+            }
+            if(currentDance == "RatDance"){
+                setSize(60,126);
+                sprite.setBounds(0,0,60,126);
+                danceLenght = 2176;
+
+                newSprite = "/sprites/collabs/"+name+"/RatDance.gif";
+                if(!newSprite.equals(spritePath)){
+                    sprite.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource(newSprite))));
+                    spritePath = newSprite;
+                }
+
+                if(danceTimer == danceLenght){
+                    state = States.IDLE;
+                }
+                danceTimer++;
+            }
+        } else {
+            danceTimer = 0;
+        }
     }
 
     public void chooseDestination(){
         int cursorProbability = 10;
-        int windowProbability = 10 + cursorProbability;
+        int windowProbability = 1000 + cursorProbability;
         int walkProbability = 50 + windowProbability;
 
         int target = (int)(Math.random() * walkProbability);
