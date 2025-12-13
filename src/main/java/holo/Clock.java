@@ -664,7 +664,6 @@ public class Clock implements Runnable{
                         }
                     }
                 }
-
             }
 
             try {
@@ -674,6 +673,7 @@ public class Clock implements Runnable{
 
             }
             stats.updateDestination();
+            pc.updateAmazonTimer();
 
 
             // Death out of Hunger

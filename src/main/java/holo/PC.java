@@ -32,14 +32,8 @@ public class PC extends JFrame {
     private ArrayList<Collab> listOfCollabs;
     private String activeName = "mio";
     private ArrayList<JButton> amazonTiles = new ArrayList<>();
-    private JButton amazonTile1 = new JButton();
-    private JButton amazonTile2 = new JButton();
-    private JButton amazonTile3 = new JButton();
-    private JButton amazonTile4 = new JButton();
-    private JButton amazonTile5 = new JButton();
-    private JButton amazonTile6 = new JButton();
-    private JButton amazonTile7 = new JButton();
-    private JButton amazonTile8 = new JButton();
+    private JLabel amazonTimer = new JLabel();
+    private boolean shopRefreshed = false;
 
     public PC(FriendStats stats, ArrayList<Collab> listOfCollabs) throws IOException, FontFormatException {
         subscribers = stats.getSubscribers();
@@ -353,6 +347,12 @@ public class PC extends JFrame {
             amazonTiles.add(amazonTile);
         }
 
+        amazonTimer.setText("09:59");
+        amazonTimer.setFont(font.deriveFont(16f));
+        amazonTimer.setForeground(Color.WHITE);
+        amazonTimer.setBounds(184, 52, 30, 8);
+        amazonPanel.add(amazonTimer);
+
         JButton backBtn3 = new JButton();
         backBtn3.setContentAreaFilled(false);
         backBtn3.setBorderPainted(false);
@@ -518,12 +518,32 @@ public class PC extends JFrame {
         for (int i = 0; i < 8; i++) {
             int gift = rand.nextInt(allnames.length);
             String giftname = String.valueOf(allnames[gift]);
-            amazonTiles.get(i).setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
+            amazonTiles.get(i).setBorder(BorderFactory.createEmptyBorder(4, 0, 0, 0));
             amazonTiles.get(i).setIcon(new ImageIcon(getClass().getResource("/sprites/gifts/"+ giftname +".png")));
-            amazonTiles.get(i).setText("    " + rand.nextInt(100,201));
+            amazonTiles.get(i).setText("  " + rand.nextInt(100,201));
             amazonTiles.get(i).setHorizontalTextPosition(SwingConstants.CENTER);
             amazonTiles.get(i).setVerticalTextPosition(SwingConstants.BOTTOM);
             amazonTiles.get(i).setIconTextGap(1);
+            amazonTiles.get(i).setFont(font.deriveFont(17f));
+        }
+    }
+
+    public void updateAmazonTimer(){
+        long currentTime = System.currentTimeMillis();
+        long timeleft = 600 - (currentTime/1000) % 600;
+        int minutes = (int) (timeleft / 60);
+        int seconds = (int) (timeleft % 60);
+        String text = String.format("%02d:%02d", minutes, seconds);
+        amazonTimer.setText(text);
+        System.out.println("TIME UPDATED: " + text);
+
+        if(timeleft == 600 && !shopRefreshed) {
+            generateAmazonShop();
+            shopRefreshed = true;
+        }
+
+        if(timeleft < 600) {
+            shopRefreshed = false;
         }
     }
 }
