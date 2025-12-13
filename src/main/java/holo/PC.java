@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PC extends JFrame {
@@ -30,6 +31,15 @@ public class PC extends JFrame {
     public int viewers = 0;
     private ArrayList<Collab> listOfCollabs;
     private String activeName = "mio";
+    private ArrayList<JButton> amazonTiles = new ArrayList<>();
+    private JButton amazonTile1 = new JButton();
+    private JButton amazonTile2 = new JButton();
+    private JButton amazonTile3 = new JButton();
+    private JButton amazonTile4 = new JButton();
+    private JButton amazonTile5 = new JButton();
+    private JButton amazonTile6 = new JButton();
+    private JButton amazonTile7 = new JButton();
+    private JButton amazonTile8 = new JButton();
 
     public PC(FriendStats stats, ArrayList<Collab> listOfCollabs) throws IOException, FontFormatException {
         subscribers = stats.getSubscribers();
@@ -331,6 +341,18 @@ public class PC extends JFrame {
             }
         };
 
+
+        for (int i = 0; i < 8; i++) {
+            JButton amazonTile = new JButton();
+            amazonTile.setContentAreaFilled(false);
+            amazonTile.setBorderPainted(false);
+            amazonTile.setFocusPainted(false);
+            amazonTile.setOpaque(false);
+            amazonTile.setBounds(77 + (44 * (i % 4)), 68 + (43 * ((i % 8) / 4)), 34, 40);
+            amazonPanel.add(amazonTile);
+            amazonTiles.add(amazonTile);
+        }
+
         JButton backBtn3 = new JButton();
         backBtn3.setContentAreaFilled(false);
         backBtn3.setBorderPainted(false);
@@ -418,6 +440,8 @@ public class PC extends JFrame {
 
 
         setLocation(stats.pcPositionX, stats.pcPositionY);
+
+        generateAmazonShop();
     }
 
     public void stream(){
@@ -485,5 +509,21 @@ public class PC extends JFrame {
             }
         }
         discordPanel.repaint();
+    }
+
+    public void generateAmazonShop(){
+        Random rand = new Random();
+        GiftNames[] allnames = GiftNames.values();
+
+        for (int i = 0; i < 8; i++) {
+            int gift = rand.nextInt(allnames.length);
+            String giftname = String.valueOf(allnames[gift]);
+            amazonTiles.get(i).setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
+            amazonTiles.get(i).setIcon(new ImageIcon(getClass().getResource("/sprites/gifts/"+ giftname +".png")));
+            amazonTiles.get(i).setText("    " + rand.nextInt(100,201));
+            amazonTiles.get(i).setHorizontalTextPosition(SwingConstants.CENTER);
+            amazonTiles.get(i).setVerticalTextPosition(SwingConstants.BOTTOM);
+            amazonTiles.get(i).setIconTextGap(1);
+        }
     }
 }
