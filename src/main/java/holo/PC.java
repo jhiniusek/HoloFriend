@@ -17,9 +17,11 @@ public class PC extends JFrame {
     private JFrame frame = new JFrame();
     JPanel youtubePanel;
     JPanel discordPanel;
+    JPanel amazonPanel;
     ImageIcon desktopSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/PC UI.png"));
     ImageIcon youtubeSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/StreamOffline.png"));
     ImageIcon discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat1.png"));
+    ImageIcon amazonSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/Amazon.png"));
     Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/Micro5-Regular.ttf"));
     JLabel viewerCount = new JLabel();
     JLabel subscriberCount = new JLabel();
@@ -142,6 +144,14 @@ public class PC extends JFrame {
         openDiscord.setOpaque(false);
         openDiscord.setBounds(10, 51, 41, 41);
         desktopPanel.add(openDiscord);
+
+        JButton openAmazon = new JButton();
+        openAmazon.setContentAreaFilled(false);
+        openAmazon.setBorderPainted(false);
+        openAmazon.setFocusPainted(false);
+        openAmazon.setOpaque(false);
+        openAmazon.setBounds(10, 100, 41, 35);
+        desktopPanel.add(openAmazon);
 
         JButton closeBtn1 = new JButton();
         closeBtn1.setContentAreaFilled(false);
@@ -299,18 +309,58 @@ public class PC extends JFrame {
 
         discordPanel.add(scrollPane);
 
+
+        // ========================
+        // EKRAN AMAZON
+        // ========================
+        amazonPanel = new JPanel(null) {
+
+            {
+                setDoubleBuffered(true);
+            }
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+
+                g2.drawImage(amazonSprite.getImage(), 0, 0, getWidth(), getHeight(), this);
+                g2.dispose();
+            }
+        };
+
+        JButton backBtn3 = new JButton();
+        backBtn3.setContentAreaFilled(false);
+        backBtn3.setBorderPainted(false);
+        backBtn3.setFocusPainted(false);
+        backBtn3.setOpaque(false);
+        backBtn3.setBounds(277, 24, 7, 7);
+        amazonPanel.add(backBtn3);
+
+        JButton closeBtn4 = new JButton();
+        closeBtn4.setContentAreaFilled(false);
+        closeBtn4.setBorderPainted(false);
+        closeBtn4.setFocusPainted(false);
+        closeBtn4.setOpaque(false);
+        closeBtn4.setBounds(308, 5, 7, 7);
+        amazonPanel.add(closeBtn4);
+
         // =========================
         // PRZEŁĄCZANIE EKRANÓW
         // =========================
         frame.add(desktopPanel, "desktop");
         frame.add(youtubePanel, "youtube");
         frame.add(discordPanel, "discord");
+        frame.add(amazonPanel, "amazon");
 
         Container content = frame.getContentPane();
         content.setLayout(new CardLayout());
         content.add(desktopPanel, "desktop");
         content.add(youtubePanel, "youtube");
         content.add(discordPanel, "discord");
+        content.add(amazonPanel, "amazon");
 
         CardLayout cl = (CardLayout) content.getLayout();
 
@@ -351,11 +401,15 @@ public class PC extends JFrame {
                     break;
             }
         });
+        openAmazon.addActionListener(e -> cl.show(frame.getContentPane(), "amazon"));
+
         backBtn1.addActionListener(e -> cl.show(frame.getContentPane(), "desktop"));
         backBtn2.addActionListener(e -> cl.show(frame.getContentPane(), "desktop"));
+        backBtn3.addActionListener(e -> cl.show(frame.getContentPane(), "desktop"));
         closeBtn1.addActionListener(e -> frame.setVisible(false));
         closeBtn2.addActionListener(e -> frame.setVisible(false));
         closeBtn3.addActionListener(e -> frame.setVisible(false));
+        closeBtn4.addActionListener(e -> frame.setVisible(false));
 
 
         // 🔹 Zmniejsza liczbę niepotrzebnych repaintów (optymalizacja Swinga)
