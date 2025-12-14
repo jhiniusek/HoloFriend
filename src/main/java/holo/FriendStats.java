@@ -82,6 +82,9 @@ public class FriendStats {
     public ArrayList<Integer> listOfLevels = new ArrayList<>();
     public ArrayList<Integer> listOfExp = new ArrayList<>();
     public ArrayList<Long> listOfTime = new ArrayList<Long>();
+    public ArrayList<String> amazonGiftNames = new ArrayList<>();
+    public ArrayList<String> amazonGiftPrices = new ArrayList<>();
+    public ArrayList<Boolean> amazonGiftEnabled = new ArrayList<>();
 
     public FriendStats() throws InterruptedException {
         getScreens();
@@ -495,6 +498,30 @@ public class FriendStats {
         return listOfTime.get(id);
     }
 
+    public ArrayList<String> getAmazonGiftNames() {
+        return amazonGiftNames;
+    }
+
+    public void setAmazonGiftNames(ArrayList<String> amazonGiftNames) {
+        this.amazonGiftNames = amazonGiftNames;
+    }
+
+    public ArrayList<String> getAmazonGiftPrices() {
+        return amazonGiftPrices;
+    }
+
+    public void setAmazonGiftPrices(ArrayList<String> amazonGiftPrices) {
+        this.amazonGiftPrices = amazonGiftPrices;
+    }
+
+    public ArrayList<Boolean> getAmazonGiftEnabled() {
+        return amazonGiftEnabled;
+    }
+
+    public void setAmazonGiftEnabled(ArrayList<Boolean> amazonGiftEnabled) {
+        this.amazonGiftEnabled = amazonGiftEnabled;
+    }
+
     // OTHERS
     public int getRandomY(){
         return screens.get(0).getRandomY();
@@ -844,7 +871,7 @@ public class FriendStats {
     public void Save(){
         Save save = new Save(hunger,tiredness,currency,subscribers,goodRod,superRod,bedOwned,bedPositionX,bedPositionY,wardrobeOwned,
                 wardrobePositionX,wardrobePositionY,radioOwned,radioPositionX,radioPositionY,chessSlowed,pcOwned,
-                pcPositionX,pcPositionY,kurokami,skin,locale, listOfLevels, listOfExp, listOfTime);
+                pcPositionX,pcPositionY,kurokami,skin,locale, listOfLevels, listOfExp, listOfTime, amazonGiftNames, amazonGiftPrices, amazonGiftEnabled);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileOutputStream fos = new FileOutputStream("save.sav");
             GZIPOutputStream gos = new GZIPOutputStream(fos);

@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PC extends JFrame {
+    private FriendStats stats;
     private Point initialClickPC;
     private Point initialClickDesktop;
     JLabel sprite = new JLabel(new ImageIcon(getClass().getResource("/sprites/PC.png")));
@@ -36,6 +37,7 @@ public class PC extends JFrame {
     private boolean shopRefreshed = false;
 
     public PC(FriendStats stats, ArrayList<Collab> listOfCollabs) throws IOException, FontFormatException {
+        this.stats = stats;
         subscribers = stats.getSubscribers();
         this.listOfCollabs = listOfCollabs;
         setUndecorated(true);
@@ -441,7 +443,7 @@ public class PC extends JFrame {
 
         setLocation(stats.pcPositionX, stats.pcPositionY);
 
-        generateAmazonShop();
+        loadAmazonShop();
     }
 
     public void stream(){
@@ -511,20 +513,62 @@ public class PC extends JFrame {
         discordPanel.repaint();
     }
 
+    public void loadAmazonShop(){
+        if(stats.getAmazonGiftNames().size() == 8 && stats.getAmazonGiftPrices().size() == 8 && stats.getAmazonGiftEnabled().size() == 8){
+            for (int i = 0; i < 8; i++) {
+                amazonTiles.get(i).setBorder(BorderFactory.createEmptyBorder(4, 0, 0, 0));
+                amazonTiles.get(i).setIcon(new ImageIcon(getClass().getResource("/sprites/gifts/"+ stats.amazonGiftNames.get(i) +".png")));
+                amazonTiles.get(i).setText("  " + stats.amazonGiftPrices.get(i));
+                amazonTiles.get(i).setHorizontalTextPosition(SwingConstants.CENTER);
+                amazonTiles.get(i).setVerticalTextPosition(SwingConstants.BOTTOM);
+                amazonTiles.get(i).setIconTextGap(1);
+                amazonTiles.get(i).setFont(font.deriveFont(17f));
+                int finalI = i;
+                amazonTiles.get(i).addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        Gift test = new Gift(stats.amazonGiftNames.get(finalI));
+                        amazonTiles.get(finalI).setEnabled(false);
+                        stats.amazonGiftEnabled.set(finalI,false);
+                    }
+                });
+                amazonTiles.get(i).setEnabled(stats.getAmazonGiftEnabled().get(i));
+            }
+        } else {
+            generateAmazonShop();
+        }
+    }
+
     public void generateAmazonShop(){
         Random rand = new Random();
         GiftNames[] allnames = GiftNames.values();
+        stats.getAmazonGiftNames().clear();
+        stats.getAmazonGiftPrices().clear();
+        stats.getAmazonGiftEnabled().clear();
 
         for (int i = 0; i < 8; i++) {
             int gift = rand.nextInt(allnames.length);
-            String giftname = String.valueOf(allnames[gift]);
+            String giftName = String.valueOf(allnames[gift]);
             amazonTiles.get(i).setBorder(BorderFactory.createEmptyBorder(4, 0, 0, 0));
-            amazonTiles.get(i).setIcon(new ImageIcon(getClass().getResource("/sprites/gifts/"+ giftname +".png")));
-            amazonTiles.get(i).setText("  " + rand.nextInt(100,201));
+            amazonTiles.get(i).setIcon(new ImageIcon(getClass().getResource("/sprites/gifts/"+ giftName +".png")));
+            String price = String.valueOf(rand.nextInt(100,201));
+            amazonTiles.get(i).setText("  " + price);
             amazonTiles.get(i).setHorizontalTextPosition(SwingConstants.CENTER);
             amazonTiles.get(i).setVerticalTextPosition(SwingConstants.BOTTOM);
             amazonTiles.get(i).setIconTextGap(1);
             amazonTiles.get(i).setFont(font.deriveFont(17f));
+            int finalI = i;
+            amazonTiles.get(i).addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Gift test = new Gift(giftName);
+                    amazonTiles.get(finalI).setEnabled(false);
+                    stats.amazonGiftEnabled.set(finalI,false);
+                }
+            });
+            stats.getAmazonGiftNames().add(i, giftName);
+            stats.getAmazonGiftPrices().add(i, price);
+            stats.getAmazonGiftEnabled().add(i, true);
         }
     }
 
@@ -535,7 +579,6 @@ public class PC extends JFrame {
         int seconds = (int) (timeleft % 60);
         String text = String.format("%02d:%02d", minutes, seconds);
         amazonTimer.setText(text);
-        System.out.println("TIME UPDATED: " + text);
 
         if(timeleft == 600 && !shopRefreshed) {
             generateAmazonShop();
