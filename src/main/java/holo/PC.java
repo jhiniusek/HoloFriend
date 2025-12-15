@@ -5,8 +5,6 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -32,6 +30,7 @@ public class PC extends JFrame {
     public int viewers = 0;
     private ArrayList<Collab> listOfCollabs;
     private String activeName = "mio";
+    private JLabel chatterIcon = new JLabel();
     private ArrayList<JButton> amazonTiles = new ArrayList<>();
     private JLabel amazonTimer = new JLabel();
     private boolean shopRefreshed = false;
@@ -83,13 +82,16 @@ public class PC extends JFrame {
         setLocation(100,100);
 
 
+        // =========================
+        // DESKTOP
+        // =========================
 
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setUndecorated(true);
         frame.setSize(320, 180);
         frame.setLocationRelativeTo(null);
         frame.setLayout(new CardLayout());
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.setType(Window.Type.UTILITY);
 
         frame.getContentPane().addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -111,9 +113,6 @@ public class PC extends JFrame {
             }
         });
 
-        // =========================
-        // EKRAN PULPITU
-        // =========================
         JPanel desktopPanel = new JPanel() {
             private final Image background = desktopSprite.getImage();
 
@@ -168,7 +167,7 @@ public class PC extends JFrame {
         desktopPanel.add(closeBtn1);
 
         // ========================
-        // EKRAN YOUTUBE
+        // YOUTUBE
         // ========================
         youtubePanel = new JPanel(null) {
 
@@ -224,7 +223,7 @@ public class PC extends JFrame {
         youtubePanel.add(closeBtn2);
 
         // =========================
-        // EKRAN DISCORD
+        // DISCORD
         // =========================
         discordPanel = new JPanel(null) {
 
@@ -244,20 +243,28 @@ public class PC extends JFrame {
             }
         };
 
-        // 🔹 Panel z ikonami
         JPanel iconsPanel = new JPanel();
         iconsPanel.setLayout(new BoxLayout(iconsPanel, BoxLayout.Y_AXIS));
         iconsPanel.setOpaque(false);
         iconsPanel.setDoubleBuffered(true);
 
-        Dimension fixedSize = new Dimension(32, 32);
+        Dimension slotSize = new Dimension(40, 52);
+
         for (int i = 0; i < listOfCollabs.size(); i++) {
+
+            JLayeredPane slot = new JLayeredPane();
+            slot.setPreferredSize(slotSize);
+            slot.setMinimumSize(slotSize);
+            slot.setMaximumSize(slotSize);
+            slot.setOpaque(false);
+
+
             JButton btn = new JButton();
-            btn.setAlignmentX(Component.CENTER_ALIGNMENT);
-            btn.setPreferredSize(fixedSize);
-            btn.setMinimumSize(fixedSize);
-            btn.setMaximumSize(fixedSize);
+            btn.setBounds(4, 0, 32, 32);
             btn.setBorderPainted(false);
+            btn.setContentAreaFilled(false);
+            btn.setFocusPainted(false);
+
             int finalI = i;
             String path = listOfCollabs.get(finalI).getName() + "Icon";
             btn.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/" + path + ".png")));
@@ -266,11 +273,32 @@ public class PC extends JFrame {
                 activeName = listOfCollabs.get(finalI).getName();
                 updateDiscord(listOfCollabs.get(finalI));
             });
-            iconsPanel.add(btn);
-            if (i < 12) iconsPanel.add(Box.createVerticalStrut(10));
+
+
+            JProgressBar expBar = new JProgressBar(0, 100);
+            listOfCollabs.get(i).setExpBar(expBar);
+            expBar.setValue(listOfCollabs.get(i).getExperience());
+            expBar.setBounds(7, 33, 27, 4);
+            expBar.setBorderPainted(false);
+            expBar.setOpaque(false);
+            expBar.setForeground(new Color(80, 200, 255));
+
+
+            JLabel levelIcon = new JLabel();
+            listOfCollabs.get(i).setLevelIcon(levelIcon);
+            levelIcon.setBounds(1, 27, 32, 10);
+            levelIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/level" + listOfCollabs.get(i).getLevel() + ".png")));
+
+
+            slot.add(btn, Integer.valueOf(100));
+            slot.add(expBar, Integer.valueOf(50));
+            slot.add(levelIcon, Integer.valueOf(200));
+
+            iconsPanel.add(slot);
+            iconsPanel.add(Box.createVerticalStrut(-10));
         }
 
-        // 🔹 ScrollPane z przezroczystością
+
         JScrollPane scrollPane = new JScrollPane(iconsPanel);
         scrollPane.setBounds(38, 30, 42, 114);
         scrollPane.setBorder(null);
@@ -280,7 +308,7 @@ public class PC extends JFrame {
         scrollPane.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
         scrollPane.setDoubleBuffered(true);
 
-        // 🔹 Usunięcie widocznych pasków przewijania, ale zachowanie scrolla
+
         scrollPane.getVerticalScrollBar().setUI(new BasicScrollBarUI() {
             @Override protected void paintThumb(Graphics g, JComponent c, Rectangle r) {}
             @Override protected void paintTrack(Graphics g, JComponent c, Rectangle r) {}
@@ -288,7 +316,11 @@ public class PC extends JFrame {
         scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
         scrollPane.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
 
-        // 🔹 Przycisk powrotu do pulpitu
+        chatterIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/" + activeName + "ChatIcon.png")));
+        chatterIcon.setBounds(89,58,22,22);
+        chatterIcon.setVisible(false);
+        discordPanel.add(chatterIcon);
+
         JButton backBtn2 = new JButton();
         backBtn2.setContentAreaFilled(false);
         backBtn2.setBorderPainted(false);
@@ -317,7 +349,7 @@ public class PC extends JFrame {
 
 
         // ========================
-        // EKRAN AMAZON
+        // AMAZON
         // ========================
         amazonPanel = new JPanel(null) {
 
@@ -372,7 +404,7 @@ public class PC extends JFrame {
         amazonPanel.add(closeBtn4);
 
         // =========================
-        // PRZEŁĄCZANIE EKRANÓW
+        // SWITCHING SCREENS
         // =========================
         frame.add(desktopPanel, "desktop");
         frame.add(youtubePanel, "youtube");
@@ -436,7 +468,7 @@ public class PC extends JFrame {
         closeBtn4.addActionListener(e -> frame.setVisible(false));
 
 
-        // 🔹 Zmniejsza liczbę niepotrzebnych repaintów (optymalizacja Swinga)
+
         System.setProperty("sun.java2d.opengl", "true");
 
 
@@ -471,15 +503,23 @@ public class PC extends JFrame {
     public void updateDiscord(Collab collab){
         switch (collab.getChatOption()){
             case 1:
+                chatterIcon.setVisible(false);
+                chatterIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/" + activeName + "ChatIcon.png")));
                 discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat1.png"));
                 break;
             case 2:
+                chatterIcon.setVisible(true);
+                chatterIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/" + activeName + "ChatIcon.png")));
                 discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat2.png"));
                 break;
             case 3:
+                chatterIcon.setVisible(true);
+                chatterIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/" + activeName + "ChatIcon.png")));
                 discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat3.png"));
                 break;
             case 4:
+                chatterIcon.setVisible(true);
+                chatterIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/" + activeName + "ChatIcon.png")));
                 discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat4.png"));
                 break;
         }

@@ -11,8 +11,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -48,7 +46,9 @@ public class Collab extends JFrame {
     private int chatOption = 1;
     private String name;
     private int level = 1;
+    private JLabel levelIcon;
     private int experience;
+    private JProgressBar expBar;
     private long time = 0;
     private States state = States.IDLE;
     private int idleTimer;
@@ -102,6 +102,14 @@ public class Collab extends JFrame {
         stats.updateLevel(id, level);
     }
 
+    public JLabel getLevelIcon() {
+        return levelIcon;
+    }
+
+    public void setLevelIcon(JLabel levelIcon) {
+        this.levelIcon = levelIcon;
+    }
+
     public int getExperience() {
         return experience;
     }
@@ -109,6 +117,14 @@ public class Collab extends JFrame {
     public void setExperience(int experience) {
         this.experience = experience;
         stats.updateExp(id, experience);
+    }
+
+    public JProgressBar getExpBar() {
+        return expBar;
+    }
+
+    public void setExpBar(JProgressBar expBar) {
+        this.expBar = expBar;
     }
 
     public long getTime() {
