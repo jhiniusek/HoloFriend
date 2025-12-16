@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -26,6 +27,7 @@ public class Collab extends JFrame {
     private float destinationY;
     private boolean right = true;
     private boolean isActive = false;
+    private ArrayList<Gift> listOfGifts;
 
     private String chaseObject = "";
     private GameWindow gameWindow;
@@ -210,10 +212,11 @@ public class Collab extends JFrame {
         this.destinationX = destinationX;
     }
 
-    public Collab(FriendStats stats, String name, int id){
+    public Collab(FriendStats stats, String name, int id, ArrayList<Gift> listOfGifts){
         this.stats = stats;
         this.name = name;
         this.id = id;
+        this.listOfGifts = listOfGifts;
         try {
             setLevel(stats.getLevelById(id));
         } catch (Exception e) {
@@ -439,6 +442,7 @@ public class Collab extends JFrame {
 
     public void doStep(){
         updateDestination();
+        CheckGiftCollision();
         if((positionX != destinationX || positionY != destinationY) && (state==States.WALK || state==States.CHASE || state==States.PULL || state==States.PUSH)) {
 
             if (positionX > destinationX){
@@ -896,6 +900,89 @@ public class Collab extends JFrame {
                 return;
             }
         }
+    }
+
+    private void CheckGiftCollision(){
+        for(int i = 0; i < listOfGifts.size(); i++){
+            int x = -10;
+            int y = -10;
+            try {
+                x = listOfGifts.get(i).getX();
+                y = listOfGifts.get(i).getY();
+                int min_x = (int)positionX;
+                int max_x = min_x + 48;
+
+                int min_y = (int)positionY - 16;
+                int max_y = min_y + 128;
+
+                if (x > min_x && x < max_x){
+                    if (y > min_y && y < max_y){
+                        if (listOfGifts.get(i).isHolding()) {
+                            Random random = new Random();
+                            switch(name){
+                                case "mio":
+                                    String gift = listOfGifts.get(i).getName();
+                                    if(Objects.equals(gift, "Sukonbu") || Objects.equals(gift, "Miteru") || Objects.equals(gift, "Oruyanke")){
+                                        gainExperience(random.nextInt(40, 50));
+                                    }
+                                    else if(Objects.equals(gift, "MioFamNeko") || Objects.equals(gift, "MioFamOokami")){
+                                        gainExperience(random.nextInt(20, 35));
+                                    } else {
+                                        gainExperience(random.nextInt(35, 40));
+                                    }
+                                    break;
+                                case "korone":
+                                    break;
+                            }
+                            listOfGifts.get(i).dispose();
+                            listOfGifts.remove(i);
+                            break;
+                        }
+                    }
+                }
+            } catch (Exception e){
+            }
+        }
+    }
+
+    private void gainExperience(int amount){
+        // Level 1
+        // Level 2  =  100exp
+        // Level 3  =  250exp
+        // Level 4  =  500exp
+        // Level 5  =  1000exp
+        // Total    =  1850exp
+
+        setExperience(getExperience() + amount);
+
+        if(getExperience() >= 100){
+            if(getExperience() >= 350){
+                if(getExperience() >= 850){
+                    if(getExperience() >= 1850){
+                        setLevel(5);
+                        levelIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/level5.png")));
+                        expBar.setValue(100);
+                    } else {
+                        setLevel(4);
+                        levelIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/level4.png")));
+                        expBar.setValue(100 - ((1850 - getExperience())/1000)*100);
+                    }
+                } else {
+                    setLevel(3);
+                    levelIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/level3.png")));
+                    expBar.setValue(100 - ((850 - getExperience())/500)*100);
+                }
+            } else {
+                setLevel(2);
+                levelIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/level2.png")));
+                expBar.setValue(100 - ((350 - getExperience())/250)*100);
+            }
+        } else {
+            setLevel(1);
+            levelIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/level1.png")));
+            expBar.setValue(getExperience());
+        }
+
     }
 
     @Override

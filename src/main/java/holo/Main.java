@@ -2,6 +2,7 @@ package holo;
 
 import java.awt.*;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Main {
@@ -24,18 +25,21 @@ public class Main {
         Wardrobe wardrobe = new Wardrobe(stats);
         stats.setWardrobe(wardrobe);
 
+        ArrayList<Gift> listOfGifts = new ArrayList<>();
+
         CollabNames[] collabNames = CollabNames.values();
         ArrayList<Collab> listOfCollabs = new ArrayList<>();
         for (int i = 0; i < collabNames.length; i++) {
-            listOfCollabs.add(new Collab(stats, collabNames[i].name(), i));
+            listOfCollabs.add(new Collab(stats, collabNames[i].name(), i, listOfGifts));
         }
-        PC pc = new PC(stats, listOfCollabs);
+        PC pc = new PC(stats, listOfCollabs, listOfGifts);
         stats.setPc(pc);
         radio.setListOfCollabs(listOfCollabs);
 
         Shop shop = new Shop(stats, bed, radio, wardrobe, pc);
         GameWindow window = new  GameWindow(stats, foodList, shop);
         shop.setMainWindow(window);
+        pc.setGameWindow(window);
         stats.setGameWindow(window);
 
         for (int i = 0; i < listOfCollabs.size(); i++) {

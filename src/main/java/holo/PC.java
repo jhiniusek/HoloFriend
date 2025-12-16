@@ -11,6 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class PC extends JFrame {
     private FriendStats stats;
+    private GameWindow gameWindow;
     private Point initialClickPC;
     private Point initialClickDesktop;
     JLabel sprite = new JLabel(new ImageIcon(getClass().getResource("/sprites/PC.png")));
@@ -33,12 +34,18 @@ public class PC extends JFrame {
     private JLabel chatterIcon = new JLabel();
     private ArrayList<JButton> amazonTiles = new ArrayList<>();
     private JLabel amazonTimer = new JLabel();
+    private ArrayList<Gift> listOfGifts;
     private boolean shopRefreshed = false;
 
-    public PC(FriendStats stats, ArrayList<Collab> listOfCollabs) throws IOException, FontFormatException {
+    public void setGameWindow(GameWindow gameWindow) {
+        this.gameWindow = gameWindow;
+    }
+
+    public PC(FriendStats stats, ArrayList<Collab> listOfCollabs, ArrayList<Gift> listOfGifts) throws IOException, FontFormatException {
         this.stats = stats;
         subscribers = stats.getSubscribers();
         this.listOfCollabs = listOfCollabs;
+        this.listOfGifts = listOfGifts;
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setType(Type.UTILITY);
@@ -567,9 +574,14 @@ public class PC extends JFrame {
                 amazonTiles.get(i).addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Gift test = new Gift(stats.amazonGiftNames.get(finalI));
-                        amazonTiles.get(finalI).setEnabled(false);
-                        stats.amazonGiftEnabled.set(finalI,false);
+                        if(stats.getCurrency() > Integer.parseInt(stats.amazonGiftPrices.get(finalI))) {
+                            Gift gift = new Gift(stats.amazonGiftNames.get(finalI), stats.amazonGiftPrices.get(finalI));
+                            stats.setCurrency(stats.getCurrency() - Integer.parseInt(stats.amazonGiftPrices.get(finalI)));
+                            gameWindow.currency.setText(String.valueOf(stats.getCurrency()));
+                            listOfGifts.add(gift);
+                            amazonTiles.get(finalI).setEnabled(false);
+                            stats.amazonGiftEnabled.set(finalI, false);
+                        }
                     }
                 });
                 amazonTiles.get(i).setEnabled(stats.getAmazonGiftEnabled().get(i));
@@ -601,14 +613,20 @@ public class PC extends JFrame {
             amazonTiles.get(i).addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    Gift test = new Gift(giftName);
-                    amazonTiles.get(finalI).setEnabled(false);
-                    stats.amazonGiftEnabled.set(finalI,false);
+                    if(stats.getCurrency() > Integer.parseInt(price)){
+                        Gift gift = new Gift(giftName, price);
+                        stats.setCurrency(stats.getCurrency() - Integer.parseInt(price));
+                        gameWindow.currency.setText(String.valueOf(stats.getCurrency()));
+                        listOfGifts.add(gift);
+                        amazonTiles.get(finalI).setEnabled(false);
+                        stats.amazonGiftEnabled.set(finalI,false);
+                    }
                 }
             });
-            stats.getAmazonGiftNames().add(i, giftName);
-            stats.getAmazonGiftPrices().add(i, price);
-            stats.getAmazonGiftEnabled().add(i, true);
+            amazonTiles.get(i).setEnabled(true);
+            stats.getAmazonGiftNames().set(i, giftName);
+            stats.getAmazonGiftPrices().set(i, price);
+            stats.getAmazonGiftEnabled().set(i, true);
         }
     }
 

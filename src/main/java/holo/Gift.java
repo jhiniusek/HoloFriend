@@ -8,8 +8,22 @@ import java.awt.event.MouseMotionAdapter;
 
 public class Gift extends JFrame{
     private Point initialClick;
+    private boolean isHolding = false;
+    private String name;
+    private String price;
 
-    public Gift(String name) {
+    public boolean isHolding() {
+        return isHolding;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public Gift(String name, String price) {
+        this.name = name;
+        this.price = price;
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setType(Window.Type.UTILITY);
@@ -23,6 +37,11 @@ public class Gift extends JFrame{
         getContentPane().addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 initialClick = e.getPoint();
+                isHolding = true;
+            }
+
+            public void mouseReleased(MouseEvent e) {
+                isHolding = false;
             }
         });
 
