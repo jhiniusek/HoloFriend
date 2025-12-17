@@ -85,9 +85,8 @@ public class PC extends JFrame {
             }
         });
 
-        setVisible(true);
-        setLocation(100,100);
-
+        setVisible(stats.isPcOwned());
+        setLocation(stats.pcPositionX, stats.pcPositionY);
 
         // =========================
         // DESKTOP

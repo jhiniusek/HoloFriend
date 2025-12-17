@@ -27,6 +27,7 @@ public class GameWindow extends JFrame{
     JButton respawnBed = new JButton();
     JButton respawnRadio = new JButton();
     JButton respawnWardrobe = new JButton();
+    JButton respawnPc = new JButton();
     JButton helpButton = new JButton();
     JButton englishButton = new JButton();
     JButton japaneseButton = new JButton();
@@ -166,7 +167,7 @@ public class GameWindow extends JFrame{
 
 
         options.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
-        options.setSize(250, 360);
+        options.setSize(250, 420);
         options.setLayout(null);
         options.setLocationRelativeTo(null);
         options.setResizable(false);
@@ -225,7 +226,20 @@ public class GameWindow extends JFrame{
             }
         });
 
-        helpButton.setBounds(45, 230, 144, 30);
+        respawnPc.setBounds(45, 210, 144, 30);
+        options.add(respawnPc);
+
+        respawnPc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(stats.isWardrobeOwned()){ // IS PC OWNED
+                    stats.getPc().setLocation(stats.getCursorX(), stats.getCursorY());
+                    stats.getPc().toFront();
+                }
+            }
+        });
+
+        helpButton.setBounds(45, 290, 144, 30);
         options.add(helpButton);
 
         helpButton.addActionListener(new ActionListener() {
@@ -235,7 +249,7 @@ public class GameWindow extends JFrame{
             }
         });
 
-        englishButton.setBounds(25, 270, 90, 30);
+        englishButton.setBounds(25, 330, 90, 30);
         options.add(englishButton);
 
         englishButton.addActionListener(new ActionListener() {
@@ -247,7 +261,7 @@ public class GameWindow extends JFrame{
             }
         });
 
-        japaneseButton.setBounds(125, 270, 90, 30);
+        japaneseButton.setBounds(125, 330, 90, 30);
         options.add(japaneseButton);
 
         japaneseButton.addActionListener(new ActionListener() {
@@ -456,6 +470,8 @@ public class GameWindow extends JFrame{
         respawnRadio.setFont(font.deriveFont(fontSize));
         respawnWardrobe.setText(Messages.get("button.wardrobe"));
         respawnWardrobe.setFont(font.deriveFont(fontSize));
+        respawnPc.setText(Messages.get("button.pc"));
+        respawnPc.setFont(font.deriveFont(fontSize));
         helpButton.setText(Messages.get("button.help"));
         helpButton.setFont(font.deriveFont(fontSize));
         englishButton.setText(Messages.get("button.english"));

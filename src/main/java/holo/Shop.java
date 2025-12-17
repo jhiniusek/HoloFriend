@@ -311,8 +311,42 @@ public class Shop extends JFrame {
         }
 
 
+        JButton buyPc = new JButton();
+        buyPc.setBounds(222, 157, 59, 80);
+        buyPc.setContentAreaFilled(false);
+        buyPc.setBorderPainted(false);
+        buyPc.setFocusPainted(false);
+        buyPc.setOpaque(false);
+        buyPc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (stats.getCurrency()>=500) {
+                    pc.setVisible(true);
+                    buyPc.setEnabled(false);
+                    stats.setPcOwned(true);
+                    stats.setCurrency(stats.getCurrency() - 500);
+                    mainWindow.currency.setText(String.valueOf(stats.getCurrency()));
+                    pc.setLocation(getLocation().x + 306, getLocation().y + 162);
+                    stats.checkOutOfBounds();
+                    pc.setLocation(stats.pcPositionX, stats.pcPositionY);
+                    SoldOut(241, 151);
+                }
+
+            }
+        });
+        if(!stats.isPcOwned()){
+            add(buyPc);
+        } else {
+            JLabel pcSold = new JLabel(soldOut);
+            pcSold.setBounds(241, 151, soldOut.getIconWidth(), soldOut.getIconHeight());
+            add(pcSold);
+            getContentPane().setComponentZOrder(pcSold, 0);
+        }
+
+
         setVisible(false);
     }
+
 
     public void setMainWindow(GameWindow window){
         this.mainWindow = window;
