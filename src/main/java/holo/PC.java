@@ -455,7 +455,7 @@ public class PC extends JFrame {
                     break;
                 case 2:
                     collab.setChatOption(4);
-                    collab.setVisible(false);
+                    collab.end();
                     updateDiscord(collab);
                     break;
                 case 3:
@@ -544,15 +544,23 @@ public class PC extends JFrame {
         if (collab != null) {
             switch (collab.getChatOption()){
                 case 1:
+                    chatterIcon.setVisible(false);
+                    chatterIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/" + activeName + "ChatIcon.png")));
                     discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat1.png"));
                     break;
                 case 2:
+                    chatterIcon.setVisible(true);
+                    chatterIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/" + activeName + "ChatIcon.png")));
                     discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat2.png"));
                     break;
                 case 3:
+                    chatterIcon.setVisible(true);
+                    chatterIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/" + activeName + "ChatIcon.png")));
                     discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat3.png"));
                     break;
                 case 4:
+                    chatterIcon.setVisible(true);
+                    chatterIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/" + activeName + "ChatIcon.png")));
                     discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat4.png"));
                     break;
             }
@@ -624,9 +632,9 @@ public class PC extends JFrame {
                 }
             });
             amazonTiles.get(i).setEnabled(true);
-            stats.getAmazonGiftNames().set(i, giftName);
-            stats.getAmazonGiftPrices().set(i, price);
-            stats.getAmazonGiftEnabled().set(i, true);
+            stats.getAmazonGiftNames().add(i, giftName);
+            stats.getAmazonGiftPrices().add(i, price);
+            stats.getAmazonGiftEnabled().add(i, true);
         }
     }
 

@@ -9,5 +9,6 @@ public enum States {
     DANCE,
     WORK,
     PULL,
-    PUSH
+    PUSH,
+    END
 }

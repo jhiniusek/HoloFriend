@@ -27,7 +27,6 @@ public class Collab extends JFrame {
     private float destinationY;
     private boolean right = true;
     private boolean isActive = false;
-    private ArrayList<Gift> listOfGifts;
 
     private String chaseObject = "";
     private GameWindow gameWindow;
@@ -51,6 +50,8 @@ public class Collab extends JFrame {
     private JLabel levelIcon;
     private int experience;
     private JProgressBar expBar;
+    private ArrayList<Gift> listOfGifts;
+    private boolean receivedGift = false;
     private long time = 0;
     private States state = States.IDLE;
     private int idleTimer;
@@ -288,7 +289,7 @@ public class Collab extends JFrame {
 
         getContentPane().addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseDragged(MouseEvent e) {
-                if (state != States.PULL) {
+                if (state != States.PULL && state != States.END) {
                     state = States.HOLD;
 
                     int thisX = getLocation().x;
@@ -309,6 +310,7 @@ public class Collab extends JFrame {
 
     public void start(){
         isActive = true;
+        receivedGift = false;
         state = States.WALK;
         positionX = -100;
         positionY = stats.getRandomY();
@@ -320,6 +322,7 @@ public class Collab extends JFrame {
     }
 
     public void end(){
+        state = States.END;
         destinationX = -100;
         destinationY = stats.getRandomY();
         evaluateMs();
@@ -347,7 +350,7 @@ public class Collab extends JFrame {
                 }
             }
 
-        } else if (state == States.WALK) {
+        } else if (state == States.WALK || state == States.END) {
             setSize(60,129);
             sprite.setBounds(0,0,60,129);
             shadow.setBounds(1,118,60,11);
@@ -442,8 +445,13 @@ public class Collab extends JFrame {
 
     public void doStep(){
         updateDestination();
-        CheckGiftCollision();
-        if((positionX != destinationX || positionY != destinationY) && (state==States.WALK || state==States.CHASE || state==States.PULL || state==States.PUSH)) {
+        if(!receivedGift){
+            CheckGiftCollision();
+        }
+        if(checkTimeUp() && state != States.END){
+            end();
+        }
+        if((positionX != destinationX || positionY != destinationY) && (state==States.WALK || state==States.CHASE || state==States.PULL || state==States.PUSH || state==States.END)) {
 
             if (positionX > destinationX){
 
@@ -555,6 +563,12 @@ public class Collab extends JFrame {
 
         if(idleTimer != 0 && state == States.IDLE){
             idleTimer--;
+        }
+
+        if (positionX == destinationX && positionY == destinationY && state == States.END) {
+            setTime(System.currentTimeMillis());
+            setVisible(false);
+            isActive=false;
         }
 
         if (positionX == destinationX && positionY == destinationY && idleTimer == 0) {
@@ -843,7 +857,7 @@ public class Collab extends JFrame {
     }
 
     public void evaluateMs(){
-        if (state == States.WALK || state == States.PULL || state == States.PUSH) {
+        if (state == States.WALK || state == States.PULL || state == States.PUSH || state == States.END) {
             right = destinationX > positionX;
         }
 
@@ -923,12 +937,12 @@ public class Collab extends JFrame {
                                 case "mio":
                                     String gift = listOfGifts.get(i).getName();
                                     if(Objects.equals(gift, "Sukonbu") || Objects.equals(gift, "Miteru") || Objects.equals(gift, "Oruyanke")){
-                                        gainExperience(random.nextInt(40, 50));
+                                        gainExperience(random.nextInt(60, 80));
                                     }
                                     else if(Objects.equals(gift, "MioFamNeko") || Objects.equals(gift, "MioFamOokami")){
-                                        gainExperience(random.nextInt(20, 35));
+                                        gainExperience(random.nextInt(40, 60));
                                     } else {
-                                        gainExperience(random.nextInt(35, 40));
+                                        gainExperience(random.nextInt(50, 70));
                                     }
                                     break;
                                 case "korone":
@@ -936,6 +950,7 @@ public class Collab extends JFrame {
                             }
                             listOfGifts.get(i).dispose();
                             listOfGifts.remove(i);
+                            receivedGift = true;
                             break;
                         }
                     }
@@ -965,17 +980,17 @@ public class Collab extends JFrame {
                     } else {
                         setLevel(4);
                         levelIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/level4.png")));
-                        expBar.setValue(100 - ((1850 - getExperience())/1000)*100);
+                        expBar.setValue((int) ((((float)getExperience() - 850)/1000)*100));
                     }
                 } else {
                     setLevel(3);
                     levelIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/level3.png")));
-                    expBar.setValue(100 - ((850 - getExperience())/500)*100);
+                    expBar.setValue((int) ((((float)getExperience() - 350)/500)*100));
                 }
             } else {
                 setLevel(2);
                 levelIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/level2.png")));
-                expBar.setValue(100 - ((350 - getExperience())/250)*100);
+                expBar.setValue((int) ((((float)getExperience() - 100)/250)*100));
             }
         } else {
             setLevel(1);

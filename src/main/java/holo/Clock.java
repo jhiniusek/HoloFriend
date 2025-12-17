@@ -661,6 +661,7 @@ public class Clock implements Runnable{
                         if(collab.checkCooldown()){
                             collab.setChatOption(1);
                             pc.updateDiscord();
+                            // CHANGE ICON MIO TO DISAPPEAR
                         }
                     }
                 }
