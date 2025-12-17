@@ -7,6 +7,7 @@ import java.awt.event.*;
 public class Shop extends JFrame {
     private Point initialClick;
     private GameWindow mainWindow;
+    public JLabel imageLabel = new JLabel();
     ImageIcon soldOut = new ImageIcon(getClass().getResource("/sprites/Shop_Sold.png"));
     ImageIcon locked = new ImageIcon(getClass().getResource("/sprites/Shop_Locked.png"));
 
@@ -19,7 +20,9 @@ public class Shop extends JFrame {
         setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
         setBackground(new Color(1.0f,1.0f,1.0f,0f));
         ImageIcon imageIcon = new ImageIcon(getClass().getResource("/sprites/Shop.png"));
-        JLabel imageLabel = new JLabel(imageIcon);
+        if (stats.getLocale() == MyLocale.JAPANESE) {
+            imageIcon = new ImageIcon(getClass().getResource("/sprites/ShopJP.png"));
+        }
         imageLabel.setBounds(0, 0, imageIcon.getIconWidth(), imageIcon.getIconHeight());
         add(imageLabel);
 

@@ -21,6 +21,10 @@ public class Gift extends JFrame{
         return name;
     }
 
+    public String getPrice() {
+        return price;
+    }
+
     public Gift(String name, String price) {
         this.name = name;
         this.price = price;

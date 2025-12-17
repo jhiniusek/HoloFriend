@@ -18,6 +18,7 @@ public class GameWindow extends JFrame{
     private JFrame options = new JFrame("Options");
     private JFrame byeFriend = new JFrame("Bye Friend");
     private JFrame help = new JFrame("Help");
+    private Shop shop;
     JTextPane quitMessage = new JTextPane();
     JButton closeButton = new JButton();
     JButton stayButton = new JButton();
@@ -68,6 +69,7 @@ public class GameWindow extends JFrame{
     private float fontSize = 20f;
 
     public GameWindow(FriendStats stats, ArrayList<Food> foodList, Shop shop) throws IOException, FontFormatException {
+        this.shop = shop;
         locale = stats.getLocale();
         Messages.setLocale(locale.getLocale());
         changeLocale(stats);
@@ -410,6 +412,10 @@ public class GameWindow extends JFrame{
             UpdateHint();
             UpdateText();
             menuImage.setIcon(new ImageIcon(getClass().getResource("/sprites/MenuENG.png")));
+            shop.imageLabel.setIcon(new ImageIcon(getClass().getResource("/sprites/Shop.png")));
+            stats.getPc().amazonSprite= new ImageIcon(getClass().getResource("/sprites/Desktop/Amazon.png"));
+            stats.getPc().amazonPanel.repaint();
+            stats.getPc().updateDiscord();
         } else if (locale == MyLocale.JAPANESE) {
             Messages.setLocale(Locale.JAPANESE);
             tips = tipsJP;
@@ -424,6 +430,10 @@ public class GameWindow extends JFrame{
             UpdateHint();
             UpdateText();
             menuImage.setIcon(new ImageIcon(getClass().getResource("/sprites/MenuJP.png")));
+            shop.imageLabel.setIcon(new ImageIcon(getClass().getResource("/sprites/ShopJP.png")));
+            stats.getPc().amazonSprite= new ImageIcon(getClass().getResource("/sprites/Desktop/AmazonJP.png"));
+            stats.getPc().amazonPanel.repaint();
+            stats.getPc().updateDiscord();
         }
 
 

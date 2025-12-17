@@ -869,6 +869,11 @@ public class FriendStats {
     }
 
     public void Save(){
+        //GIFT REFUND FOR NOW
+        for (int i = 0; i < pc.listOfGifts.size(); i++) {
+            currency += Integer.parseInt(pc.listOfGifts.get(i).getPrice());
+        }
+
         Save save = new Save(hunger,tiredness,currency,subscribers,goodRod,superRod,bedOwned,bedPositionX,bedPositionY,wardrobeOwned,
                 wardrobePositionX,wardrobePositionY,radioOwned,radioPositionX,radioPositionY,chessSlowed,pcOwned,
                 pcPositionX,pcPositionY,kurokami,skin,locale, listOfLevels, listOfExp, listOfTime, amazonGiftNames, amazonGiftPrices, amazonGiftEnabled);

@@ -22,7 +22,7 @@ public class PC extends JFrame {
     ImageIcon desktopSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/PC UI.png"));
     ImageIcon youtubeSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/StreamOffline.png"));
     ImageIcon discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat1.png"));
-    ImageIcon amazonSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/Amazon.png"));
+    public ImageIcon amazonSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/Amazon.png"));
     Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/Micro5-Regular.ttf"));
     JLabel viewerCount = new JLabel();
     JLabel subscriberCount = new JLabel();
@@ -34,7 +34,7 @@ public class PC extends JFrame {
     private JLabel chatterIcon = new JLabel();
     private ArrayList<JButton> amazonTiles = new ArrayList<>();
     private JLabel amazonTimer = new JLabel();
-    private ArrayList<Gift> listOfGifts;
+    public ArrayList<Gift> listOfGifts;
     private boolean shopRefreshed = false;
 
     public void setGameWindow(GameWindow gameWindow) {
@@ -232,6 +232,10 @@ public class PC extends JFrame {
         // =========================
         // DISCORD
         // =========================
+        if(stats.getLocale() == MyLocale.JAPANESE){
+            discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat1JP.png"));
+        }
+
         discordPanel = new JPanel(null) {
 
             {
@@ -358,6 +362,10 @@ public class PC extends JFrame {
         // ========================
         // AMAZON
         // ========================
+        if(stats.getLocale() == MyLocale.JAPANESE){
+            amazonSprite= new ImageIcon(getClass().getResource("/sprites/Desktop/AmazonJP.png"));
+        }
+
         amazonPanel = new JPanel(null) {
 
             {
@@ -512,22 +520,38 @@ public class PC extends JFrame {
             case 1:
                 chatterIcon.setVisible(false);
                 chatterIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/" + activeName + "ChatIcon.png")));
-                discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat1.png"));
+                if(stats.getLocale() == MyLocale.JAPANESE){
+                    discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat1JP.png"));
+                } else if (stats.getLocale() == MyLocale.ENGLISH) {
+                    discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat1.png"));
+                }
                 break;
             case 2:
                 chatterIcon.setVisible(true);
                 chatterIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/" + activeName + "ChatIcon.png")));
-                discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat2.png"));
+                if(stats.getLocale() == MyLocale.JAPANESE){
+                    discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat2JP.png"));
+                } else if (stats.getLocale() == MyLocale.ENGLISH) {
+                    discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat2.png"));
+                }
                 break;
             case 3:
                 chatterIcon.setVisible(true);
                 chatterIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/" + activeName + "ChatIcon.png")));
-                discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat3.png"));
+                if(stats.getLocale() == MyLocale.JAPANESE){
+                    discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat3JP.png"));
+                } else if (stats.getLocale() == MyLocale.ENGLISH) {
+                    discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat3.png"));
+                }
                 break;
             case 4:
                 chatterIcon.setVisible(true);
                 chatterIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/" + activeName + "ChatIcon.png")));
-                discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat4.png"));
+                if(stats.getLocale() == MyLocale.JAPANESE){
+                    discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat4JP.png"));
+                } else if (stats.getLocale() == MyLocale.ENGLISH) {
+                    discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat4.png"));
+                }
                 break;
         }
         discordPanel.repaint();
@@ -546,22 +570,38 @@ public class PC extends JFrame {
                 case 1:
                     chatterIcon.setVisible(false);
                     chatterIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/" + activeName + "ChatIcon.png")));
-                    discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat1.png"));
+                    if(stats.getLocale() == MyLocale.JAPANESE){
+                        discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat1JP.png"));
+                    } else if (stats.getLocale() == MyLocale.ENGLISH) {
+                        discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat1.png"));
+                    }
                     break;
                 case 2:
                     chatterIcon.setVisible(true);
                     chatterIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/" + activeName + "ChatIcon.png")));
-                    discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat2.png"));
+                    if(stats.getLocale() == MyLocale.JAPANESE){
+                        discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat2JP.png"));
+                    } else if (stats.getLocale() == MyLocale.ENGLISH) {
+                        discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat2.png"));
+                    }
                     break;
                 case 3:
                     chatterIcon.setVisible(true);
                     chatterIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/" + activeName + "ChatIcon.png")));
-                    discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat3.png"));
+                    if(stats.getLocale() == MyLocale.JAPANESE){
+                        discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat3JP.png"));
+                    } else if (stats.getLocale() == MyLocale.ENGLISH) {
+                        discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat3.png"));
+                    }
                     break;
                 case 4:
                     chatterIcon.setVisible(true);
                     chatterIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/" + activeName + "ChatIcon.png")));
-                    discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat4.png"));
+                    if(stats.getLocale() == MyLocale.JAPANESE){
+                        discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat4JP.png"));
+                    } else if (stats.getLocale() == MyLocale.ENGLISH) {
+                        discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat4.png"));
+                    }
                     break;
             }
         }
