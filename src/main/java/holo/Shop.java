@@ -147,7 +147,7 @@ public class Shop extends JFrame {
                     bed.setVisible(true);
                     buyBed.setEnabled(false);
                     stats.setBedOwned(true);
-                    stats.setCurrency(stats.getCurrency() - 350);
+                    stats.setCurrency(stats.getCurrency() - 250);
                     mainWindow.currency.setText(String.valueOf(stats.getCurrency()));
                     bed.setLocation(getLocation().x + 306, getLocation().y + 162);
                     stats.checkOutOfBounds();
