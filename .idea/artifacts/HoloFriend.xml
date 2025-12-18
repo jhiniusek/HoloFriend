@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="HoloFriend">
+    <output-path>$PROJECT_DIR$/out/artifacts/HoloFriend</output-path>
+    <root id="archive" name="Frend.jar">
+      <element id="module-output" name="Frend" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../Libraries/gson-2.13.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../Libraries/jna-5.17.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../Libraries/jna-platform-5.17.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

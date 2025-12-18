@@ -297,7 +297,7 @@ public class PC extends JFrame {
             JLabel levelIcon = new JLabel();
             listOfCollabs.get(i).setLevelIcon(levelIcon);
             levelIcon.setBounds(1, 27, 32, 10);
-            levelIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/level" + listOfCollabs.get(i).getLevel() + ".png")));
+            levelIcon.setIcon(new ImageIcon(getClass().getResource("/sprites/Desktop/Level" + listOfCollabs.get(i).getLevel() + ".png")));
 
 
             slot.add(btn, Integer.valueOf(100));
