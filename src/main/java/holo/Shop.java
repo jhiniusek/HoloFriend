@@ -143,7 +143,7 @@ public class Shop extends JFrame {
         buyBed.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (stats.getCurrency()>=350) {
+                if (stats.getCurrency()>=250) {
                     bed.setVisible(true);
                     buyBed.setEnabled(false);
                     stats.setBedOwned(true);
