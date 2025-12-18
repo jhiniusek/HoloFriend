@@ -589,15 +589,24 @@ public class Clock implements Runnable{
                 if(streamTimer == 160){
                     int actualViewers = pc.viewers;
                     int newViewers;
+                    int collabMultiplier = 0;
+
+                    for (int i = 0; i < listOfCollabs.size(); i++) {
+                        if(listOfCollabs.get(i).isActive()){
+                            collabMultiplier += 2;
+                        }
+                    }
 
                     //ENGAGING STREAM = VIEWERS COME
                     if (stats.getState() == States.WORK || stats.getState() == States.CHASE || stats.getState() == States.PULL || stats.getState() == States.PUSH || stats.getState() == States.HOLD || stats.getState() == States.DANCE ) {
-                        int randomNum = ThreadLocalRandom.current().nextInt(1, 5 + 1);  //ADD MULTIPLIERS IF COLLAB SOON
-                        newViewers = actualViewers + (actualViewers * randomNum / 100);
-                        if(newViewers <= actualViewers){
-                            pc.viewers = pc.viewers + 1;
+                        int randomNum = ThreadLocalRandom.current().nextInt(1, 5 + 1);
+                        newViewers = actualViewers * (randomNum+collabMultiplier) / 100;
+                        if(actualViewers + newViewers <= actualViewers){
+                            pc.viewers += 1;
+                            stats.setSubscribers(stats.getSubscribers() + 1);
                         } else {
-                            pc.viewers = newViewers;
+                            pc.viewers += newViewers;
+                            stats.setSubscribers(stats.getSubscribers() + (newViewers * 60 / 100));
                         }
 
                     //BORING STREAM == VIEWERS LEAVE
@@ -607,13 +616,6 @@ public class Clock implements Runnable{
                         if(newViewers < actualViewers){
                             pc.viewers = newViewers;
                         }
-                    }
-
-                    //NEW SUBSCRIBERS
-                    if(stats.getSubscribers() < pc.viewers){
-                        int randomNum = ThreadLocalRandom.current().nextInt(10, 20 + 1);
-                        int newSubs = (pc.viewers - stats.getSubscribers()) * randomNum / 100;
-                        stats.setSubscribers(stats.getSubscribers() + newSubs);
                     }
 
                     //PAYMENTS
@@ -660,11 +662,10 @@ public class Clock implements Runnable{
                     if (!collab.isActive()) {
                         if(collab.checkCooldown()){
                             collab.setChatOption(1);
-                            pc.updateDiscord();
-                            // CHANGE ICON MIO TO DISAPPEAR
                         }
                     }
                 }
+                pc.updateDiscord();
             }
 
             try {

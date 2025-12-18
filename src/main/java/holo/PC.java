@@ -623,6 +623,7 @@ public class PC extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         if(stats.getCurrency() > Integer.parseInt(stats.amazonGiftPrices.get(finalI))) {
                             Gift gift = new Gift(stats.amazonGiftNames.get(finalI), stats.amazonGiftPrices.get(finalI));
+                            gift.setLocation(stats.getCursorX(), stats.getCursorY());
                             stats.setCurrency(stats.getCurrency() - Integer.parseInt(stats.amazonGiftPrices.get(finalI)));
                             gameWindow.currency.setText(String.valueOf(stats.getCurrency()));
                             listOfGifts.add(gift);
@@ -656,12 +657,16 @@ public class PC extends JFrame {
             amazonTiles.get(i).setVerticalTextPosition(SwingConstants.BOTTOM);
             amazonTiles.get(i).setIconTextGap(1);
             amazonTiles.get(i).setFont(font.deriveFont(17f));
+            for (ActionListener al : amazonTiles.get(i).getActionListeners()) {
+                amazonTiles.get(i).removeActionListener(al);
+            }
             int finalI = i;
             amazonTiles.get(i).addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if(stats.getCurrency() > Integer.parseInt(price)){
                         Gift gift = new Gift(giftName, price);
+                        gift.setLocation(stats.getCursorX(), stats.getCursorY());
                         stats.setCurrency(stats.getCurrency() - Integer.parseInt(price));
                         gameWindow.currency.setText(String.valueOf(stats.getCurrency()));
                         listOfGifts.add(gift);

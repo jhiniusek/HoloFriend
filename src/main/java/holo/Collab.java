@@ -494,7 +494,7 @@ public class Collab extends JFrame {
             window = null;
             rect.clear();
             state = States.IDLE;
-            //window.setAlwaysOnTop(false);  <- ???  has to be gamewindow I think xdd
+            gameWindow.setAlwaysOnTop(false);
         }
 
         if(positionX == destinationX && positionY == destinationY && (state==States.WALK || state==States.CHASE)){
@@ -567,6 +567,7 @@ public class Collab extends JFrame {
 
         if (positionX == destinationX && positionY == destinationY && state == States.END) {
             setTime(System.currentTimeMillis());
+            chatOption = 1;
             setVisible(false);
             isActive=false;
         }

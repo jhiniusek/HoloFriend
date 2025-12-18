@@ -34,7 +34,11 @@ public class Screen {
     }
 
     int getRandomY(){
-        return ThreadLocalRandom.current().nextInt(yMin, yMax + 1);
+        int randomY = ThreadLocalRandom.current().nextInt(yMin, yMax + 1);
+        if(randomY > 128){
+            randomY = randomY - 128;
+        }
+        return randomY;
     }
 
     public boolean checkIfVisible(Point point){
