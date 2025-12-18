@@ -686,8 +686,8 @@ public class Collab extends JFrame {
     }
 
     public void chooseDestination(){
-        int cursorProbability = 10;
-        int windowProbability = 10 + cursorProbability;
+        int cursorProbability = stats.getChaseCursorValue();
+        int windowProbability = stats.getChaseWindowValue() + cursorProbability;
         int walkProbability = 50 + windowProbability;
 
         int target = (int)(Math.random() * walkProbability);

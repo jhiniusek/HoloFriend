@@ -44,6 +44,8 @@ public class FriendStats {
     private int windowSide;
     private int windowCatchPoint;
     private int clickCounter = 0;
+    private int chaseCursorValue = 10;
+    private int chaseWindowValue = 10;
     private boolean ableToWork = true;
     private Lake lake;
     private Bed bed;
@@ -532,6 +534,22 @@ public class FriendStats {
         return randomScreen.getRandomPoint();
     }
 
+    public int getChaseCursorValue() {
+        return chaseCursorValue;
+    }
+
+    public void setChaseCursorValue(int chaseCursorValue) {
+        this.chaseCursorValue = chaseCursorValue;
+    }
+
+    public int getChaseWindowValue() {
+        return chaseWindowValue;
+    }
+
+    public void setChaseWindowValue(int chaseWindowValue) {
+        this.chaseWindowValue = chaseWindowValue;
+    }
+
     public void setFoodList(ArrayList<Food> foodList) {
         this.foodList = foodList;
     }
@@ -568,8 +586,8 @@ public class FriendStats {
         if(ableToWork){
             workProbability = 20 + tiredness + sleepProbability;
         }
-        int cursorProbability = 10 + workProbability;
-        int windowProbability = 10 + cursorProbability;
+        int cursorProbability = chaseCursorValue + workProbability;
+        int windowProbability = chaseWindowValue + cursorProbability;
         int walkProbability = 50 + windowProbability;
 
         int target = (int)(Math.random() * walkProbability);
@@ -874,9 +892,10 @@ public class FriendStats {
             currency += Integer.parseInt(pc.listOfGifts.get(i).getPrice());
         }
 
-        Save save = new Save(hunger,tiredness,currency,subscribers,goodRod,superRod,bedOwned,bedPositionX,bedPositionY,wardrobeOwned,
-                wardrobePositionX,wardrobePositionY,radioOwned,radioPositionX,radioPositionY,chessSlowed,pcOwned,
-                pcPositionX,pcPositionY,kurokami,skin,locale, listOfLevels, listOfExp, listOfTime, amazonGiftNames, amazonGiftPrices, amazonGiftEnabled);
+        Save save = new Save(hunger, tiredness, currency, subscribers, goodRod, superRod, bedOwned, bedPositionX, bedPositionY, wardrobeOwned,
+                wardrobePositionX, wardrobePositionY, radioOwned, radioPositionX, radioPositionY, chessSlowed, pcOwned,
+                pcPositionX, pcPositionY, kurokami, skin,locale, listOfLevels, listOfExp, listOfTime, amazonGiftNames,
+                amazonGiftPrices, amazonGiftEnabled, chaseCursorValue, chaseWindowValue);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileOutputStream fos = new FileOutputStream("save.sav");
             GZIPOutputStream gos = new GZIPOutputStream(fos);

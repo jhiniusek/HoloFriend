@@ -33,11 +33,14 @@ public class Save {
     ArrayList<String> amazonGiftNames;
     ArrayList<String> amazonGiftPrices;
     ArrayList<Boolean> amazonGiftEnabled;
+    int chaseCursorValue;
+    int chaseWindowValue;
 
     public Save(int hunger, int tiredness, int currency, int subscribers, boolean goodRod, boolean superRod, boolean bed, int bedX,
                 int bedY, boolean wardrobe, int wardrobeX, int wardrobeY, boolean radio, int radioX, int radioY,
                 boolean chessTypeBeat, boolean pc, int pcX, int pcY, boolean kurokami, int skin, MyLocale locale, ArrayList<Integer> listOfLevel,
-                ArrayList<Integer> listOfExp, ArrayList<Long> listOfTime, ArrayList<String> amazonGiftNames, ArrayList<String> amazonGiftPrices, ArrayList<Boolean> amazonGiftEnabled) {
+                ArrayList<Integer> listOfExp, ArrayList<Long> listOfTime, ArrayList<String> amazonGiftNames, ArrayList<String> amazonGiftPrices,
+                ArrayList<Boolean> amazonGiftEnabled, int chaseCursorValue, int chaseWindowValue) {
         this.hunger = hunger;
         this.tiredness = tiredness;
         this.currency = currency;
@@ -66,6 +69,8 @@ public class Save {
         this.amazonGiftNames = amazonGiftNames;
         this.amazonGiftPrices = amazonGiftPrices;
         this.amazonGiftEnabled = amazonGiftEnabled;
+        this.chaseCursorValue = chaseCursorValue;
+        this.chaseWindowValue = chaseWindowValue;
     }
 
     public void Load(FriendStats stats){
@@ -111,5 +116,7 @@ public class Save {
         if (amazonGiftEnabled!=null){
             stats.setAmazonGiftEnabled(amazonGiftEnabled);
         }
+        stats.setChaseCursorValue(chaseCursorValue);
+        stats.setChaseWindowValue(chaseWindowValue);
     }
 }

@@ -28,6 +28,8 @@ public class GameWindow extends JFrame{
     JButton respawnRadio = new JButton();
     JButton respawnWardrobe = new JButton();
     JButton respawnPc = new JButton();
+    JTextPane checkBoxCursorLabel = new JTextPane();
+    JTextPane checkBoxWindowLabel = new JTextPane();
     JButton helpButton = new JButton();
     JButton englishButton = new JButton();
     JButton japaneseButton = new JButton();
@@ -47,7 +49,13 @@ public class GameWindow extends JFrame{
             "Sleeping regenerates stamina",
             "You can spend gold in the shop",
             "Click on wardrobe to change clothes",
-            "If you pet Fubuki too much, she gets angry"};
+            "If you pet Fubuki too much, she gets angry",
+            "Stream to earn gold",
+            "Gain viewers by doing interesting things or collabing", //TEST THIS ONE ON UI
+            "Buy gifts for friends on Amazon",
+            "Give gifts to friends to increase friendship",
+            "Higher friendship allows longer collabs",
+            "You can give only one gift per collab"};
 
     JList<String> listOfTips = new JList<String>(tipsENG);
 
@@ -64,7 +72,13 @@ public class GameWindow extends JFrame{
             "寝るとスタミナが回復する",
             "ショップでコインを使えるよ",
             "ワードローブをクリックして服を着替える",
-            "フブキを撫ですぎると、怒ってしまいます。"};
+            "フブキを撫ですぎると怒ってしまう。",
+            "配信してコインを稼ごう",
+            "面白い行動やコラボで視聴者を増やそう",
+            "Amazonで友達へのプレゼントを買える",
+            "友達にプレゼントをあげて親密度を上げよう",
+            "親密度が高いほどコラボ時間が長くなる",
+            "コラボ中に渡せるプレゼントは1つだけ"};
 
     Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/Micro5-Regular.ttf"));
     private float fontSize = 20f;
@@ -167,7 +181,7 @@ public class GameWindow extends JFrame{
 
 
         options.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
-        options.setSize(250, 420);
+        options.setSize(250, 450);
         options.setLayout(null);
         options.setLocationRelativeTo(null);
         options.setResizable(false);
@@ -239,7 +253,58 @@ public class GameWindow extends JFrame{
             }
         });
 
-        helpButton.setBounds(45, 290, 144, 30);
+        JCheckBox checkBoxCursor = new JCheckBox();
+        checkBoxCursor.setAlignmentX(Component.CENTER_ALIGNMENT);
+        checkBoxCursor.setBounds(53, 245, 20, 20);
+        if(stats.getChaseCursorValue() == 10){
+            checkBoxCursor.setSelected(true);
+        }
+        checkBoxCursor.addActionListener(e -> {
+            if (checkBoxCursor.isSelected()) {
+                stats.setChaseCursorValue(10);
+            } else {
+                stats.setChaseCursorValue(0);
+            }
+        });
+        options.add(checkBoxCursor);
+
+        checkBoxCursorLabel.setEditable(false);
+        checkBoxCursorLabel.setOpaque(false);
+        checkBoxCursorLabel.setFocusable(false);
+        StyledDocument style1 = checkBoxCursorLabel.getStyledDocument();
+        SimpleAttributeSet align1= new SimpleAttributeSet();
+        StyleConstants.setAlignment(align1, StyleConstants.ALIGN_CENTER);
+        style1.setParagraphAttributes(0, style1.getLength(), align1, false);
+        checkBoxCursorLabel.setBounds(10, 265, 110, 60);
+        options.add(checkBoxCursorLabel);
+
+        JCheckBox checkBoxWindow = new JCheckBox();
+        checkBoxWindow.setAlignmentX(Component.CENTER_ALIGNMENT);
+        checkBoxWindow.setBounds(160, 245, 20, 20);
+        if(stats.getChaseWindowValue() == 10){
+            checkBoxWindow.setSelected(true);
+        }
+        checkBoxWindow.addActionListener(e -> {
+            if (checkBoxWindow.isSelected()) {
+                stats.setChaseWindowValue(10);
+            } else {
+                stats.setChaseWindowValue(0);
+            }
+        });
+        options.add(checkBoxWindow);
+
+        checkBoxWindowLabel.setEditable(false);
+        checkBoxWindowLabel.setOpaque(false);
+        checkBoxWindowLabel.setFocusable(false);
+        StyledDocument style2 = checkBoxWindowLabel.getStyledDocument();
+        SimpleAttributeSet align2= new SimpleAttributeSet();
+        StyleConstants.setAlignment(align2, StyleConstants.ALIGN_CENTER);
+        style2.setParagraphAttributes(0, style2.getLength(), align2, false);
+        checkBoxWindowLabel.setBounds(117, 265, 110, 60);
+        options.add(checkBoxWindowLabel);
+
+
+        helpButton.setBounds(45, 320, 144, 30);
         options.add(helpButton);
 
         helpButton.addActionListener(new ActionListener() {
@@ -249,7 +314,7 @@ public class GameWindow extends JFrame{
             }
         });
 
-        englishButton.setBounds(25, 330, 90, 30);
+        englishButton.setBounds(25, 360, 90, 30);
         options.add(englishButton);
 
         englishButton.addActionListener(new ActionListener() {
@@ -261,7 +326,7 @@ public class GameWindow extends JFrame{
             }
         });
 
-        japaneseButton.setBounds(125, 330, 90, 30);
+        japaneseButton.setBounds(125, 360, 90, 30);
         options.add(japaneseButton);
 
         japaneseButton.addActionListener(new ActionListener() {
@@ -276,11 +341,11 @@ public class GameWindow extends JFrame{
 
 
         help.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
-        help.setSize(370, 310);
+        help.setSize(370, 420);
         help.setLayout(null);
         help.setLocationRelativeTo(null);
         help.setResizable(false);
-        listOfTips.setBounds(10,10,335,251);
+        listOfTips.setBounds(10,10,335,361);
         help.add(listOfTips);
 
         JButton optionsButton = new JButton();
@@ -472,6 +537,10 @@ public class GameWindow extends JFrame{
         respawnWardrobe.setFont(font.deriveFont(fontSize));
         respawnPc.setText(Messages.get("button.pc"));
         respawnPc.setFont(font.deriveFont(fontSize));
+        checkBoxCursorLabel.setText(Messages.get("text.check_box_cursor"));
+        checkBoxCursorLabel.setFont(font.deriveFont(fontSize));
+        checkBoxWindowLabel.setText(Messages.get("text.check_box_window"));
+        checkBoxWindowLabel.setFont(font.deriveFont(fontSize));
         helpButton.setText(Messages.get("button.help"));
         helpButton.setFont(font.deriveFont(fontSize));
         englishButton.setText(Messages.get("button.english"));
