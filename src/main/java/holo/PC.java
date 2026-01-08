@@ -19,9 +19,11 @@ public class PC extends JFrame {
     JPanel youtubePanel;
     JPanel discordPanel;
     JPanel amazonPanel;
+    JPanel dicePanel;
     ImageIcon desktopSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/PC UI.png"));
     ImageIcon youtubeSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/StreamOffline.png"));
     ImageIcon discordSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiscordChat1.png"));
+    ImageIcon diceSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/Dice.png"));
     public ImageIcon amazonSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/Amazon.png"));
     Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/sprites/Micro5-Regular.ttf"));
     JLabel viewerCount = new JLabel();
@@ -36,6 +38,10 @@ public class PC extends JFrame {
     private JLabel amazonTimer = new JLabel();
     public ArrayList<Gift> listOfGifts;
     private boolean shopRefreshed = false;
+    public int diceAmount = 2;
+    private ArrayList<Point> dicePositions = new ArrayList<>();
+    private ArrayList<JLabel> dices = new ArrayList<>();
+    public int rollTries = 0;
 
     public void setGameWindow(GameWindow gameWindow) {
         this.gameWindow = gameWindow;
@@ -163,6 +169,14 @@ public class PC extends JFrame {
         openAmazon.setOpaque(false);
         openAmazon.setBounds(10, 100, 41, 35);
         desktopPanel.add(openAmazon);
+
+        JButton openDice = new JButton();
+        openDice.setContentAreaFilled(false);
+        openDice.setBorderPainted(false);
+        openDice.setFocusPainted(false);
+        openDice.setOpaque(false);
+        openDice.setBounds(274, 95, 30, 42);
+        desktopPanel.add(openDice);
 
         JButton closeBtn1 = new JButton();
         closeBtn1.setContentAreaFilled(false);
@@ -362,7 +376,7 @@ public class PC extends JFrame {
         // AMAZON
         // ========================
         if(stats.getLocale() == MyLocale.JAPANESE){
-            amazonSprite= new ImageIcon(getClass().getResource("/sprites/Desktop/AmazonJP.png"));
+            amazonSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/AmazonJP.png"));
         }
 
         amazonPanel = new JPanel(null) {
@@ -417,6 +431,56 @@ public class PC extends JFrame {
         closeBtn4.setBounds(308, 5, 7, 7);
         amazonPanel.add(closeBtn4);
 
+        // ========================
+        // Dice
+        // ========================
+        if(stats.getLocale() == MyLocale.JAPANESE){
+            diceSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiceJP.png"));
+        }
+        dicePanel = new JPanel(null) {
+
+            {
+                setDoubleBuffered(true);
+            }
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+
+                g2.drawImage(diceSprite.getImage(), 0, 0, getWidth(), getHeight(), this);
+                g2.dispose();
+            }
+        };
+
+        JButton backBtn4 = new JButton();
+        backBtn4.setContentAreaFilled(false);
+        backBtn4.setBorderPainted(false);
+        backBtn4.setFocusPainted(false);
+        backBtn4.setOpaque(false);
+        backBtn4.setBounds(277, 24, 7, 7);
+        dicePanel.add(backBtn4);
+
+        JButton rollDice = new JButton();
+        rollDice.setContentAreaFilled(false);
+        rollDice.setBorderPainted(false);
+        rollDice.setFocusPainted(false);
+        rollDice.setOpaque(false);
+        rollDice.setBounds(129, 127, 62, 23);
+        dicePanel.add(rollDice);
+
+        JButton closeBtn5 = new JButton();
+        closeBtn5.setContentAreaFilled(false);
+        closeBtn5.setBorderPainted(false);
+        closeBtn5.setFocusPainted(false);
+        closeBtn5.setOpaque(false);
+        closeBtn5.setBounds(308, 5, 7, 7);
+        dicePanel.add(closeBtn5);
+
+        dicePositions = calculateDicePositions();
+
         // =========================
         // SWITCHING SCREENS
         // =========================
@@ -424,6 +488,7 @@ public class PC extends JFrame {
         frame.add(youtubePanel, "youtube");
         frame.add(discordPanel, "discord");
         frame.add(amazonPanel, "amazon");
+        frame.add(dicePanel, "dice");
 
         Container content = frame.getContentPane();
         content.setLayout(new CardLayout());
@@ -431,6 +496,7 @@ public class PC extends JFrame {
         content.add(youtubePanel, "youtube");
         content.add(discordPanel, "discord");
         content.add(amazonPanel, "amazon");
+        content.add(dicePanel, "dice");
 
         CardLayout cl = (CardLayout) content.getLayout();
 
@@ -472,14 +538,18 @@ public class PC extends JFrame {
             }
         });
         openAmazon.addActionListener(e -> cl.show(frame.getContentPane(), "amazon"));
+        openDice.addActionListener(e -> cl.show(frame.getContentPane(), "dice"));
+        rollDice.addActionListener(e -> RollDice());
 
         backBtn1.addActionListener(e -> cl.show(frame.getContentPane(), "desktop"));
         backBtn2.addActionListener(e -> cl.show(frame.getContentPane(), "desktop"));
         backBtn3.addActionListener(e -> cl.show(frame.getContentPane(), "desktop"));
+        backBtn4.addActionListener(e -> cl.show(frame.getContentPane(), "desktop"));
         closeBtn1.addActionListener(e -> frame.setVisible(false));
         closeBtn2.addActionListener(e -> frame.setVisible(false));
         closeBtn3.addActionListener(e -> frame.setVisible(false));
         closeBtn4.addActionListener(e -> frame.setVisible(false));
+        closeBtn5.addActionListener(e -> frame.setVisible(false));
 
 
 
@@ -698,5 +768,94 @@ public class PC extends JFrame {
         if(timeleft < 600) {
             shopRefreshed = false;
         }
+    }
+
+    private void RollDice() {
+        if(dicePositions.size() != diceAmount){
+            dicePositions = calculateDicePositions();
+        }
+        for (int i = 0; i < dices.size(); i++) {
+            dicePanel.remove(dices.get(i));
+        }
+        dices.clear();
+
+        for (int i = 0; i < diceAmount; i++) {
+            int face = ThreadLocalRandom.current().nextInt(1, 7);
+            JLabel dice = new JLabel(new ImageIcon(getClass().getResource("/sprites/Desktop/Dice" + face + ".png")));
+            dice.setBounds(
+                    dicePositions.get(i).x,
+                    dicePositions.get(i).y,
+                    30,
+                    30
+            );
+            dicePanel.add(dice);
+            dices.add(dice);
+        }
+        dicePanel.repaint();
+    }
+
+    private ArrayList<Point> calculateDicePositions() {
+        final int AREA_X1 = 55;
+        final int AREA_Y1 = 59;
+        final int AREA_X2 = 264;
+        final int AREA_Y2 = 124;
+
+        final int DICE_SIZE = 30;
+        final int GAP = 6;
+
+        final int MAX_PER_ROW = 6;
+
+        final int AREA_WIDTH  = AREA_X2 - AREA_X1; // 209
+        final int AREA_HEIGHT = AREA_Y2 - AREA_Y1; // 65
+
+        ArrayList<Point> positions = new ArrayList<>();
+
+        int rows = diceAmount <= MAX_PER_ROW ? 1 : 2;
+        int topRowCount = Math.min(diceAmount, MAX_PER_ROW);
+        int bottomRowCount = Math.max(0, diceAmount - MAX_PER_ROW);
+
+        int step = DICE_SIZE + GAP;
+
+        int topRowY;
+        if (rows == 1) {
+            topRowY = AREA_Y1 + (AREA_HEIGHT - DICE_SIZE) / 2;
+        } else {
+            topRowY = AREA_Y1;
+        }
+
+        int bottomRowY = topRowY + DICE_SIZE + GAP;
+
+        int topRowWidth =
+                topRowCount * DICE_SIZE +
+                        (topRowCount - 1) * GAP;
+
+        int topRowStartX =
+                AREA_X1 + (AREA_WIDTH - topRowWidth) / 2;
+
+        for (int i = 0; i < topRowCount; i++) {
+            positions.add(new Point(
+                    topRowStartX + i * step,
+                    topRowY
+            ));
+        }
+
+        if (bottomRowCount > 0) {
+
+            int bottomRowWidth =
+                    bottomRowCount * DICE_SIZE +
+                            (bottomRowCount - 1) * GAP;
+
+            int bottomRowStartX =
+                    AREA_X1 + (AREA_WIDTH - bottomRowWidth) / 2;
+
+            for (int i = 0; i < bottomRowCount; i++) {
+                positions.add(new Point(
+                        bottomRowStartX + i * step,
+                        bottomRowY
+                ));
+            }
+        }
+
+        return positions;
     }
 }

@@ -494,8 +494,10 @@ public class GameWindow extends JFrame{
             UpdateText();
             menuImage.setIcon(new ImageIcon(getClass().getResource("/sprites/MenuENG.png")));
             shop.imageLabel.setIcon(new ImageIcon(getClass().getResource("/sprites/Shop.png")));
-            stats.getPc().amazonSprite= new ImageIcon(getClass().getResource("/sprites/Desktop/Amazon.png"));
+            stats.getPc().amazonSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/Amazon.png"));
             stats.getPc().amazonPanel.repaint();
+            stats.getPc().diceSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/Dice.png"));
+            stats.getPc().dicePanel.repaint();
             stats.getPc().updateDiscord();
         } else if (locale == MyLocale.JAPANESE) {
             Messages.setLocale(Locale.JAPANESE);
@@ -514,6 +516,8 @@ public class GameWindow extends JFrame{
             shop.imageLabel.setIcon(new ImageIcon(getClass().getResource("/sprites/ShopJP.png")));
             stats.getPc().amazonSprite= new ImageIcon(getClass().getResource("/sprites/Desktop/AmazonJP.png"));
             stats.getPc().amazonPanel.repaint();
+            stats.getPc().diceSprite = new ImageIcon(getClass().getResource("/sprites/Desktop/DiceJP.png"));
+            stats.getPc().dicePanel.repaint();
             stats.getPc().updateDiscord();
         }
 
