@@ -5,6 +5,9 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
@@ -564,7 +567,7 @@ public class PC extends JFrame {
         rollDice.addActionListener(e -> {
             rollDice.setEnabled(false);
             RollDice();
-            Timer timer = new Timer(300, ev -> {
+            Timer timer = new Timer(150, ev -> {
                 rollDice.setEnabled(true);
             });
             timer.setRepeats(false);
@@ -906,8 +909,26 @@ public class PC extends JFrame {
     }
 
     private void buildScoreFrame(){
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("dd.MM.yyyy : HH:mm:ss");
+        diceScore.setSize(260, 40 + 20 * stats.scores.size());
+        diceScore.setLocation(stats.getCursorX() - 130, stats.getCursorY() - 20);
+        for (int i = 0; i < stats.scores.size(); i++) {
+            String text = (i + 2) + " Dices: " + stats.scores.get(i);
+            JLabel label = new JLabel(text);
+            label.setBounds(5, 5 + (i * 20), 140, 10);
+            diceScore.add(label);
+
+            long timestamp = stats.hitTimestamps.get(i);
+            String formattedDate = Instant.ofEpochMilli(timestamp)
+                    .atZone(ZoneId.systemDefault())
+                    .format(formatter);
+
+            String text2 = "At: " + formattedDate;
+            JLabel label2 = new JLabel(text2);
+            label2.setBounds(100, 5 + (i * 20), 150, 10);
+            diceScore.add(label2);
+        }
         diceScore.setVisible(true);
-        diceScore.setLocation(stats.getCursorX() - 70, stats.getCursorY() - 20);
-        diceScore.setSize(140, 400);
     }
 }
