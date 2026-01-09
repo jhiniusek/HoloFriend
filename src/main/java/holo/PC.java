@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -38,10 +39,12 @@ public class PC extends JFrame {
     private JLabel amazonTimer = new JLabel();
     public ArrayList<Gift> listOfGifts;
     private boolean shopRefreshed = false;
-    public int diceAmount = 2;
     private ArrayList<Point> dicePositions = new ArrayList<>();
     private ArrayList<JLabel> dices = new ArrayList<>();
-    public int rollTries = 0;
+    private ArrayList<Integer> faces = new ArrayList<>();
+    JLabel rolls = new JLabel();
+    private JFrame diceScore = new JFrame("Dice");
+    JButton openScore = new JButton();
 
     public void setGameWindow(GameWindow gameWindow) {
         this.gameWindow = gameWindow;
@@ -479,7 +482,26 @@ public class PC extends JFrame {
         closeBtn5.setBounds(308, 5, 7, 7);
         dicePanel.add(closeBtn5);
 
+        rolls.setText(String.valueOf(stats.rollTries));
+        rolls.setFont(font.deriveFont(16f));
+        rolls.setForeground(Color.black);
+        rolls.setBounds(68, 142, 60, 9);
+        dicePanel.add(rolls);
+
         dicePositions = calculateDicePositions();
+
+        diceScore.setIconImage(new ImageIcon(getClass().getResource("/sprites/Icon.png")).getImage());
+        diceScore.setLayout(null);
+        diceScore.setLocationRelativeTo(null);
+        diceScore.setResizable(false);
+        diceScore.setVisible(false);
+
+        openScore.setContentAreaFilled(false);
+        openScore.setBorderPainted(false);
+        openScore.setFocusPainted(false);
+        openScore.setOpaque(false);
+        openScore.setBounds(269, 134, 13, 14);
+        dicePanel.add(openScore);
 
         // =========================
         // SWITCHING SCREENS
@@ -539,7 +561,17 @@ public class PC extends JFrame {
         });
         openAmazon.addActionListener(e -> cl.show(frame.getContentPane(), "amazon"));
         openDice.addActionListener(e -> cl.show(frame.getContentPane(), "dice"));
-        rollDice.addActionListener(e -> RollDice());
+        rollDice.addActionListener(e -> {
+            rollDice.setEnabled(false);
+            RollDice();
+            Timer timer = new Timer(300, ev -> {
+                rollDice.setEnabled(true);
+            });
+            timer.setRepeats(false);
+            timer.start();
+
+        });
+        openScore.addActionListener(e -> buildScoreFrame());
 
         backBtn1.addActionListener(e -> cl.show(frame.getContentPane(), "desktop"));
         backBtn2.addActionListener(e -> cl.show(frame.getContentPane(), "desktop"));
@@ -771,16 +803,20 @@ public class PC extends JFrame {
     }
 
     private void RollDice() {
-        if(dicePositions.size() != diceAmount){
+        stats.rollTries++;
+        rolls.setText(String.valueOf(stats.rollTries));
+        if(dicePositions.size() != stats.diceAmount){
             dicePositions = calculateDicePositions();
         }
         for (int i = 0; i < dices.size(); i++) {
             dicePanel.remove(dices.get(i));
         }
         dices.clear();
+        faces.clear();
 
-        for (int i = 0; i < diceAmount; i++) {
+        for (int i = 0; i < stats.diceAmount; i++) {
             int face = ThreadLocalRandom.current().nextInt(1, 7);
+            faces.add(face);
             JLabel dice = new JLabel(new ImageIcon(getClass().getResource("/sprites/Desktop/Dice" + face + ".png")));
             dice.setBounds(
                     dicePositions.get(i).x,
@@ -792,6 +828,16 @@ public class PC extends JFrame {
             dices.add(dice);
         }
         dicePanel.repaint();
+
+        boolean allTheSame = new HashSet<Integer>(faces).size() == 1;
+        System.out.println(allTheSame ? "same" : "different");
+        if(allTheSame){
+            stats.scores.add(stats.rollTries);
+            stats.hitTimestamps.add(System.currentTimeMillis());
+            openScore.doClick();
+            stats.diceAmount++;
+            stats.rollTries = 0;
+        }
     }
 
     private ArrayList<Point> calculateDicePositions() {
@@ -810,9 +856,9 @@ public class PC extends JFrame {
 
         ArrayList<Point> positions = new ArrayList<>();
 
-        int rows = diceAmount <= MAX_PER_ROW ? 1 : 2;
-        int topRowCount = Math.min(diceAmount, MAX_PER_ROW);
-        int bottomRowCount = Math.max(0, diceAmount - MAX_PER_ROW);
+        int rows = stats.diceAmount <= MAX_PER_ROW ? 1 : 2;
+        int topRowCount = Math.min(stats.diceAmount, MAX_PER_ROW);
+        int bottomRowCount = Math.max(0, stats.diceAmount - MAX_PER_ROW);
 
         int step = DICE_SIZE + GAP;
 
@@ -857,5 +903,11 @@ public class PC extends JFrame {
         }
 
         return positions;
+    }
+
+    private void buildScoreFrame(){
+        diceScore.setVisible(true);
+        diceScore.setLocation(stats.getCursorX() - 70, stats.getCursorY() - 20);
+        diceScore.setSize(140, 400);
     }
 }

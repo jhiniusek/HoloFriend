@@ -86,6 +86,13 @@ public class FriendStats {
     public ArrayList<String> amazonGiftPrices = new ArrayList<>();
     public ArrayList<Boolean> amazonGiftEnabled = new ArrayList<>();
 
+    //PC GAMES
+        //DICE
+    public int diceAmount = 2;
+    public int rollTries = 0;
+    public ArrayList<Integer> scores = new ArrayList<>();
+    public ArrayList<Long> hitTimestamps = new ArrayList<>();
+
     public FriendStats() throws InterruptedException {
         getScreens();
         CollabNames[] collabNames = CollabNames.values();
@@ -893,7 +900,8 @@ public class FriendStats {
         Save save = new Save(hunger, tiredness, currency, subscribers, goodRod, superRod, bedOwned, bedPositionX, bedPositionY, wardrobeOwned,
                 wardrobePositionX, wardrobePositionY, radioOwned, radioPositionX, radioPositionY, chessSlowed, pcOwned,
                 pcPositionX, pcPositionY, kurokami, skin,locale, listOfLevels, listOfExp, listOfTime, amazonGiftNames,
-                amazonGiftPrices, amazonGiftEnabled, chaseCursorValue, chaseWindowValue);
+                amazonGiftPrices, amazonGiftEnabled, chaseCursorValue, chaseWindowValue, diceAmount, rollTries, scores,
+                hitTimestamps);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileOutputStream fos = new FileOutputStream("save.sav");
             GZIPOutputStream gos = new GZIPOutputStream(fos);

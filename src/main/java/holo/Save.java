@@ -33,12 +33,17 @@ public class Save {
     ArrayList<Boolean> amazonGiftEnabled;
     int chaseCursorValue;
     int chaseWindowValue;
+    int diceAmount;
+    int rollTries;
+    ArrayList<Integer> scores;
+    ArrayList<Long> hitTimestamps;
 
     public Save(int hunger, int tiredness, int currency, int subscribers, boolean goodRod, boolean superRod, boolean bed, int bedX,
                 int bedY, boolean wardrobe, int wardrobeX, int wardrobeY, boolean radio, int radioX, int radioY,
                 boolean chessTypeBeat, boolean pc, int pcX, int pcY, boolean kurokami, int skin, MyLocale locale, ArrayList<Integer> listOfLevel,
                 ArrayList<Integer> listOfExp, ArrayList<Long> listOfTime, ArrayList<String> amazonGiftNames, ArrayList<String> amazonGiftPrices,
-                ArrayList<Boolean> amazonGiftEnabled, int chaseCursorValue, int chaseWindowValue) {
+                ArrayList<Boolean> amazonGiftEnabled, int chaseCursorValue, int chaseWindowValue, int diceAmount, int rollTries,
+                ArrayList<Integer> scores, ArrayList<Long> hitTimestamps) {
         this.hunger = hunger;
         this.tiredness = tiredness;
         this.currency = currency;
@@ -69,6 +74,10 @@ public class Save {
         this.amazonGiftEnabled = amazonGiftEnabled;
         this.chaseCursorValue = chaseCursorValue;
         this.chaseWindowValue = chaseWindowValue;
+        this.diceAmount = diceAmount;
+        this.rollTries = rollTries;
+        this.scores = scores;
+        this.hitTimestamps = hitTimestamps;
     }
 
     public void Load(FriendStats stats){
@@ -116,5 +125,15 @@ public class Save {
         }
         stats.setChaseCursorValue(chaseCursorValue);
         stats.setChaseWindowValue(chaseWindowValue);
+        if (diceAmount!=0){
+            stats.diceAmount = diceAmount;
+        }
+        stats.rollTries = rollTries;
+        if (scores!=null){
+            stats.scores = scores;
+        }
+        if (hitTimestamps!=null){
+            stats.hitTimestamps = hitTimestamps;
+        }
     }
 }
