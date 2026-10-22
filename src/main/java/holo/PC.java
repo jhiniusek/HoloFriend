@@ -833,7 +833,6 @@ public class PC extends JFrame {
         dicePanel.repaint();
 
         boolean allTheSame = new HashSet<Integer>(faces).size() == 1;
-        System.out.println(allTheSame ? "same" : "different");
         if(allTheSame){
             stats.scores.add(stats.rollTries);
             stats.hitTimestamps.add(System.currentTimeMillis());

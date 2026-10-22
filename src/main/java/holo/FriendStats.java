@@ -81,7 +81,7 @@ public class FriendStats {
     //COLLABS
     public ArrayList<Integer> listOfLevels = new ArrayList<>();
     public ArrayList<Integer> listOfExp = new ArrayList<>();
-    public ArrayList<Long> listOfTime = new ArrayList<Long>();
+    public ArrayList<Long> listOfTime = new ArrayList<>();
     public ArrayList<String> amazonGiftNames = new ArrayList<>();
     public ArrayList<String> amazonGiftPrices = new ArrayList<>();
     public ArrayList<Boolean> amazonGiftEnabled = new ArrayList<>();
@@ -94,12 +94,15 @@ public class FriendStats {
     public ArrayList<Long> hitTimestamps = new ArrayList<>();
 
     public FriendStats() throws InterruptedException {
+        load();
         getScreens();
         CollabNames[] collabNames = CollabNames.values();
-        for (int i = 0; i < collabNames.length; i++) {
-            listOfLevels.add(null);
-            listOfExp.add(null);
-            listOfTime.add(null);
+        if(collabNames.length != listOfLevels.toArray().length){
+            for (int i = listOfLevels.toArray().length; i < collabNames.length; i++) {      //BUG TO FIX: First Load save then add empty collabs if necessary
+                listOfLevels.add(null);
+                listOfExp.add(null);
+                listOfTime.add(null);
+            }
         }
     }
 
@@ -891,7 +894,7 @@ public class FriendStats {
         }
     }
 
-    public void Save(){
+    public void save(){
         //GIFT REFUND FOR NOW
         for (int i = 0; i < pc.listOfGifts.size(); i++) {
             currency += Integer.parseInt(pc.listOfGifts.get(i).getPrice());
@@ -911,7 +914,7 @@ public class FriendStats {
         }
     }
 
-    public void Load(){
+    public void load(){
         Gson gson = new Gson();
 
         try (FileInputStream fis = new FileInputStream("save.sav");

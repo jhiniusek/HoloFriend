@@ -933,9 +933,9 @@ public class Collab extends JFrame {
                     if (y > min_y && y < max_y){
                         if (listOfGifts.get(i).isHolding()) {
                             Random random = new Random();
+                            String gift = listOfGifts.get(i).getName();
                             switch(name){
                                 case "mio":
-                                    String gift = listOfGifts.get(i).getName();
                                     if(Objects.equals(gift, "Sukonbu") || Objects.equals(gift, "Miteru") || Objects.equals(gift, "Oruyanke")){
                                         gainExperience(random.nextInt(60, 80));
                                     }
@@ -945,7 +945,25 @@ public class Collab extends JFrame {
                                         gainExperience(random.nextInt(50, 70));
                                     }
                                     break;
+                                case "okayu":
+                                    if(Objects.equals(gift, "Koronesuki") || Objects.equals(gift, "Futoinu") || Objects.equals(gift, "Hosoinu")){
+                                        gainExperience(random.nextInt(60, 80));
+                                    }
+                                    else if(Objects.equals(gift, "Oniginya")){
+                                        gainExperience(random.nextInt(40, 60));
+                                    } else {
+                                        gainExperience(random.nextInt(50, 70));
+                                    }
+                                    break;
                                 case "korone":
+                                    if(Objects.equals(gift, "Oniginya")){
+                                        gainExperience(random.nextInt(60, 80));
+                                    }
+                                    else if(Objects.equals(gift, "Koronesuki") || Objects.equals(gift, "Futoinu") || Objects.equals(gift, "Hosoinu")){
+                                        gainExperience(random.nextInt(40, 60));
+                                    } else {
+                                        gainExperience(random.nextInt(50, 70));
+                                    }
                                     break;
                             }
                             listOfGifts.get(i).dispose();

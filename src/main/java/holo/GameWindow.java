@@ -148,7 +148,7 @@ public class GameWindow extends JFrame{
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                stats.Save();
+                stats.save();
                 System.exit(0);
             }
         });

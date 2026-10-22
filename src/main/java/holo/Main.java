@@ -8,8 +8,6 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException, IOException, FontFormatException {
         FriendStats stats = new FriendStats();
-        stats.Load();
-        //stats.LoadDebug();
 
         ArrayList<Food> foodList= new ArrayList<>();
         for(int i = 0; i < 6; i++){

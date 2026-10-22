@@ -700,7 +700,7 @@ public class Clock implements Runnable{
                         stats.setCurrency(0);
                         stats.setHunger(100);
                         stats.setTiredness(100);
-                        stats.Save();
+                        stats.save();
                         System.exit(0);
                     }
                 });
